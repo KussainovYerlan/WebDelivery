@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <div class="form">
+        {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+        <h3>Register</h3>
+        <div class="register-top-grid">
+            <div class="register__item">
+                <div class="register__item-label">
+                    {{ form_label(registrationForm.email) }}
+                </div>
+                <div class="form-error">
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+                <div class="register__item-widget">
+                    {{ form_widget(registrationForm.email) }}
+                </div>
+            </div>
+            <div class="register__item">
+                <div class="register__item-label">
+                    {{ form_label(registrationForm.login) }}
+                </div>
+                <div class="form-error">
+                    {{ form_errors(registrationForm.login) }}
+                </div>
+                <div class="register__item-widget">
+                    {{ form_widget(registrationForm.login) }}
+                </div>
+                <div class="form-help">
+                    {{ form_help(registrationForm.login) }}
+                </div>
+            </div>
+            <div class="register__item">
+                <div class="register__item-label">
+                    {{ form_label(registrationForm.plainPassword) }}
+                </div>
+                <div class="form-error">
+                    {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+                <div class="register__item-widget">
+                    {{ form_widget(registrationForm.plainPassword) }}
+                </div>
+                <div class="form-help">
+                    {{ form_help(registrationForm.plainPassword) }}
+                </div>
+            </div>
+        </div>
+        <div class="form-but">
+            <button class="btn">Submit</button>
+        </div>
+        {{ form_end(registrationForm) }}
+    </div>
+
+{% endblock %}

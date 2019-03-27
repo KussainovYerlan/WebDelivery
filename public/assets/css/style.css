@@ -1,0 +1,71 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.nav-item {
+    font-size: 18px;
+}
+
+.form {
+    background-color: #f8f8f8;
+    padding: 20px 40px 20px 23px;
+}
+
+.register-top-grid input{
+    border: 1px solid #EEE;
+    outline-color:#FF5B36;
+    width: 80%;
+    font-size: 1em;
+    padding: 0.5em;
+}
+
+.register__item {
+    margin-top: 10px;
+}
+
+.form-but{
+    margin-top:1em;
+}
+.form-but button {
+    background:#E24425;
+    color: #FFF;
+    font-size: 18px;
+    padding: 0.6em 2em;
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -o-transition: 0.5s all;
+    display: inline-block;
+    border:none;
+    outline:none;
+}
+
+.form-but button:hover {
+    background:#5BBD50;
+}
+
+.form-but button {
+    padding: 0.3em 1.3em;
+}
+.form-but button {
+    padding: 0.4em 1.5em;
+}
+
+.form-help {
+    font-size: 14px;
+    color: #4e555b;
+}
+
+.form-error > ul {
+    color: #a71d2a;
+    margin-bottom: 5px;
+}
+
+#remember-me {
+    margin-top:10px;
+    margin-bottom: 8px!important;
+}
+
+#remember-me > label {
+    margin-top:1px;
+}

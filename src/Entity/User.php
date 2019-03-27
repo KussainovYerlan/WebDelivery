@@ -5,10 +5,13 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface
 {
@@ -21,11 +24,23 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(
+     *     message="Please enter your email."
+     * )
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     *     checkMX = true
+     * )
+     * @Assert\Length(
+     *      max = 180,
+     *      maxMessage = "Your email must be shorter than {{ limit }} characters."
+     * )
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     *
      */
     private $roles = [];
 
@@ -44,6 +59,20 @@ class User implements UserInterface
      * @ORM\OneToOne(targetEntity="App\Entity\Seller", mappedBy="user", cascade={"persist", "remove"})
      */
     private $seller;
+
+    /**
+     * @ORM\Column(type="string", length=120, unique=true)
+     * @Assert\NotBlank(
+     *     message="Please enter your login."
+     * )
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 120,
+     *      minMessage = "Your login must be longer than {{ limit }} characters.",
+     *      maxMessage = "Your login must be shorter than {{ limit }} characters."
+     * )
+     */
+    private $login;
 
     public function __construct()
     {
@@ -172,6 +201,18 @@ class User implements UserInterface
         if ($this !== $seller->getUser()) {
             $seller->setUser($this);
         }
+
+        return $this;
+    }
+
+    public function getLogin(): ?string
+    {
+        return $this->login;
+    }
+
+    public function setLogin(string $login): self
+    {
+        $this->login = $login;
 
         return $this;
     }
