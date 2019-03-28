@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,4 +32,31 @@ class SecurityController extends AbstractController
     {
         // controller can be blank: it will never be executed!
     }
+
+    /**
+     * @Route("/activation/{token}", name="activation")
+     */
+
+    public function activation(string $token)
+    {
+        if (strlen($token) != 60)
+        {
+            throw $this->createNotFoundException('Ooops, there is no such page');
+        }
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->getDoctrine()->getRepository(User::class)->getUserByToken($token);
+
+        if (!$user)
+        {
+            throw $this->createNotFoundException('Ooops, there is no such page');
+        }
+
+        $user->setToken('');
+        $manager->persist($user);
+        $manager->flush();
+
+        return $this->render( 'security/activation.html.twig');
+
+    }
+
 }

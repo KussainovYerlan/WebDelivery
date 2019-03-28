@@ -5,7 +5,7 @@
 {% block body %}
     <div class="form">
         {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
-        <h3>Register</h3>
+        <h4>Register</h4>
         <div class="register-top-grid">
             <div class="register__item">
                 <div class="register__item-label">
@@ -33,8 +33,8 @@
                 </div>
             </div>
             <div class="register__item">
-                <div class="register__item-label">
-                    {{ form_label(registrationForm.plainPassword) }}
+                <div class="register__item-label" style="margin-bottom: 5px">
+                    Password
                 </div>
                 <div class="form-error">
                     {{ form_errors(registrationForm.plainPassword) }}
@@ -52,5 +52,4 @@
         </div>
         {{ form_end(registrationForm) }}
     </div>
-
 {% endblock %}

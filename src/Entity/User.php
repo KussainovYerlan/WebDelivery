@@ -29,7 +29,6 @@ class User implements UserInterface
      * )
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email.",
-     *     checkMX = true
      * )
      * @Assert\Length(
      *      max = 180,
@@ -73,6 +72,11 @@ class User implements UserInterface
      * )
      */
     private $login;
+
+    /**
+     * @ORM\Column(type="string", length=60)
+     */
+    private $token;
 
     public function __construct()
     {
@@ -213,6 +217,18 @@ class User implements UserInterface
     public function setLogin(string $login): self
     {
         $this->login = $login;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }

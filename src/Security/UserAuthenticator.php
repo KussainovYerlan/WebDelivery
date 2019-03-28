@@ -49,6 +49,7 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator
             'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
+        dump($credentials['csrf_token']);
         $request->getSession()->set(
             Security::LAST_USERNAME,
             $credentials['email']
@@ -67,6 +68,11 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
         if (!$user) {
             $user = $this->entityManager->getRepository(User::class)->findOneBy(['login' => $credentials['email']]);
+        }
+
+        if ($user->getToken() != "")
+        {
+            throw new CustomUserMessageAuthenticationException('Please confirm your email.');
         }
 
         if (!$user) {
