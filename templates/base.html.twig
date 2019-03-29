@@ -6,8 +6,6 @@
         {% block stylesheets %}
             <link href="{{ asset('css/bootstrap.min.css') }}" rel='stylesheet' type='text/css' />
             <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" media="all" />
-            <script src="{{ asset('js/jquery.min.js') }}"></script>
-            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <!--webfont-->
             <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -17,6 +15,10 @@
         {% include('menu.html.twig') %}
         {% block body %}
         {% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('js/shoping_cart.js') }}"></script>
+        {% endblock %}
     </body>
 </html>
