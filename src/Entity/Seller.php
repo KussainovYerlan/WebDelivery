@@ -44,15 +44,17 @@ class Seller
     private $orders;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="seller", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="seller")
      */
-    private $user;
+    private $users;
+
+
 
     public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -158,15 +160,35 @@ class Seller
         return $this;
     }
 
-    public function getUser(): ?User
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
     {
-        return $this->user;
+        return $this->users;
     }
 
-    public function setUser(User $user): self
+    public function addUser(User $user): self
     {
-        $this->user = $user;
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setSeller($this);
+        }
 
         return $this;
     }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getSeller() === $this) {
+                $user->setSeller(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

@@ -48,6 +48,11 @@ class Product
      */
     private $seller;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $external_id;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +126,18 @@ class Product
     public function setSeller(?Seller $seller): self
     {
         $this->seller = $seller;
+
+        return $this;
+    }
+
+    public function getExternalId(): ?string
+    {
+        return $this->external_id;
+    }
+
+    public function setExternalId(?string $external_id): self
+    {
+        $this->external_id = $external_id;
 
         return $this;
     }

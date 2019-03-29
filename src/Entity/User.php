@@ -54,10 +54,6 @@ class User implements UserInterface
      */
     private $orders;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Seller", mappedBy="user", cascade={"persist", "remove"})
-     */
-    private $seller;
 
     /**
      * @ORM\Column(type="string", length=120, unique=true)
@@ -77,6 +73,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=60)
      */
     private $token;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Seller", inversedBy="users")
+     */
+    private $seller;
 
     public function __construct()
     {
@@ -192,22 +193,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getSeller(): ?Seller
-    {
-        return $this->seller;
-    }
-
-    public function setSeller(Seller $seller): self
-    {
-        $this->seller = $seller;
-
-        // set the owning side of the relation if necessary
-        if ($this !== $seller->getUser()) {
-            $seller->setUser($this);
-        }
-
-        return $this;
-    }
 
     public function getLogin(): ?string
     {
@@ -229,6 +214,18 @@ class User implements UserInterface
     public function setToken(string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getSeller(): ?Seller
+    {
+        return $this->seller;
+    }
+
+    public function setSeller(?Seller $seller): self
+    {
+        $this->seller = $seller;
 
         return $this;
     }
