@@ -135,19 +135,6 @@ class Seller
         return $this;
     }
 
-    public function removeOrder(Order $order): self
-    {
-        if ($this->orders->contains($order)) {
-            $this->orders->removeElement($order);
-            // set the owning side to null (unless already changed)
-            if ($order->getSeller() === $this) {
-                $order->setSeller(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection|User[]
      */

@@ -87,6 +87,11 @@ class User implements UserInterface
         $this->deliveryOrders = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->login;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
