@@ -3,41 +3,85 @@
 {% block title %}Product index{% endblock %}
 
 {% block body %}
-    <h1>Product index</h1>
+    <div class="container">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Count</th>
-                <th>Price</th>
-                <th>External_id</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for product in products %}
-            <tr>
-                <td>{{ product.id }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.description }}</td>
-                <td>{{ product.count }}</td>
-                <td>{{ product.price }}</td>
-                <td>{{ product.externalId }}</td>
-                <td>
-                    <a href="{{ path('product_show', {'id': product.id}) }}">show</a>
-                    <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="modal" role="dialog" id="shopping-cart"><div class="modal-dialog" role="document">
+            <div class="modal-content card" tabindex="-1">
+                <div class="card-header bg-dark text-light">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                    Корзина
+                    <a href="" class="btn btn-primary pull-right">Продолжить покупки</a>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="card-body" id="shopping-cart_list">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody id="shopping-cart_content">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="pull-right" style="margin: 10px">
+                        <div class="pull-right" style="margin: 5px">
+                            Стоимость: <b id="shopping-cart_total">0.00</b>
+                        </div>
+                        <button class="btn btn-success" id="shopping-cart_clear">Очистить корзину</button>
+                        <a href="" class="btn btn-success pull-right">Оформить заказ</a>
+                    </div>
+                </div>
+            </div>
+        </div></div>
 
-    <a href="{{ path('product_new') }}">Create new</a>
+        <div class="row">
+
+            <div class="col-lg-3">
+
+                <h1 class="my-4">Название магазина</h1>
+                <div class="list-group">
+                    <a href="#" class="list-group-item">Категория 1</a>
+                    <a href="#" class="list-group-item">Категория 2</a>
+                    <a href="#" class="list-group-item">Категория 3</a>
+                </div>
+
+            </div>
+
+            <div class="col-lg-9">
+                <div class="row">
+                {% for product in products %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100" id="product">
+                            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    <a href="#" class="product-name">{{ product.name }}</a>
+                                </h4>
+                                <h5 class="product-price">{{ product.price }}</h5>
+                                <p class="card-text product-description">
+                                {% if product.description|length > 100 %}
+                                    {{ product.description[:100] }}...
+                                {% else %}
+                                    {{ product.description }}
+                                {% endif %}
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary btn-add" id="{{ product.id }}">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+
+            </div>
+        
+        </div>
+
+    </div>
 {% endblock %}
