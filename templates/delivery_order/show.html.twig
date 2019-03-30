@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DeliveryOrder{% endblock %}
+
+{% block body %}
+    <h1>DeliveryOrder</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ delivery_order.id }}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>{{ delivery_order.address }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ delivery_order.status }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('delivery_order_index') }}">back to list</a>
+
+    <a href="{{ path('delivery_order_edit', {'id': delivery_order.id}) }}">edit</a>
+
+    {{ include('delivery_order/_delete_form.html.twig') }}
+{% endblock %}

@@ -44,10 +44,7 @@ class SecurityController extends AbstractController
 
     public function activation(string $token)
     {
-        if (strlen($token) != 60)
-        {
-            throw $this->createNotFoundException('Ooops, there is no such page');
-        }
+
         $manager = $this->getDoctrine()->getManager();
         $user = $this->getDoctrine()->getRepository(User::class)->getUserByToken($token);
 

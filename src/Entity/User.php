@@ -51,11 +51,6 @@ class User implements UserInterface
      */
     private $password;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="user", orphanRemoval=true)
-     */
-    private $orders;
-
 
     /**
      * @ORM\Column(type="string", length=120, unique=true)
@@ -81,9 +76,15 @@ class User implements UserInterface
      */
     private $seller;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DeliveryOrder", mappedBy="user", orphanRemoval=true)
+     */
+    private $deliveryOrders;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+        $this->deliveryOrders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,29 +173,6 @@ class User implements UserInterface
         return $this->orders;
     }
 
-    public function addOrder(Order $order): self
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): self
-    {
-        if ($this->orders->contains($order)) {
-            $this->orders->removeElement($order);
-            // set the owning side to null (unless already changed)
-            if ($order->getUser() === $this) {
-                $order->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
 
     public function getLogin(): ?string
     {
@@ -228,6 +206,37 @@ class User implements UserInterface
     public function setSeller(?Seller $seller): self
     {
         $this->seller = $seller;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DeliveryOrder[]
+     */
+    public function getDeliveryOrders(): Collection
+    {
+        return $this->deliveryOrders;
+    }
+
+    public function addDeliveryOrder(DeliveryOrder $deliveryOrder): self
+    {
+        if (!$this->deliveryOrders->contains($deliveryOrder)) {
+            $this->deliveryOrders[] = $deliveryOrder;
+            $deliveryOrder->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeliveryOrder(DeliveryOrder $deliveryOrder): self
+    {
+        if ($this->deliveryOrders->contains($deliveryOrder)) {
+            $this->deliveryOrders->removeElement($deliveryOrder);
+            // set the owning side to null (unless already changed)
+            if ($deliveryOrder->getUser() === $this) {
+                $deliveryOrder->setUser(null);
+            }
+        }
 
         return $this;
     }
