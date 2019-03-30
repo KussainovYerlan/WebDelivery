@@ -18,26 +18,33 @@ const setCartData = (o) => {
     return false
 }
 
+const submitOrder = () => {
+    let cartData = getCartData()
+    $.ajax({
+        type: 'POST',
+        url
+    })
+}
+
 function addToCart(e){
     this.disabled = true
     let cartData = getCartData() || {},
         id = this.id,
         item = this.parentNode.parentNode,
-        img = item.querySelector('.product-image'),
+        img = item.querySelector('.product-image').src,
         name = item.querySelector('.product-name').innerHTML,
         price = item.querySelector('.product-price').innerHTML,
         description = item.querySelector('.product-description').innerHTML
 
     if(cartData.hasOwnProperty(id)){
-        cartData[id][3] += 1
+        cartData[id][0] += 1
     } else {
-        cartData[id] = [name, description, price, 1]
+        cartData[id] = [1, img, name, description, price]
     }
     if(!setCartData(cartData)){
         this.disabled = false
     }
     updateTotalCount()
-    $('.alert').alert('Yeah!')
     return false
 }
 
@@ -46,7 +53,7 @@ function updateTotalCount() {
         totalCount = 0
 
     for(let item in cartData) {
-        totalCount += parseInt(cartData[item][3])
+        totalCount += parseInt(cartData[item][0])
     }
 
     if (totalCount > 0){
@@ -62,23 +69,17 @@ function openCart(e){
         totalSum = 0
 
     if(cartData !== null){
-        totalItems = `<table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Count</th>
-                            </tr>
-                        </thead>
+        totalItems = `<table class="table modal-body">
+
                         <tbody id="shopping-cart_content">`
         for(let items in cartData){
             totalItems += '<tr>'
-            for(let i = 0; i < cartData[items].length; i++){
-                totalItems += '<td>' + cartData[items][i] + '</td>'
-            }
+            totalItems += '<td>' + cartData[items][0] + '</td>'
+            totalItems += '<td><img width="80px" src="' + cartData[items][1] + '"></td>'
+            totalItems += '<td><b>' + cartData[items][2] + '</b><br><small>' + cartData[items][3] + '</smal></td>'
+            totalItems += '<td>' + cartData[items][4] + '</td>'
             totalItems += '</tr>'
-            totalSum += parseInt(cartData[items][2]) * parseInt(cartData[items][3])
+            totalSum += parseInt(cartData[items][4]) * parseInt(cartData[items][0])
         }
         totalItems += `</tbody>
                     </table>`
@@ -103,5 +104,8 @@ addEvent(d.getElementById('shopping-cart_open'), 'click', openCart);
 addEvent(d.getElementById('shopping-cart_clear'), 'click', function(e){
     localStorage.removeItem('cart')
     cartCont.innerHTML = 'Корзина пуста'
+    d.getElementById('shopping-cart_total').innerHTML = '0'
     updateTotalCount()
 })
+
+updateTotalCount() 

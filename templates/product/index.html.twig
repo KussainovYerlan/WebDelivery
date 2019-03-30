@@ -8,29 +8,14 @@
         <div class="modal" role="dialog" id="shopping-cart"><div class="modal-dialog" role="document">
             <div class="modal-content card" tabindex="-1">
                 <div class="card-header bg-dark text-light">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                     Корзина
-                    <a href="" class="btn btn-primary pull-right">Продолжить покупки</a>
-                    <div class="clearfix"></div>
                 </div>
                 <div class="card-body" id="shopping-cart_list">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Count</th>
-                            </tr>
-                        </thead>
-                        <tbody id="shopping-cart_content">
-                        </tbody>
-                    </table>
                 </div>
                 <div class="card-footer">
                     <div class="pull-right" style="margin: 10px">
                         <div class="pull-right" style="margin: 5px">
-                            Стоимость: <b id="shopping-cart_total">0.00</b>
+                            Стоимость: <b id="shopping-cart_total">0.00</b> P
                         </div>
                         <button class="btn btn-success" id="shopping-cart_clear">Очистить корзину</button>
                         <a href="" class="btn btn-success pull-right">Оформить заказ</a>
@@ -57,7 +42,7 @@
                 {% for product in products %}
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="card h-100" id="product">
-                            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                            <a href="#"><img class="card-img-top product-image" src="http://placehold.it/700x400" alt=""></a>
                             <div class="card-body">
                                 <h4 class="card-title">
                                     <a href="#" class="product-name">{{ product.name }}</a>
