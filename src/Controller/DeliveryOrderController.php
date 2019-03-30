@@ -36,6 +36,7 @@ class DeliveryOrderController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $deliveryOrder->setUser($this->getUser());
             $entityManager->persist($deliveryOrder);
             $entityManager->flush();
 
@@ -63,6 +64,7 @@ class DeliveryOrderController extends AbstractController
      */
     public function edit(Request $request, DeliveryOrder $deliveryOrder): Response
     {
+
         $form = $this->createForm(DeliveryOrderType::class, $deliveryOrder);
         $form->handleRequest($request);
 
@@ -85,6 +87,7 @@ class DeliveryOrderController extends AbstractController
      */
     public function delete(Request $request, DeliveryOrder $deliveryOrder): Response
     {
+
         if ($this->isCsrfTokenValid('delete'.$deliveryOrder->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($deliveryOrder);

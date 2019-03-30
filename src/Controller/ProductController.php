@@ -53,6 +53,7 @@ class ProductController extends AbstractController
      */
     public function show(Product $product): Response
     {
+
         return $this->render('product/show.html.twig', [
             'product' => $product,
         ]);
@@ -85,6 +86,7 @@ class ProductController extends AbstractController
      */
     public function delete(Request $request, Product $product): Response
     {
+
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($product);
