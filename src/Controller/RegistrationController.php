@@ -16,7 +16,6 @@ use App\Service\TokenGenerator;
 
 class RegistrationController extends AbstractController
 {
-    const TOKEN_LENGTH = 60;
 
     /**
      * @Route("/register", name="app_register")
@@ -39,7 +38,7 @@ class RegistrationController extends AbstractController
             $generator = new TokenGenerator();
             while (1)
             {
-                $token = $generator->generate(self::TOKEN_LENGTH);
+                $token = $generator->generate();
                 $user_check = $repository->getUserByToken($token);
                 if (!$user_check)
                 {

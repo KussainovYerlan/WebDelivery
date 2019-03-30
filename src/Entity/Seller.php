@@ -39,14 +39,14 @@ class Seller
     private $products;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="seller", orphanRemoval=true)
-     */
-    private $orders;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="seller")
      */
     private $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DeliveryOrder", mappedBy="seller", orphanRemoval=true)
+     */
+    private $deliveryOrders;
 
 
 
@@ -55,6 +55,7 @@ class Seller
         $this->products = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->deliveryOrders = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -135,37 +136,6 @@ class Seller
     }
 
     /**
-     * @return Collection|Order[]
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-
-    public function addOrder(Order $order): self
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->setSeller($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): self
-    {
-        if ($this->orders->contains($order)) {
-            $this->orders->removeElement($order);
-            // set the owning side to null (unless already changed)
-            if ($order->getSeller() === $this) {
-                $order->setSeller(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|User[]
      */
     public function getUsers(): Collection
@@ -190,6 +160,37 @@ class Seller
             // set the owning side to null (unless already changed)
             if ($user->getSeller() === $this) {
                 $user->setSeller(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DeliveryOrder[]
+     */
+    public function getDeliveryOrders(): Collection
+    {
+        return $this->deliveryOrders;
+    }
+
+    public function addDeliveryOrder(DeliveryOrder $deliveryOrder): self
+    {
+        if (!$this->deliveryOrders->contains($deliveryOrder)) {
+            $this->deliveryOrders[] = $deliveryOrder;
+            $deliveryOrder->setSeller($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeliveryOrder(DeliveryOrder $deliveryOrder): self
+    {
+        if ($this->deliveryOrders->contains($deliveryOrder)) {
+            $this->deliveryOrders->removeElement($deliveryOrder);
+            // set the owning side to null (unless already changed)
+            if ($deliveryOrder->getSeller() === $this) {
+                $deliveryOrder->setSeller(null);
             }
         }
 

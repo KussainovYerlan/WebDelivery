@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\DeliveryOrderRepository")
  */
-class Order
+class DeliveryOrder
 {
     /**
      * @ORM\Id()
@@ -19,26 +19,26 @@ class Order
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $status;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="integer")
      */
-    private $user;
+    private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Seller", inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Seller", inversedBy="deliveryOrders")
      * @ORM\JoinColumn(nullable=false)
      */
     private $seller;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="deliveryOrders")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Product")
@@ -55,18 +55,6 @@ class Order
         return $this->id;
     }
 
-    public function getStatus(): ?int
-    {
-        return $this->status;
-    }
-
-    public function setStatus(int $status): self
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
     public function getAddress(): ?string
     {
         return $this->address;
@@ -79,14 +67,14 @@ class Order
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getStatus(): ?int
     {
-        return $this->user;
+        return $this->status;
     }
 
-    public function setUser(?User $user): self
+    public function setStatus(int $status): self
     {
-        $this->user = $user;
+        $this->status = $status;
 
         return $this;
     }
@@ -99,6 +87,18 @@ class Order
     public function setSeller(?Seller $seller): self
     {
         $this->seller = $seller;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
