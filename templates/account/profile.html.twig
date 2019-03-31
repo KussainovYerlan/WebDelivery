@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Аккаунт{% endblock %}
+
+{% block body %}
+    <div class="d-flex" id="wrapper">
+        {{ include('account/account_menu.html.twig') }}
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="profile-wrapper">
+                    <div class="profile-wrapper-header">
+                        <h2 class="mt-4">Мой профиль</h2>
+                        <a href="{{ path('edit_profile') }}"><button type="button" class="btn btn-primary edit-profile-btn">Редактировать</button></a>
+                        <a href="{{ path('password_edit') }}"><button type="button" class="btn btn-primary reset-pas-btn">Сменить пароль</button></a>
+                    </div>
+                    <div class="profile-wrapper-content">
+                        <div class="profile-wrapper-content-labels">
+                            <p>Ваш логин:</p>
+                            <p>Email:</p>
+                        </div>
+                        <div class="profile-wrapper-content-data">
+                            <p>{{ user.getLogin() }}</p>
+                            <p>{{ user.getEmail }}</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

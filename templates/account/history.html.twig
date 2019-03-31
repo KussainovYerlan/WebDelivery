@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Аккаунт{% endblock %}
+
+{% block body %}
+    <div class="d-flex" id="wrapper">
+        {{ include('account/account_menu.html.twig') }}
+        <div id="page-content-wrapper">
+            {% if orders|default(false) != false %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Стоимость</th>
+                        <th scope="col">Адрес</th>
+                        <th scope="col">Продукты</th>
+                        <th scope="col">Статус</th>
+                        <th scope="col">Дата</th>
+                    </thead>
+                    <tbody>
+                    {% for item in orders %}
+                        <tr>
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>{{ item.getCost }}</td>
+                            <td>{{ item.getAddress }}</td>
+                            <td><span class="show">Показать</span></td>
+                            <td>{{ item.getStatus }}</td>
+                            <td>{{ item.getCreatedAT|date('Y-m-d') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <h3>У вас ещё нет заказов</h3>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

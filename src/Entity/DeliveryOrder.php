@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DeliveryOrderRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class DeliveryOrder
 {
@@ -44,6 +45,16 @@ class DeliveryOrder
      * @ORM\ManyToMany(targetEntity="App\Entity\Product")
      */
     private $products;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $cost;
 
     public function __construct()
     {
@@ -128,4 +139,54 @@ class DeliveryOrder
 
         return $this;
     }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $CreatedAt): self
+    {
+        $this->createdAt = $CreatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    public function getCost(): ?int
+    {
+        return $this->cost;
+    }
+
+    public function setCost(int $cost): self
+    {
+        $this->cost = $cost;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCostAtValue()
+    {
+        $products = $this->getProducts();
+        $cost = 0;
+
+        foreach ($products as $item)
+        {
+            $cost += $item->getPrice();
+        }
+
+        $this->cost = $cost;
+    }
+
+
 }
