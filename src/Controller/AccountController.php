@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\DeliveryOrder;
 use App\Form\ChangePasswordType;
 use App\Form\EditProfileType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -14,7 +16,7 @@ class AccountController extends AbstractController
 {
 
     /**
-     * @Route("/profile", name="profile")
+     * @Route("/account/profile", name="profile")
      */
     public function profileAction()
     {
@@ -26,7 +28,7 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @Route("/profile/edit/profile", name="edit_profile")
+     * @Route("/account/edit/profile", name="edit_profile")
      */
     public function profileEditAction(Request $request)
     {
@@ -54,7 +56,7 @@ class AccountController extends AbstractController
 
 
     /**
-     * @Route("/profile/edit/password", name="password_edit")
+     * @Route("/account/edit/password", name="password_edit")
      */
     public function passwordEditAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -94,7 +96,7 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @Route("/myhistory", name="myhistory")
+     * @Route("/account/myhistory", name="myhistory")
      */
     public function myHistoryAction()
     {
@@ -106,7 +108,7 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @Route("/mydiscounts", name="mydiscounts")
+     * @Route("/account/mydiscounts", name="mydiscounts")
      */
     public function myDiscountsAction()
     {
@@ -114,5 +116,56 @@ class AccountController extends AbstractController
         return $this->render('account/profile.html.twig', [
             'user' => $user,
         ]);
+    }
+
+    /**
+     * @Route("/account/seller/orders", name="seller_orders")
+     */
+    public function sellerOrdersListAction()
+    {
+        $this->denyAccessUnlessGranted('view', new DeliveryOrder());
+        $user = $this->getUser();
+        $orders = $user->getSeller()->getDeliveryOrders();
+
+        return $this->render('account/seller_orders.html.twig', [
+            'orders' => $orders,
+        ]);
+    }
+
+    /**
+     * @Route("/account/seller/orders/submit", name="seller_orders_submit")
+     */
+    public function sellerOrdersSubmitAction(Request $request)
+    {
+        if(($id = $request->request->get('id')) == true){
+            $order = $this->getDoctrine()->getRepository(DeliveryOrder::class)->find($id);
+            $order->setStatus(DeliveryOrder::STATUS_ACCEPT);
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($order);
+            $manager->flush();
+
+            return new JsonResponse(['message' => 'Done'], 200);
+
+        }
+        return new JsonResponse(['message' => 'Update failure'], 404);
+    }
+
+    /**
+     * @Route("/account/seller/orders/cancel", name="seller_orders_cancel")
+     */
+    public function sellerOrdersCancelAction(Request $request)
+    {
+
+        if(($id = $request->request->get('id')) == true){
+            $order = $this->getDoctrine()->getRepository(DeliveryOrder::class)->find($id);
+            $order->setStatus(DeliveryOrder::STATUS_CANCEL);
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($order);
+            $manager->flush();
+
+            return new JsonResponse(['message' => 'Done'], 200);
+
+        }
+        return new JsonResponse(['message' => 'Update failure'], 404);
     }
 }

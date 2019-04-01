@@ -156,7 +156,7 @@ body {
 }
 
 #page-content-wrapper {
-    min-width: 100vw;
+    min-width: 50vw;
 }
 
 #wrapper.toggled #sidebar-wrapper {
@@ -228,5 +228,22 @@ body {
     height: 100px;
     font-size: 25px;
     padding: 30px 52px;
+}
+
+.order-history-btn {
+    margin-right: 1px;
+}
+
+.order-status {
+    font-size: 15px;
+    vertical-align: top !important;
+}
+
+.order-history-content > div {
+    margin: 15px;
+}
+
+.order-history-content-cost {
+    font-size: 20px;
 }
 

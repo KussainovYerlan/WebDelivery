@@ -32,7 +32,7 @@ class OrderVoter extends Voter
                 return $this->canAdd($user, $subject);
                 break;
             case 'view':
-                return $this->canView($user, $subject);
+                return $this->canView($user);
                 break;
             case 'submit':
         }
@@ -59,15 +59,12 @@ class OrderVoter extends Voter
         return false;
     }
 
-    protected function canView(User $user, DeliveryOrder $order)
+    protected function canView(User $user)
     {
         foreach ($user->getRoles() as $item) {
 
             if (($item == "ROLE_SELLER_MAIN") || ($item === "ROLE_SELLER_MANAGER")) {
-                if ($order->getSeller() === $user->getSeller())
-                {
                     return true;
-                }
             }
         }
         return false;

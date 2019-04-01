@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class DeliveryOrder
 {
+    const STATUS_WAIT = 'wait';
+    const STATUS_ACCEPT = 'accepted';
+    const STATUS_CANCEL = 'cancel';
+    const STATUS_DONE = 'done';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -24,10 +29,6 @@ class DeliveryOrder
      */
     private $address;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $status;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Seller", inversedBy="deliveryOrders")
@@ -56,6 +57,16 @@ class DeliveryOrder
      */
     private $cost;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $phone;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $status;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -78,17 +89,6 @@ class DeliveryOrder
         return $this;
     }
 
-    public function getStatus(): ?int
-    {
-        return $this->status;
-    }
-
-    public function setStatus(int $status): self
-    {
-        $this->status = $status;
-
-        return $this;
-    }
 
     public function getSeller(): ?Seller
     {
@@ -188,5 +188,36 @@ class DeliveryOrder
         $this->cost = $cost;
     }
 
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setStatusWait()
+    {
+        $this->status = self::STATUS_WAIT;
+    }
 
 }
