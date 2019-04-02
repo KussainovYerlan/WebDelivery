@@ -53,6 +53,11 @@ class Product
      */
     private $external_id;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
     public function __toString()
     {
         return $this->name;
@@ -143,6 +148,18 @@ class Product
     public function setExternalId(?string $external_id): self
     {
         $this->external_id = $external_id;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }
