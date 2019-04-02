@@ -103,12 +103,14 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
     {% block javascripts %}
         {{ parent() }}
         <script type="text/javascript">
             // Accept button function
             $(document).on('click', 'button.ajax-accept', function(){
-                id = $(this).data('id');
+                let id = $(this).data('id');
                 $.ajax({
                     url:'{{ (path('seller_orders_submit')) }}',
                     type: "POST",
@@ -137,7 +139,7 @@
 
             // Cancel button function
             $(document).on('click', 'button.ajax-cancel', function(){
-                id = $(this).data('id');
+                let id = $(this).data('id');
                 $.ajax({
                     url:'{{ (path('seller_orders_cancel')) }}',
                     type: "POST",
@@ -165,4 +167,3 @@
             });
         </script>
     {% endblock %}
-{% endblock %}

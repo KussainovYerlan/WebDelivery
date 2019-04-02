@@ -5,22 +5,28 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
+use App\Service\AuthService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-use App\Service\TokenGenerator;
 
 
 class RegistrationController extends AbstractController
 {
+    private $service;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->service = $authService;
+    }
 
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, UserAuthenticator $authenticator, \Swift_Mailer $mailer): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, UserAuthenticator $authenticator): Response
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 
@@ -34,51 +40,10 @@ class RegistrationController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $repository = $this->getDoctrine()->getRepository(User::class);
-            $generator = new TokenGenerator();
-            while (1)
-            {
-                $token = $generator->generate();
-                $user_check = $repository->getUserByToken($token);
-                if (!$user_check)
-                {
-                    $user->setToken($token);
-                    break;
-                }
-            }
-            // encode the plain password
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+            $this->service->register($user, $request->getSchemeAndHttpHost());
 
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-            $url = $request->getSchemeAndHttpHost() . $this->generateUrl('activation', array('token' => $user->getToken()));
-
-            $message = (new \Swift_Message('Registration'))
-                ->setFrom('delivery.dev@gamil.com')
-                ->setTo($user->getEmail())
-                ->setBody(
-                    $this->renderView(
-                        'email/registration.html.twig',
-                        [
-                            'name' => $user->getLogin(),
-                            'token' => $url,
-                        ]
-                    ),
-                    'text/html'
-                );
-
-            $mailer->send($message);
-
-            return $this->redirectToRoute('index');
-            // do anything else you need here, like send an email
-
+            $this->addFlash('notice', 'Вы успешно зарегистрировались, проверьте ваш email!');
+            return $this->redirectToRoute('app_login');
             //disable auto-login
             /*return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
