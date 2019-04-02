@@ -40,7 +40,7 @@ class AuthService
         return $token;
     }
 
-    public function register (User $user, string $domen)
+    public function register (User $user, string $domen, string $plainPassword)
     {
         $repository = $this->manager->getRepository(User::class);
         while (1)
@@ -57,7 +57,7 @@ class AuthService
         $user->setPassword(
             $this->passwordEncoder->encodePassword(
                 $user,
-                $user->getPassword()
+                $plainPassword
             )
         );
 

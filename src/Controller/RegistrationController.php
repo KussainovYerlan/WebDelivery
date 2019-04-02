@@ -37,12 +37,15 @@ class RegistrationController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
+        $ps = $user->getPassword();
+        $enc = $passwordEncoder->encodePassword($user, $user->getPassword());
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->service->register($user, $request->getSchemeAndHttpHost());
+            $this->service->register($user, $request->getSchemeAndHttpHost(), $form->get('plainPassword')->getData());
 
-            $this->addFlash('notice', 'Вы успешно зарегистрировались, проверьте ваш email!');
+
+            $this->addFlash('notice', 'Вы успешно зарегистрировались, проверьте ваш email! ');
             return $this->redirectToRoute('app_login');
             //disable auto-login
             /*return $guardHandler->authenticateUserAndHandleSuccess(

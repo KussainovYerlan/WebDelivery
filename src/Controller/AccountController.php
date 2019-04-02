@@ -69,6 +69,7 @@ class AccountController extends AbstractController
 
             $old_pwd = $form->get('old_pass')->getData();
             $new_pwd = $form->get('new_password')->getData();
+            
             $checkPass = $passwordEncoder->isPasswordValid($user, $old_pwd);
             if ($checkPass)
             {
