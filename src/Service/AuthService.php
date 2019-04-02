@@ -4,14 +4,7 @@ namespace App\Service;
 
 
 use App\Entity\User;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGenerator;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Twig\Environment;
@@ -24,7 +17,8 @@ class AuthService
     private $manager;
     private $passwordEncoder;
 
-    public function __construct(\Swift_Mailer $mailer, Environment $templating, RouterInterface $generator, ObjectManager $manager, UserPasswordEncoderInterface $encoder)
+    public function __construct(\Swift_Mailer $mailer, Environment $templating, RouterInterface $generator,
+                                ObjectManager $manager, UserPasswordEncoderInterface $encoder)
     {
         $this->mailer = $mailer;
         $this->templating = $templating;

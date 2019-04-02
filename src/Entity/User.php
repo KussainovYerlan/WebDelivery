@@ -81,10 +81,16 @@ class User implements UserInterface
      */
     private $deliveryOrders;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SellerRequests", mappedBy="user", orphanRemoval=true)
+     */
+    private $requests;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->deliveryOrders = new ArrayCollection();
+        $this->requests = new ArrayCollection();
     }
 
     public function __toString()
@@ -231,6 +237,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($deliveryOrder->getUser() === $this) {
                 $deliveryOrder->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SellerRequests[]
+     */
+    public function getRequests(): Collection
+    {
+        return $this->requests;
+    }
+
+    public function addRequest(SellerRequests $request): self
+    {
+        if (!$this->requests->contains($request)) {
+            $this->requests[] = $request;
+            $request->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequest(SellerRequests $request): self
+    {
+        if ($this->requests->contains($request)) {
+            $this->requests->removeElement($request);
+            // set the owning side to null (unless already changed)
+            if ($request->getUser() === $this) {
+                $request->setUser(null);
             }
         }
 

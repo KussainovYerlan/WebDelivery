@@ -230,13 +230,22 @@ body {
     padding: 30px 52px;
 }
 
-.order-history-btn {
-    margin-right: 1px;
-}
-
 .order-status {
     font-size: 15px;
     vertical-align: top !important;
+}
+.order-history-content-duo{
+    justify-content: space-between;
+}
+
+.order-history-content-btn {
+    display: flex;
+}
+
+.order-history-content-btn > button {
+    width: 78px;
+    height: 38px;
+    margin-right: 40px;
 }
 
 .order-history-content > div {
@@ -245,5 +254,60 @@ body {
 
 .order-history-content-cost {
     font-size: 20px;
+}
+.card-manager > .card-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-manager > .card-header > h2 {
+    font-size: 26px;
+}
+
+.manager-request-header {
+    margin: 20px 40px 20px 40px;
+}
+
+.manager-request-content {
+    margin: 20px 40px 20px 40px;
+}
+
+.manager-request-content-email {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.manager-request-content-resume {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.manager-request-label {
+    font-weight: 600;
+}
+
+.manager-request-content-file {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.manager-request-content-file > button {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.manager-request-content-file > div {
+    display: inline-block;
+}
+
+.manager-request-btn {
+    margin-top: 30px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.manager-request-btn > button {
+    width: 13%;
 }
 

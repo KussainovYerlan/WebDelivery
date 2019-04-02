@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\DeliveryOrder;
+use App\Entity\SellerRequests;
 use App\Form\ChangePasswordType;
 use App\Form\EditProfileType;
+use App\Service\AccountService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +16,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AccountController extends AbstractController
 {
+    private $service;
+
+    public function __construct(AccountService $service)
+    {
+        $this->service = $service;
+    }
 
     /**
      * @Route("/account/profile", name="profile")
@@ -69,7 +77,7 @@ class AccountController extends AbstractController
 
             $old_pwd = $form->get('old_pass')->getData();
             $new_pwd = $form->get('new_password')->getData();
-            
+
             $checkPass = $passwordEncoder->isPasswordValid($user, $old_pwd);
             if ($checkPass)
             {
@@ -78,6 +86,7 @@ class AccountController extends AbstractController
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($user);
                 $manager->flush();
+
                 return $this->render('account/success.html.twig',
                     [
                         'message' => 'Вы успешно изменили пароль'
@@ -156,7 +165,6 @@ class AccountController extends AbstractController
      */
     public function sellerOrdersCancelAction(Request $request)
     {
-
         if(($id = $request->request->get('id')) == true){
             $order = $this->getDoctrine()->getRepository(DeliveryOrder::class)->find($id);
             $order->setStatus(DeliveryOrder::STATUS_CANCEL);
@@ -169,4 +177,64 @@ class AccountController extends AbstractController
         }
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
+
+    /**
+     * @Route("/account/seller/request", name="requests")
+     */
+    public function sellerRequestsListAction()
+    {
+
+        $seller = $this->getUser()->getSeller();
+        $requests = $seller->getRequests();
+
+        return $this->render('account/requests.html.twig', [
+            'requests' => $requests,
+        ]);
+    }
+
+    /**
+     * @Route("/account/seller/managers", name="managers")
+     */
+    public function sellerManagersListAction()
+    {
+
+        $managers = $this->getUser()->getSeller()->getUsers();
+
+        return $this->render('account/requests.html.twig', [
+            'managers' => $managers,
+        ]);
+    }
+
+    /**
+     * @Route("/account/seller/request/submit", name="request_submit")
+     */
+    public function sellerRequestSubmitAction(Request $request)
+    {
+
+        if(($id = $request->request->get('id')) == true){
+
+            $this->service->submit($id);
+
+            return new JsonResponse(['message' => 'Done'], 200);
+
+        }
+        return new JsonResponse(['message' => 'Update failure'], 404);
+    }
+
+    /**
+     * @Route("/account/seller/request/cancel", name="request_cancel")
+     */
+    public function sellerRequestCancelAction(Request $request)
+    {
+
+        if(($id = $request->request->get('id')) == true){
+
+            $this->service->cancel($id);
+
+            return new JsonResponse(['message' => 'Done'], 200);
+
+        }
+        return new JsonResponse(['message' => 'Update failure'], 404);
+    }
+
 }

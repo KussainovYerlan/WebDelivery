@@ -44,7 +44,7 @@
                                 </div>
                                 <!-- Card-content -->
                                 <div class="order-history-content">
-                                    <div class="d-flex">
+                                    <div class="d-flex order-history-content-duo">
                                         <div>
                                             <div class="order-history-content-address">
                                                 Адрес доставки: {{ item.getAddress() }}
@@ -53,12 +53,13 @@
                                                 Телефон для связи: {{ item.getPhone() }}
                                             </div>
                                         </div>
+                                        <div class="order-history-content-btn">
                                         <!-- Display or not button "submit" -->
                                         {% if item.getStatus() == constant('App\\Entity\\DeliveryOrder::STATUS_WAIT') %}
                                             <button type="button" class="btn btn-success ajax-accept order-history-btn-{{ item.getId() }}" data-id="{{ item.getId() }}">Submit</button>
                                             <button type="button" class="btn btn-danger ajax-cancel order-history-btn-{{ item.getId() }}"  data-id="{{ item.getId() }}">Cancel</button>
                                         {% endif %}
-
+                                        </div>
                                     </div>
                                     <!-- Products in order -->
                                     <div class="order-history-content-product">
@@ -104,66 +105,71 @@
         </div>
     </div>
 {% endblock %}
-
-    {% block javascripts %}
+        {% block javascripts %}
         {{ parent() }}
         <script type="text/javascript">
             // Accept button function
             $(document).on('click', 'button.ajax-accept', function(){
-                let id = $(this).data('id');
-                $.ajax({
-                    url:'{{ (path('seller_orders_submit')) }}',
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        "id": id
-                    },
-                    async: true,
-                    success: function ()
+                if (confirm('Вы уверены') === true)
                     {
-                        let div_id = '#collapse' + id;
-                        let span_id = '#order-status-snap-' + id;
-                        let but_class = '.order-history-btn-' + id;
-                        $(div_id).collapse('hide');
-                        $(but_class).each(function () {
-                            $(this).css({'display' : 'none'});
+                        let id = $(this).data('id');
+                        $.ajax({
+                            url:'{{ (path('seller_orders_submit')) }}',
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                "id": id
+                            },
+                            async: true,
+                            success: function ()
+                            {
+                                let div_id = '#collapse' + id;
+                                let span_id = '#order-status-snap-' + id;
+                                let but_class = '.order-history-btn-' + id;
+                                $(div_id).collapse('hide');
+                                $(but_class).each(function () {
+                                    $(this).css({'display' : 'none'});
+                                });
+                                $(span_id).removeClass('badge-secondary').addClass('badge-info');
+                                $(span_id).text('Подтвержден')
+                            },
+                            error: function (error) {
+                                alert(error['message'])
+                            }
                         });
-                        $(span_id).removeClass('badge-secondary').addClass('badge-info');
-                        $(span_id).text('Подтвержден')
-                    },
-                    error: function (error) {
-                        alert(error['message'])
                     }
-                });
             });
 
             // Cancel button function
             $(document).on('click', 'button.ajax-cancel', function(){
-                let id = $(this).data('id');
-                $.ajax({
-                    url:'{{ (path('seller_orders_cancel')) }}',
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        "id": id
-                    },
-                    async: true,
-                    success: function ()
-                    {
-                        let div_id = '#collapse' + id;
-                        let span_id = '#order-status-snap-' + id;
-                        let but_class = '.order-history-btn-' + id;
-                        $(div_id).collapse('hide');
-                        $(but_class).each(function () {
-                            $(this).css({'display' : 'none'});
-                        });
-                        $(span_id).removeClass('badge-secondary').addClass('badge-danger');
-                        $(span_id).text('Отменен')
-                    },
-                    error: function (error) {
-                        alert(error['message'])
-                    }
-                });
+                if (confirm('Вы уверены') === true)
+                {
+                    let id = $(this).data('id');
+                    $.ajax({
+                        url:'{{ (path('seller_orders_cancel')) }}',
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            "id": id
+                        },
+                        async: true,
+                        success: function ()
+                        {
+                            let div_id = '#collapse' + id;
+                            let span_id = '#order-status-snap-' + id;
+                            let but_class = '.order-history-btn-' + id;
+                            $(div_id).collapse('hide');
+                            $(but_class).each(function () {
+                                $(this).detach();
+                            });
+                            $(span_id).removeClass('badge-secondary').addClass('badge-danger');
+                            $(span_id).text('Отменен')
+                        },
+                        error: function (error) {
+                            alert(error['message'])
+                        }
+                    });
+                }
             });
         </script>
     {% endblock %}
