@@ -8,9 +8,15 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CheckoutRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Checkout
 {
+    const STATUS_WAIT = 'wait';
+    const STATUS_ACCEPT = 'accepted';
+    const STATUS_CANCEL = 'cancel';
+    const STATUS_DONE = 'done';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -23,10 +29,6 @@ class Checkout
      */
     private $address;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $status;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Seller", inversedBy="checkouts")
@@ -44,6 +46,26 @@ class Checkout
      * @ORM\ManyToMany(targetEntity="App\Entity\Product")
      */
     private $products;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $cost;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $phone;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $status;
 
     public function __construct()
     {
@@ -67,17 +89,6 @@ class Checkout
         return $this;
     }
 
-    public function getStatus(): ?int
-    {
-        return $this->status;
-    }
-
-    public function setStatus(int $status): self
-    {
-        $this->status = $status;
-
-        return $this;
-    }
 
     public function getSeller(): ?Seller
     {
@@ -128,4 +139,85 @@ class Checkout
 
         return $this;
     }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $CreatedAt): self
+    {
+        $this->createdAt = $CreatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    public function getCost(): ?int
+    {
+        return $this->cost;
+    }
+
+    public function setCost(int $cost): self
+    {
+        $this->cost = $cost;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCostAtValue()
+    {
+        $products = $this->getProducts();
+        $cost = 0;
+
+        foreach ($products as $item)
+        {
+            $cost += $item->getPrice();
+        }
+
+        $this->cost = $cost;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setStatusWait()
+    {
+        $this->status = self::STATUS_WAIT;
+    }
+
 }

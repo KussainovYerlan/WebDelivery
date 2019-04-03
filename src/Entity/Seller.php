@@ -48,6 +48,11 @@ class Seller
      */
     private $checkouts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SellerRequests", mappedBy="seller", orphanRemoval=true)
+     */
+    private $requests;
+
 
 
     public function __construct()
@@ -56,6 +61,7 @@ class Seller
         $this->orders = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->checkouts = new ArrayCollection();
+        $this->requests = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -191,6 +197,37 @@ class Seller
             // set the owning side to null (unless already changed)
             if ($checkout->getSeller() === $this) {
                 $checkout->setSeller(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SellerRequests[]
+     */
+    public function getRequests(): Collection
+    {
+        return $this->requests;
+    }
+
+    public function addRequest(SellerRequests $request): self
+    {
+        if (!$this->requests->contains($request)) {
+            $this->requests[] = $request;
+            $request->setSeller($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequest(SellerRequests $request): self
+    {
+        if ($this->requests->contains($request)) {
+            $this->requests->removeElement($request);
+            // set the owning side to null (unless already changed)
+            if ($request->getSeller() === $this) {
+                $request->setSeller(null);
             }
         }
 

@@ -2,30 +2,31 @@
 
 namespace App\Form;
 
-use App\Entity\Checkout;
+use App\Entity\SellerRequests;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CheckoutType extends AbstractType
+class SellerRequestsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('address')
-            ->add('status')
+            ->add('firstName')
+            ->add('lastName')
+            ->add('resume', TextType::class)
+            ->add('file', FileType::class)
             ->add('seller')
-            ->add('phone', TelType::class)
-            ->add('user')
-            ->add('products')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Checkout::class,
+            'data_class' => SellerRequests::class,
         ]);
     }
 }

@@ -57,7 +57,8 @@ class SecurityController extends AbstractController
         $manager->persist($user);
         $manager->flush();
 
-        return $this->render( 'security/activation.html.twig');
+        $this->addFlash('notice', 'Вы успешно активировали свой аккаунт!');
+        return $this->redirectToRoute('app_login');
 
     }
 
