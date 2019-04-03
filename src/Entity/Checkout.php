@@ -7,10 +7,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\DeliveryOrderRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CheckoutRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class DeliveryOrder
+class Checkout
 {
     const STATUS_WAIT = 'wait';
     const STATUS_ACCEPT = 'accepted';
@@ -31,13 +31,13 @@ class DeliveryOrder
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Seller", inversedBy="deliveryOrders")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Seller", inversedBy="checkouts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $seller;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="deliveryOrders")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="checkouts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;

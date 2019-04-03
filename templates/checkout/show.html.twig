@@ -9,22 +9,22 @@
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ delivery_order.id }}</td>
+                <td>{{ checkout.id }}</td>
             </tr>
             <tr>
                 <th>Address</th>
-                <td>{{ delivery_order.address }}</td>
+                <td>{{ checkout.address }}</td>
             </tr>
             <tr>
                 <th>Status</th>
-                <td>{{ delivery_order.status }}</td>
+                <td>{{ checkout.status }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('delivery_order_index') }}">back to list</a>
+    <a href="{{ path('checkout_index') }}">back to list</a>
 
-    <a href="{{ path('delivery_order_edit', {'id': delivery_order.id}) }}">edit</a>
+    <a href="{{ path('checkout_edit', {'id': checkout.id}) }}">edit</a>
 
-    {{ include('delivery_order/_delete_form.html.twig') }}
+    {{ include('checkout/_delete_form.html.twig') }}
 {% endblock %}

@@ -44,9 +44,9 @@ class Seller
     private $users;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\DeliveryOrder", mappedBy="seller", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Checkout", mappedBy="seller", orphanRemoval=true)
      */
-    private $deliveryOrders;
+    private $checkouts;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\SellerRequests", mappedBy="seller", orphanRemoval=true)
@@ -60,7 +60,7 @@ class Seller
         $this->products = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->users = new ArrayCollection();
-        $this->deliveryOrders = new ArrayCollection();
+        $this->checkouts = new ArrayCollection();
         $this->requests = new ArrayCollection();
     }
 
@@ -173,30 +173,30 @@ class Seller
     }
 
     /**
-     * @return Collection|DeliveryOrder[]
+     * @return Collection|Checkout[]
      */
-    public function getDeliveryOrders(): Collection
+    public function getCheckouts(): Collection
     {
-        return $this->deliveryOrders;
+        return $this->checkouts;
     }
 
-    public function addDeliveryOrder(DeliveryOrder $deliveryOrder): self
+    public function addCheckout(Checkout $checkout): self
     {
-        if (!$this->deliveryOrders->contains($deliveryOrder)) {
-            $this->deliveryOrders[] = $deliveryOrder;
-            $deliveryOrder->setSeller($this);
+        if (!$this->checkouts->contains($checkout)) {
+            $this->checkouts[] = $checkout;
+            $checkout->setSeller($this);
         }
 
         return $this;
     }
 
-    public function removeDeliveryOrder(DeliveryOrder $deliveryOrder): self
+    public function removeCheckout(Checkout $checkout): self
     {
-        if ($this->deliveryOrders->contains($deliveryOrder)) {
-            $this->deliveryOrders->removeElement($deliveryOrder);
+        if ($this->checkouts->contains($checkout)) {
+            $this->checkouts->removeElement($checkout);
             // set the owning side to null (unless already changed)
-            if ($deliveryOrder->getSeller() === $this) {
-                $deliveryOrder->setSeller(null);
+            if ($checkout->getSeller() === $this) {
+                $checkout->setSeller(null);
             }
         }
 

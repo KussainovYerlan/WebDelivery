@@ -15,14 +15,14 @@
             </tr>
         </thead>
         <tbody>
-        {% for delivery_order in delivery_orders %}
+        {% for checkout in checkouts %}
             <tr>
-                <td>{{ delivery_order.id }}</td>
-                <td>{{ delivery_order.address }}</td>
-                <td>{{ delivery_order.status }}</td>
+                <td>{{ checkout.id }}</td>
+                <td>{{ checkout.address }}</td>
+                <td>{{ checkout.status }}</td>
                 <td>
-                    <a href="{{ path('delivery_order_show', {'id': delivery_order.id}) }}">show</a>
-                    <a href="{{ path('delivery_order_edit', {'id': delivery_order.id}) }}">edit</a>
+                    <a href="{{ path('checkout_show', {'id': checkout.id}) }}">show</a>
+                    <a href="{{ path('checkout_edit', {'id': checkout.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +33,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('delivery_order_new') }}">Create new</a>
+    <a href="{{ path('checkout_new') }}">Create new</a>
 {% endblock %}

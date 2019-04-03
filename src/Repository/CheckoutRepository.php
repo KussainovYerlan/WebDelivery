@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\DeliveryOrder;
+use App\Entity\Checkout;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method DeliveryOrder|null find($id, $lockMode = null, $lockVersion = null)
- * @method DeliveryOrder|null findOneBy(array $criteria, array $orderBy = null)
- * @method DeliveryOrder[]    findAll()
- * @method DeliveryOrder[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Checkout|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Checkout|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Checkout[]    findAll()
+ * @method Checkout[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DeliveryOrderRepository extends ServiceEntityRepository
+class CheckoutRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, DeliveryOrder::class);
+        parent::__construct($registry, Checkout::class);
     }
 
     // /**
-    //  * @return DeliveryOrder[] Returns an array of DeliveryOrder objects
+    //  * @return Checkout[] Returns an array of Checkout objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class DeliveryOrderRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?DeliveryOrder
+    public function findOneBySomeField($value): ?Checkout
     {
         return $this->createQueryBuilder('d')
             ->andWhere('d.exampleField = :val')
