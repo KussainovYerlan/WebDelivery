@@ -3,9 +3,9 @@
 {% block title %}История заказов{% endblock %}
 
 {% block body %}
-    <div class="d-flex" id="wrapper">
+    <div class="row" id="row-body">
     {{ include('account/account_menu.html.twig') }}
-    <div id="page-content-wrapper">
+    <div class="col">
         <div class="container-fluid" style="padding: 0;">
             <div class="profile-wrapper" style="padding: 0;">
                 {% if orders|default(false) != false %}

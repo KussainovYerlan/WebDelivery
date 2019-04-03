@@ -3,15 +3,13 @@
 {% block title %}Аккаунт{% endblock %}
 
 {% block body %}
-    <div class="d-flex" id="wrapper">
+    <div class="row" id="row-body">
         {{ include('account/account_menu.html.twig') }}
-        <div id="page-content-wrapper">
+        <div class="col">
             <div class="container-fluid">
                 <div class="profile-wrapper">
                     <div class="profile-wrapper-header">
                         <h2 class="mt-4">Мой профиль</h2>
-                        <a href="{{ path('edit_profile') }}"><button type="button" class="btn btn-primary edit-profile-btn">Редактировать</button></a>
-                        <a href="{{ path('password_edit') }}"><button type="button" class="btn btn-primary reset-pas-btn">Сменить пароль</button></a>
                     </div>
                     <div class="profile-wrapper-content">
                         <div class="profile-wrapper-content-labels">
