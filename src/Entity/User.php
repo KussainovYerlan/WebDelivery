@@ -77,14 +77,14 @@ class User implements UserInterface
     private $seller;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\DeliveryOrder", mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Checkout", mappedBy="user", orphanRemoval=true)
      */
-    private $deliveryOrders;
+    private $checkouts;
 
     public function __construct()
     {
         $this->orders = new ArrayCollection();
-        $this->deliveryOrders = new ArrayCollection();
+        $this->checkouts = new ArrayCollection();
     }
 
     public function __toString()
@@ -216,30 +216,30 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|DeliveryOrder[]
+     * @return Collection|Checkout[]
      */
-    public function getDeliveryOrders(): Collection
+    public function getCheckouts(): Collection
     {
-        return $this->deliveryOrders;
+        return $this->checkouts;
     }
 
-    public function addDeliveryOrder(DeliveryOrder $deliveryOrder): self
+    public function addCheckout(Checkout $checkout): self
     {
-        if (!$this->deliveryOrders->contains($deliveryOrder)) {
-            $this->deliveryOrders[] = $deliveryOrder;
-            $deliveryOrder->setUser($this);
+        if (!$this->checkouts->contains($checkout)) {
+            $this->checkouts[] = $checkout;
+            $checkout->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeDeliveryOrder(DeliveryOrder $deliveryOrder): self
+    public function removeCheckout(Checkout $checkout): self
     {
-        if ($this->deliveryOrders->contains($deliveryOrder)) {
-            $this->deliveryOrders->removeElement($deliveryOrder);
+        if ($this->checkouts->contains($checkout)) {
+            $this->checkouts->removeElement($checkout);
             // set the owning side to null (unless already changed)
-            if ($deliveryOrder->getUser() === $this) {
-                $deliveryOrder->setUser(null);
+            if ($checkout->getUser() === $this) {
+                $checkout->setUser(null);
             }
         }
 
