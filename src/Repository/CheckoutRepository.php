@@ -32,7 +32,7 @@ class CheckoutRepository extends ServiceEntityRepository
             ->setParameter('year', $date->format('Y'))
             ->setParameter('month', $date->format('m'))
             ->setParameter('day', $date->format('d'))
-            ->setParameter('status', DeliveryOrder::STATUS_DONE);
+            ->setParameter('status', Checkout::STATUS_DONE);
         ;
         return $ql->getQuery()->getSingleScalarResult();
     }

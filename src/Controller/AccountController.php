@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Checkout;
 use App\Entity\DeliveryOrder;
 use App\Entity\SellerRequests;
 use App\Entity\User;
@@ -29,7 +30,7 @@ class AccountController extends AbstractController
      */
     public function profileAction()
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $user = $this->getUser();
 
         return $this->render('account/profile.html.twig', [
@@ -42,7 +43,7 @@ class AccountController extends AbstractController
      */
     public function profileEditAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $user = $this->getUser();
         $form = $this->createForm(EditProfileType::class, $user);
         $form->handleRequest($request);
@@ -69,7 +70,7 @@ class AccountController extends AbstractController
      */
     public function passwordEditAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $user = $this->getUser();
         $form = $this->createForm(ChangePasswordType::class);
         $form->handleRequest($request);
@@ -111,7 +112,7 @@ class AccountController extends AbstractController
     public function myHistoryAction(Request $request)
     {
         $this->denyAccessUnlessGranted('viewAccount');
-        $orders = $this->getDoctrine()->getRepository(DeliveryOrder::class)
+        $orders = $this->getDoctrine()->getRepository(Checkout::class)
             ->findByUser($this->getUser()->getId(), $request->get('page'));
 
         $thisPage = $request->get('page') ?: 1;
@@ -145,7 +146,7 @@ class AccountController extends AbstractController
         $this->denyAccessUnlessGranted(['ROLE_SELLER_MAIN', 'ROLE_SELLER_MANAGER']);
         $user = $this->getUser();
         $seller_id = $user->getSeller()->getId();
-        $orders = $this->getDoctrine()->getRepository(DeliveryOrder::class)
+        $orders = $this->getDoctrine()->getRepository(Checkout::class)
             ->findBySeller($seller_id, $request->get('page'));
 
         $thisPage = $request->get('page') ?: 1;
@@ -167,7 +168,7 @@ class AccountController extends AbstractController
         if ($request->isXMLHttpRequest()) {
             if (($id = $request->request->get('id')) == true) {
 
-                $order = $this->getDoctrine()->getRepository(DeliveryOrder::class)->find($id);
+                $order = $this->getDoctrine()->getRepository(Checkout::class)->find($id);
                 $this->denyAccessUnlessGranted('submit', $order);
                 $order->setStatus(DeliveryOrder::STATUS_ACCEPT);
                 $manager = $this->getDoctrine()->getManager();
@@ -189,9 +190,9 @@ class AccountController extends AbstractController
         if ($request->isXMLHttpRequest()) {
             if (($id = $request->request->get('id')) == true) {
 
-                $order = $this->getDoctrine()->getRepository(DeliveryOrder::class)->find($id);
+                $order = $this->getDoctrine()->getRepository(Checkout::class)->find($id);
                 $this->denyAccessUnlessGranted('submit', $order);
-                $order->setStatus(DeliveryOrder::STATUS_CANCEL);
+                $order->setStatus(Checkout::STATUS_CANCEL);
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($order);
                 $manager->flush();

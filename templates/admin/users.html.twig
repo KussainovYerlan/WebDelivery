@@ -63,7 +63,7 @@
                         <th scope="col">{{ user.getId() }}</th>
                         <th scope="col">{{ user.getLogin() }}</th>
                         <th scope="col">{{ user.getEmail() }}</th>
-                        <th scope="col">{{ user.getDeliveryOrders().count }}</th>
+                        <th scope="col">{{ user.getCheckouts().count }}</th>
                         <th scope="col">{{ user.getRoles()|join(', ') }}</th>
                         <th scope="col">
                             <button class="btn btn-danger ajax-delete" data-id="{{ user.getId }}">

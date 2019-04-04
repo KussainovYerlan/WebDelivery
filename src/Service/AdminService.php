@@ -5,6 +5,7 @@ namespace App\Service;
 
 
 use App\Entity\AdminRequests;
+use App\Entity\Checkout;
 use App\Entity\DeliveryOrder;
 use App\Entity\Seller;
 use App\Entity\User;
@@ -62,7 +63,7 @@ class AdminService
 
     public function getDoneOrdersToday()
     {
-        return $this->manager->getRepository(DeliveryOrder::class)->countDoneOrders(new \DateTime());
+        return $this->manager->getRepository(Checkout::class)->countDoneOrders(new \DateTime());
     }
 
     public function requestSubmit(AdminRequests $adminRequest, $domen)
