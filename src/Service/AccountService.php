@@ -37,7 +37,7 @@ class AccountService
         }
 
         $user = $sellerRequest->getUser();
-        $user->setRoles(['ROLE_SELLER_MANAGER']);
+        $user->setRoles(User::ROLE_SELLER_MANAGER);
         $user->setSeller($sellerRequest->getSeller());
         $this->manager->persist($user);
         $this->manager->remove($sellerRequest);

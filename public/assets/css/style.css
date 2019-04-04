@@ -356,3 +356,23 @@ body {
 }
 
 
+/* Admin styles */
+.card-body-icon {
+    position: absolute;
+    z-index: 0;
+    top: -1rem;
+    right: 0.5rem;
+    opacity: 0.4;
+    font-size: 5rem;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.search-form {
+    margin-top: 20px;
+}
+
+
+

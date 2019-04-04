@@ -37,12 +37,11 @@ class RegistrationController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-        $ps = $user->getPassword();
-        $enc = $passwordEncoder->encodePassword($user, $user->getPassword());
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->service->register($user, $request->getSchemeAndHttpHost(), $form->get('plainPassword')->getData());
+            $user->setRoles(User::ROLE_USER);
+            $this->service->register($user, $request->getSchemeAndHttpHost(), $form->get('plainPassword')->getData(), 'email/registration.html.twig', 'Регистрация');
 
 
             $this->addFlash('notice', 'Вы успешно зарегистрировались, проверьте ваш email! ');

@@ -35,6 +35,7 @@ class OrderVoter extends Voter
                 return $this->canView($user);
                 break;
             case 'submit':
+                return $this->canSubmit($user, $subject);
         }
 
         return false;

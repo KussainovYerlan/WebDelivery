@@ -70,8 +70,31 @@
                                             </div>
                                         </div>
                                 </div>
+                                </div>
                         {% endfor %}
-                        </div>
+                            <div class="row">
+                                <div class="col">
+                                    <nav>
+                                        <ul class="pagination justify-content-center">
+                                            <li class="page-item" {{ thisPage == 1 ? 'class="disabled"' }}>
+                                                <a class="page-link" href="{{ path('myhistory', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}">«</a>
+                                            </li>
+
+                                            {% for i in 1..maxPages %}
+                                                {% if i > 0 %}
+                                                    <li class="page-item {{ thisPage == i ? 'active' }}" >
+                                                        <a class="page-link" href="{{ path('myhistory', {page: i}) }}">{{ i }}</a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endfor %}
+
+                                            <li class="page-item" {{ thisPage == maxPages ? 'class="disabled"' }}>
+                                                <a class="page-link" href="{{ path('myhistory', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage}) }}">»</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
                     {% else %}
                         <div id="page-content-wrapper">
                             <div class="container-fluid" style="margin: 15px">

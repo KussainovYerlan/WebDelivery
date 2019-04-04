@@ -34,15 +34,13 @@ class AuthService
         return $token;
     }
 
-    public function register (User $user, string $domen, string $plainPassword)
+    public function register(User $user, string $domen, string $plainPassword, string $template, $title)
     {
         $repository = $this->manager->getRepository(User::class);
-        while (1)
-        {
+        while (1) {
             $token = $this->generate();
             $user_check = $repository->getUserByToken($token);
-            if (!$user_check)
-            {
+            if (!$user_check) {
                 $user->setToken($token);
                 break;
             }
@@ -59,14 +57,14 @@ class AuthService
         $this->manager->flush();
 
 
-        $this->sendEmail($domen, $user,'email/registration.html.twig');
+        $this->sendEmail($domen, $user, $template, $plainPassword, $title);
     }
 
-    public function sendEmail(string $domen, User $user, $template)
+    public function sendEmail(string $domen, User $user, $template, $plainPassword, $title)
     {
         $url = $domen . $this->generator->generate('activation', ['token' => $user->getToken()]);
 
-        $message = (new \Swift_Message('Registration'))
+        $message = (new \Swift_Message($title))
             ->setFrom('delivery.dev@gmail.com')
             ->setTo($user->getEmail())
             ->setBody(
@@ -75,11 +73,24 @@ class AuthService
                     [
                         'name' => $user->getLogin(),
                         'token' => $url,
+                        'password' => $plainPassword
                     ]
                 ),
                 'text/html'
             );
         $this->mailer->send($message);
+    }
+
+    public function generateStr()
+    {
+        $chars = "qazxswedcvfrtgbnhyujmkiolp1234567890QAZXSWEDCVFRTGBNHYUJMKIOLP";
+        $max = 10;
+        $size = strlen($chars) - 1;
+        $str= null;
+        while ($max--)
+            $str .= $chars[rand(0, $size)];
+
+        return $str;
     }
 
 }
