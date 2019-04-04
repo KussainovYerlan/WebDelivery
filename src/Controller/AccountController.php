@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\DeliveryOrder;
 use App\Entity\SellerRequests;
+use App\Entity\User;
 use App\Form\ChangePasswordType;
 use App\Form\EditProfileType;
 use App\Service\AccountService;
@@ -28,6 +29,7 @@ class AccountController extends AbstractController
      */
     public function profileAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
 
         return $this->render('account/profile.html.twig', [
@@ -40,12 +42,12 @@ class AccountController extends AbstractController
      */
     public function profileEditAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
         $form = $this->createForm(EditProfileType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($user);
             $manager->flush();
@@ -62,25 +64,23 @@ class AccountController extends AbstractController
     }
 
 
-
     /**
      * @Route("/account/edit/password", name="password_edit")
      */
     public function passwordEditAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
         $form = $this->createForm(ChangePasswordType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $old_pwd = $form->get('old_pass')->getData();
             $new_pwd = $form->get('new_password')->getData();
 
             $checkPass = $passwordEncoder->isPasswordValid($user, $old_pwd);
-            if ($checkPass)
-            {
+            if ($checkPass) {
                 $new_pwd = $passwordEncoder->encodePassword($user, $new_pwd);
                 $user->setPassword($new_pwd);
                 $manager = $this->getDoctrine()->getManager();
@@ -108,12 +108,20 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/myhistory", name="myhistory")
      */
-    public function myHistoryAction()
+    public function myHistoryAction(Request $request)
     {
-        $user = $this->getUser();
-        $orders = $user->getDeliveryOrders();
+        $this->denyAccessUnlessGranted('viewAccount');
+        $orders = $this->getDoctrine()->getRepository(DeliveryOrder::class)
+            ->findByUser($this->getUser()->getId(), $request->get('page'));
+
+        $thisPage = $request->get('page') ?: 1;
+
+        $maxPages = ceil($orders->count() / 4);
+
         return $this->render('account/history.html.twig', [
-            'orders' => $orders,
+            'thisPage' => $thisPage,
+            'maxPages' => $maxPages,
+            'orders' => $orders
         ]);
     }
 
@@ -122,6 +130,7 @@ class AccountController extends AbstractController
      */
     public function myDiscountsAction()
     {
+        $this->denyAccessUnlessGranted('viewAccount');
         $user = $this->getUser();
         return $this->render('account/profile.html.twig', [
             'user' => $user,
@@ -131,14 +140,22 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/seller/orders", name="seller_orders")
      */
-    public function sellerOrdersListAction()
+    public function sellerOrdersListAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('view', new DeliveryOrder());
+        $this->denyAccessUnlessGranted(['ROLE_SELLER_MAIN', 'ROLE_SELLER_MANAGER']);
         $user = $this->getUser();
-        $orders = $user->getSeller()->getDeliveryOrders();
+        $seller_id = $user->getSeller()->getId();
+        $orders = $this->getDoctrine()->getRepository(DeliveryOrder::class)
+            ->findBySeller($seller_id, $request->get('page'));
+
+        $thisPage = $request->get('page') ?: 1;
+
+        $maxPages = ceil($orders->count() / 4);
 
         return $this->render('account/seller_orders.html.twig', [
-            'orders' => $orders,
+            'thisPage' => $thisPage,
+            'maxPages' => $maxPages,
+            'orders' => $orders
         ]);
     }
 
@@ -147,15 +164,19 @@ class AccountController extends AbstractController
      */
     public function sellerOrdersSubmitAction(Request $request)
     {
-        if(($id = $request->request->get('id')) == true){
-            $order = $this->getDoctrine()->getRepository(DeliveryOrder::class)->find($id);
-            $order->setStatus(DeliveryOrder::STATUS_ACCEPT);
-            $manager = $this->getDoctrine()->getManager();
-            $manager->persist($order);
-            $manager->flush();
+        if ($request->isXMLHttpRequest()) {
+            if (($id = $request->request->get('id')) == true) {
 
-            return new JsonResponse(['message' => 'Done'], 200);
+                $order = $this->getDoctrine()->getRepository(DeliveryOrder::class)->find($id);
+                $this->denyAccessUnlessGranted('submit', $order);
+                $order->setStatus(DeliveryOrder::STATUS_ACCEPT);
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($order);
+                $manager->flush();
 
+                return new JsonResponse(['message' => 'Done'], 200);
+
+            }
         }
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
@@ -165,15 +186,19 @@ class AccountController extends AbstractController
      */
     public function sellerOrdersCancelAction(Request $request)
     {
-        if(($id = $request->request->get('id')) == true){
-            $order = $this->getDoctrine()->getRepository(DeliveryOrder::class)->find($id);
-            $order->setStatus(DeliveryOrder::STATUS_CANCEL);
-            $manager = $this->getDoctrine()->getManager();
-            $manager->persist($order);
-            $manager->flush();
+        if ($request->isXMLHttpRequest()) {
+            if (($id = $request->request->get('id')) == true) {
 
-            return new JsonResponse(['message' => 'Done'], 200);
+                $order = $this->getDoctrine()->getRepository(DeliveryOrder::class)->find($id);
+                $this->denyAccessUnlessGranted('submit', $order);
+                $order->setStatus(DeliveryOrder::STATUS_CANCEL);
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($order);
+                $manager->flush();
 
+                return new JsonResponse(['message' => 'Done'], 200);
+
+            }
         }
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
@@ -181,27 +206,51 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/seller/request", name="requests")
      */
-    public function sellerRequestsListAction()
+    public function sellerRequestsListAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_SELLER_MAIN');
 
-        $seller = $this->getUser()->getSeller();
-        $requests = $seller->getRequests();
+        $seller_id = $this->getUser()->getSeller()->getId();
+        $requests = $this->getDoctrine()->getRepository(SellerRequests::class)
+            ->findBySeller($seller_id, $request->get('page'));
+
+        $thisPage = $request->get('page') ?: 1;
+
+        $maxPages = ceil($requests->count() / 4);
 
         return $this->render('account/requests.html.twig', [
-            'requests' => $requests,
+            'thisPage' => $thisPage,
+            'maxPages' => $maxPages,
+            'requests' => $requests
         ]);
     }
 
     /**
      * @Route("/account/seller/managers", name="managers")
      */
-    public function sellerManagersListAction()
+    public function sellerManagersListAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_SELLER_MAIN');
 
-        $managers = $this->getUser()->getSeller()->getUsers();
+        $user = $this->getUser();
+        $managers_clear = [];
+        $managers = $this->getDoctrine()->getRepository(User::class)
+            ->findBySeller($user->getSeller()->getId(), $request->get('page'));
 
-        return $this->render('account/requests.html.twig', [
-            'managers' => $managers,
+        foreach ($managers as $manager) {
+            if ($manager !== $user) {
+                $managers_clear[] = $manager;
+            }
+        }
+
+        $thisPage = $request->get('page') ?: 1;
+
+        $maxPages = ceil($managers->count() / 4);
+
+        return $this->render('account/managers.html.twig', [
+            'thisPage' => $thisPage,
+            'maxPages' => $maxPages,
+            'managers' => $managers_clear
         ]);
     }
 
@@ -210,13 +259,15 @@ class AccountController extends AbstractController
      */
     public function sellerRequestSubmitAction(Request $request)
     {
+        if ($request->isXMLHttpRequest()) {
+            $this->denyAccessUnlessGranted('ROLE_SELLER_MAIN');
+            if (($id = $request->request->get('id')) == true) {
 
-        if(($id = $request->request->get('id')) == true){
+                $this->service->submit($id);
 
-            $this->service->submit($id);
+                return new JsonResponse(['message' => 'Done'], 200);
 
-            return new JsonResponse(['message' => 'Done'], 200);
-
+            }
         }
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
@@ -226,13 +277,15 @@ class AccountController extends AbstractController
      */
     public function sellerRequestCancelAction(Request $request)
     {
+        if ($request->isXMLHttpRequest()) {
+            $this->denyAccessUnlessGranted('ROLE_SELLER_MAIN');
+            if (($id = $request->request->get('id')) == true) {
 
-        if(($id = $request->request->get('id')) == true){
+                $this->service->cancel($id);
 
-            $this->service->cancel($id);
+                return new JsonResponse(['message' => 'Done'], 200);
 
-            return new JsonResponse(['message' => 'Done'], 200);
-
+            }
         }
         return new JsonResponse(['message' => 'Update failure'], 404);
     }

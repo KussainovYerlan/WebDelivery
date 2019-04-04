@@ -39,8 +39,6 @@ class SellerRequestsController extends AbstractController
             }
             $sellerRequest->setSeller($form->get('seller')->getData());
             $sellerRequest->setUser($this->getUser());
-            $sellerRequest->setFirstName($form->get('firstName')->getData());
-            $sellerRequest->setLastName($form->get('lastName')->getData());
             $sellerRequest->setresume($form->get('resume')->getData());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sellerRequest);

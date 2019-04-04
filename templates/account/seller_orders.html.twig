@@ -90,7 +90,30 @@
                             <!-- Card body end -->
                         </div>
                         <!-- end of the card -->
+                        </div>
                         {% endfor %}
+                    <div class="row">
+                        <div class="col">
+                            <nav>
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item" {{ thisPage == 1 ? 'class="disabled"' }}>
+                                        <a class="page-link" href="{{ path('seller_orders', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}">«</a>
+                                    </li>
+
+                                    {% for i in 1..maxPages %}
+                                        {% if i > 0 %}
+                                            <li class="page-item {{ thisPage == i ? 'active' }}" >
+                                                <a class="page-link" href="{{ path('seller_orders', {page: i}) }}">{{ i }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    <li class="page-item" {{ thisPage == maxPages ? 'class="disabled"' }}>
+                                        <a class="page-link" href="{{ path('seller_orders', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage}) }}">»</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                     {% else %}
                         <!-- if there is no products -->

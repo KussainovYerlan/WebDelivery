@@ -55,6 +55,7 @@
                         <span class="menu-collapsed">Заказы</span>
                     </div>
                 </a>
+                {% if is_granted("ROLE_SELLER_MAIN") %}
                 <a href="#submenu1" data-toggle="collapse" aria-expanded="false" class="bg-light list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-start align-items-center">
                         <span class="fas fa-user-friends fa-fw mr-3"></span>
@@ -64,13 +65,14 @@
                 </a>
                 <!-- Submenu content -->
                 <div id='submenu1' class="collapse sidebar-submenu">
-                    <a href="#" class="list-group-item list-group-item-action bg-light">
+                    <a href="{{ path('managers') }}" class="list-group-item list-group-item-action bg-light">
                         <span class="menu-collapsed">Все менеджеры</span>
                     </a>
                     <a href="{{ path('requests') }}" class="list-group-item list-group-item-action bg-light">
                         <span class="menu-collapsed">Заявки</span>
                     </a>
                 </div>
+                {% endif %}
                 <a href="#submenu3" data-toggle="collapse" aria-expanded="false" class="bg-light list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-start align-items-center">
                         <span class="fas fa-shopping-bag fa-fw mr-3"></span>
@@ -88,6 +90,12 @@
                     </a>
                 </div>
             {% endif %}
+            <a href="{{ path('logout') }}" class="bg-light list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fas fa-sign-out-alt fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Выйти</span>
+                </div>
+            </a>
         </ul><!-- List Group END-->
     </div><!-- sidebar-container END -->
     </div><!-- Main Col END -->

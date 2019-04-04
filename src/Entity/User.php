@@ -13,10 +13,17 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  * @UniqueEntity(fields={"login"}, message="There is already an account with this login")
+ * @ORM\HasLifecycleCallbacks()
  *
  */
 class User implements UserInterface
 {
+
+    const ROLE_USER = 'ROLE_USER';
+    const ROLE_SELLER_MAIN = 'ROLE_SELLER_MAIN';
+    const ROLE_SELLER_MANAGER = 'ROLE_SELLER_MANAGER';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -40,10 +47,10 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="string")
      *
      */
-    private $roles = [];
+    private $role;
 
     /**
      * @var string The hashed password
@@ -85,6 +92,11 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\SellerRequests", mappedBy="user", orphanRemoval=true)
      */
     private $requests;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $CreatedAt;
 
     public function __construct()
     {
@@ -128,18 +140,14 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getRoles(): array
+    public function getRoles() : array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return [$this->role];
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles($role): self
     {
-        $this->roles = $roles;
+        $this->role = $role;
 
         return $this;
     }
@@ -273,4 +281,14 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAt()
+    {
+        $this->CreatedAt = new \DateTime();
+    }
+
+
 }
