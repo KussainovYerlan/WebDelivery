@@ -7,7 +7,7 @@ use App\Entity\Seller;
 use App\Entity\User;
 use App\Form\ImportTableType;
 use App\Service\TokenGenerator;
-use App\Service\TableImporter;
+use App\Service\ProductImportService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,8 +39,9 @@ class IndexController extends AbstractController
         $sheetData='';
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->getData()['importFile'];
-            $table = new TableImporter();
-            $sheetData = $table->importCsv($file, $repository);
+            $em = $this->getDoctrine()->getManager();
+            $table = new ProductImportService($em,$file,$repository);
+            $sheetData = $table->importCsv();
         }
         return $this->render('index/importcsv.html.twig', [
             'form' => $form->createView(),
