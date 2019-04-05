@@ -41,7 +41,8 @@ class ProductImportService
     private function pushProductToBase($importProducts){
         foreach ($importProducts as $importProduct)
         {
-            $product = $this->repository->findOneBy([]);
+            $importProductId=$importProduct[0];
+            $product = $this->repository->findOneBy(['external_id'=>$importProductId]);
             if ($product) {
                 $product->setName($importProduct[3]);
                 $product->setDescription($importProduct[4]);
