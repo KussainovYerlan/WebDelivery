@@ -9,10 +9,12 @@
 namespace App\Service;
 
 use App\Entity\Product;
+use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Csv;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
-use Doctrine\ORM\EntityManager;;
+
+use Doctrine\ORM\EntityManager;
 
 
 

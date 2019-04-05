@@ -20,6 +20,17 @@ class IndexController extends AbstractController
      */
     public function index(Request $request):Response
     {
+
+        return $this->render('index/index.html.twig', [
+
+        ]);
+    }
+    /**
+     * @Route("/importcsv", name="importcsv")
+     */
+    public function importCsv(Request $request):Response
+    {
+
         $repository = $this->getDoctrine()->getRepository(Product::class);
         $products = $repository->findAll();
         $form = $this->createForm(ImportTableType::class);
@@ -31,7 +42,7 @@ class IndexController extends AbstractController
             $table = new TableImporter();
             $sheetData = $table->importCsv($file, $repository);
         }
-        return $this->render('index/index.html.twig', [
+        return $this->render('index/importcsv.html.twig', [
             'form' => $form->createView(),
             'sheetData' => $sheetData,
             'products' => $products,
