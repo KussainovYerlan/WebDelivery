@@ -13,12 +13,12 @@ class SearchProductType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('description')
-            ->add('count')
-            ->add('price')
-            ->add('external_id')
-            ->add('category')
-            ->add('seller')
+//            ->add('description')
+//            ->add('count')
+//            ->add('price')
+//            ->add('external_id')
+//            ->add('category')
+//            ->add('seller')
         ;
     }
 

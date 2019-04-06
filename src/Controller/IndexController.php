@@ -6,6 +6,7 @@ use App\Entity\Product;
 use App\Entity\Seller;
 use App\Entity\User;
 use App\Form\ImportTableType;
+use App\Form\SearchProductType;
 use App\Service\TokenGenerator;
 use App\Service\ProductImportService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,9 +21,7 @@ class IndexController extends AbstractController
      */
     public function index(Request $request):Response
     {
-
         return $this->render('index/index.html.twig', [
-
         ]);
     }
     /**
@@ -30,13 +29,9 @@ class IndexController extends AbstractController
      */
     public function importCsv(Request $request):Response
     {
-
         $repository = $this->getDoctrine()->getRepository(Product::class);
-        $products = $repository->findAll();
         $form = $this->createForm(ImportTableType::class);
         $form->handleRequest($request);
-
-        $sheetData='';
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->getData()['importFile'];
             $em = $this->getDoctrine()->getManager();
@@ -45,7 +40,25 @@ class IndexController extends AbstractController
         }
         return $this->render('index/importcsv.html.twig', [
             'form' => $form->createView(),
-            'sheetData' => $sheetData,
+        ]);
+    }
+    /**
+     * @Route("/search", name="search")
+     */
+    public function searchProducts(Request $request):Response
+    {
+        $form = $this->createForm(SearchProductType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->getData()->getName();
+            $products = $this->getDoctrine()
+                ->getRepository(Product::class)
+                ->searchProducts($search);
+        } else {
+            $products = false;
+        }
+        return $this->render('index/search.html.twig', [
+            'form' => $form->createView(),
             'products' => $products,
         ]);
     }

@@ -7,7 +7,9 @@
 {% block body %}
     {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Send') }}</button>
+    <button class="btn">{{ button_label|default('Find') }}</button>
 
     {{ form_end(form) }}
+
+    {{ dump(products) }}
 {% endblock %}

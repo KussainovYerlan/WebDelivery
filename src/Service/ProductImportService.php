@@ -48,8 +48,8 @@ class ProductImportService
                 $product->setDescription($importProduct[4]);
                 $product->setCount($importProduct[5]);
                 $product->setPrice($importProduct[6]);
-                // $product->setCategory($importProduct[1]);
-                $product->setCategory(0);
+              //  $product->setCategory($importProduct[1]);
+                $product->setCategory(1);
             }
             else {
                 $product = new Product();
@@ -57,8 +57,8 @@ class ProductImportService
                 $product->setDescription($importProduct[4]);
                 $product->setCount($importProduct[5]);
                 $product->setPrice($importProduct[6]);
-                // $product->setCategory($importProduct[1]);
-                $product->setCategory(0);
+                //$product->setCategory($importProduct[1]);
+                $product->setCategory(1);
                 $product->setExternalId($importProduct[0]);
             }
             $this->manager->persist($product);
