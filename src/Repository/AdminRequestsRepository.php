@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\AdminRequests;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -17,6 +18,23 @@ class AdminRequestsRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, AdminRequests::class);
+    }
+
+    public function findAllPaginate($page = 1)
+    {
+        $query = $this->createQueryBuilder('s')
+        ;
+
+        return $this->paginate($query->getQuery(), $page ?: 1);
+    }
+
+    public function paginate($dql, $page = 1, $limit = 4)
+    {
+        $paginator = new Paginator($dql);
+        $paginator->getQuery()
+            ->setFirstResult($limit * ($page - 1))
+            ->setMaxResults($limit);
+        return $paginator;
     }
 
     // /**

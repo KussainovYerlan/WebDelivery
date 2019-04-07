@@ -10,9 +10,9 @@
         <div class="col-md-12">
             <form action="{{ path('admin_users') }}" method="GET">
                 <div class="row search-form">
-                    <div class="col-md-7">
+                    <div class="col-md-8">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="search" value="{{ app.request.get('search') }}" placeholder="Введите логин пользователя">
+                            <input type="text" class="form-control" name="search-login" value="{{ app.request.get('search') }}" placeholder="Введите логин пользователя">
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -32,7 +32,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <div class="form-group">
                             <button class="btn btn-primary border" type="submit"><i class="fa fa-search"></i></button>
                         </div>
@@ -45,7 +45,7 @@
         <div class="profile-wrapper">
             <div class="row dashboard-today">
                 <table class="table">
-                    <caption>List of users</caption>
+                    <caption>Список пользователей</caption>
                     <thead>
                     <tr>
                         <th scope="col">id</th>
@@ -53,7 +53,7 @@
                         <th scope="col">Email</th>
                         <th scope="col">Кол-во заказов</th>
                         <th scope="col">Роли</th>
-                        <th scope="col">#</th>
+                        <th scope="col">Продавец</th>
                         <th scope="col">#</th>
                     </tr>
                     </thead>
@@ -65,18 +65,17 @@
                         <th scope="col">{{ user.getEmail() }}</th>
                         <th scope="col">{{ user.getCheckouts().count }}</th>
                         <th scope="col">{{ user.getRoles()|join(', ') }}</th>
+
+                        {% if user.getSeller() %}
+                        <th scope="col"><a href="{{ path('admin_seller_view', { id: user.getSeller().getId() }) }}">{{ user.getSeller().getName() }}</a></th>
+                        {% else %}
+                        <th scope="col">#</th>
+                        {% endif %}
                         <th scope="col">
                             <button class="btn btn-danger ajax-delete" data-id="{{ user.getId }}">
                                 Удалить
                             </button>
                         </th>
-                        {% if user.getRoles() == [constant('App\\Entity\\User::ROLE_SELLER_MAIN')] %}
-                            <th scope="col">
-                                <button class="btn btn-primary">
-                                    Подробнее
-                                </button>
-                            </th>
-                        {% endif %}
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -106,6 +105,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    </div>
     </div>
 {% endblock %}
         {% block javascripts %}

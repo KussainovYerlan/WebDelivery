@@ -39,7 +39,7 @@ class Seller
     private $products;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="seller")
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="seller", orphanRemoval=true)
      */
     private $users;
 

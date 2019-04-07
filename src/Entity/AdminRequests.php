@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AdminRequestsRepository")
+ *
  */
 class AdminRequests
 {
@@ -18,6 +20,13 @@ class AdminRequests
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     *     message="Пожалуйста, введите название компании."
+     * )
+     * @Assert\Length(
+     *      max = 50,
+     *      maxMessage = "Название вашей компании должно быть короче {{ limit }} символов."
+     * )
      */
     private $company_name;
 
@@ -28,16 +37,34 @@ class AdminRequests
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\File(mimeTypes={ "application/pdf" },
+     *      mimeTypesMessage = "Файл должен иметь расширение .pdf",
+     *      maxSize="2M",
+     *      maxSizeMessage="Размер файла должен быть меньше {{ limit }} {{ suffix }}.",
+     *     notFoundMessage="Файл не найден")
      */
     private $company_file;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(
+     *     message="Пожалуйста, введите email."
+     * )
+     * @Assert\Email(
+     *     message = "Email '{{ value }}' имеет неверный формат.",
+     * )
+     * @Assert\Length(
+     *      max = 180,
+     *      maxMessage = "Ваш email должен быть короче {{ limit }} символов."
+     * )
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     *     message="Пожалуйста, введите адрес компании."
+     * )
      */
     private $company_address;
 

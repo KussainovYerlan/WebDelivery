@@ -5,7 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    product_images_directory: '%kernel.project_dir%/public/uploads/product_images' 
+    product_images_directory: '%kernel.project_dir%/public/uploads/product_images'
+    request_doc_directory: '%kernel.project_dir%/public/assets/request_doc'
 
 services:
     # default configuration for services in *this* file
@@ -32,3 +33,6 @@ services:
 
     App\Service\AdminService:
         arguments: ['@doctrine.orm.default_entity_manager']
+
+    App\Service\RequestService:
+        arguments: ['@doctrine.orm.default_entity_manager','%kernel.project_dir%/public/assets/request_doc']

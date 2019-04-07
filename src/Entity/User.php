@@ -34,14 +34,14 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(
-     *     message="Please enter your email."
+     *     message="Пожалуйста, введите email."
      * )
      * @Assert\Email(
-     *     message = "The email '{{ value }}' is not a valid email.",
+     *     message = "Email '{{ value }}' имеет неверный формат.",
      * )
      * @Assert\Length(
      *      max = 180,
-     *      maxMessage = "Your email must be shorter than {{ limit }} characters."
+     *      maxMessage = "Ваш email должен быть короче {{ limit }} символов."
      * )
      */
     private $email;
@@ -62,13 +62,13 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=120, unique=true)
      * @Assert\NotBlank(
-     *     message="Please enter your login."
+     *     message="Пожалуйства, введите свой логин."
      * )
      * @Assert\Length(
      *      min = 6,
      *      max = 120,
-     *      minMessage = "Your login must be longer than {{ limit }} characters.",
-     *      maxMessage = "Your login must be shorter than {{ limit }} characters."
+     *      minMessage = "Ваш логин должен быть длиннее {{ limit }} символов.",
+     *      maxMessage = "Ваш логин должен быть короче {{ limit }} символов."
      * )
      */
     private $login;

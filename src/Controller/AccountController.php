@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Checkout;
-use App\Entity\DeliveryOrder;
+use App\Entity\Seller;
 use App\Entity\SellerRequests;
 use App\Entity\User;
 use App\Form\ChangePasswordType;
@@ -30,7 +30,6 @@ class AccountController extends AbstractController
      */
     public function profileAction()
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $user = $this->getUser();
 
         return $this->render('account/profile.html.twig', [
@@ -43,18 +42,14 @@ class AccountController extends AbstractController
      */
     public function profileEditAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $user = $this->getUser();
         $form = $this->createForm(EditProfileType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager = $this->getDoctrine()->getManager();
-            $manager->persist($user);
-            $manager->flush();
-            return $this->render('account/success.html.twig', [
-                'message' => 'Данные успешно отредактированы'
-            ]);
+            $this->service->persistToTable($user);
+            $this->addFlash('notice', 'Вы успешно отредактивовали профиль');
+            return $this->redirectToRoute('profile');
         }
 
         return $this->render('account/edit_profile.html.twig', [
@@ -70,34 +65,15 @@ class AccountController extends AbstractController
      */
     public function passwordEditAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $user = $this->getUser();
         $form = $this->createForm(ChangePasswordType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $old_pwd = $form->get('old_pass')->getData();
-            $new_pwd = $form->get('new_password')->getData();
-
-            $checkPass = $passwordEncoder->isPasswordValid($user, $old_pwd);
-            if ($checkPass) {
-                $new_pwd = $passwordEncoder->encodePassword($user, $new_pwd);
-                $user->setPassword($new_pwd);
-                $manager = $this->getDoctrine()->getManager();
-                $manager->persist($user);
-                $manager->flush();
-
-                return $this->render('account/success.html.twig',
-                    [
-                        'message' => 'Вы успешно изменили пароль'
-                    ]);
-            } else {
-                return $this->render('account/edit_password.html.twig', [
-                    'form' => $form->createView(),
-                    'error' => 'Неправильный пароль.'
-                ]);
-            }
+            $this->service->changePassword($form, $user);
+            $this->addFlash('notice', 'Вы успешно изменили пароль');
+            return $this->redirectToRoute('profile');
         }
 
         return $this->render('account/edit_password.html.twig', [
@@ -111,7 +87,6 @@ class AccountController extends AbstractController
      */
     public function myHistoryAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('viewAccount');
         $orders = $this->getDoctrine()->getRepository(Checkout::class)
             ->findByUser($this->getUser()->getId(), $request->get('page'));
 
@@ -131,7 +106,6 @@ class AccountController extends AbstractController
      */
     public function myDiscountsAction()
     {
-        $this->denyAccessUnlessGranted('viewAccount');
         $user = $this->getUser();
         return $this->render('account/profile.html.twig', [
             'user' => $user,
@@ -143,11 +117,11 @@ class AccountController extends AbstractController
      */
     public function sellerOrdersListAction(Request $request)
     {
-        $this->denyAccessUnlessGranted(['ROLE_SELLER_MAIN', 'ROLE_SELLER_MANAGER']);
+
         $user = $this->getUser();
-        $seller_id = $user->getSeller()->getId();
+        $sellerId = $user->getSeller()->getId();
         $orders = $this->getDoctrine()->getRepository(Checkout::class)
-            ->findBySeller($seller_id, $request->get('page'));
+            ->findBySeller($sellerId, $request->get('page'));
 
         $thisPage = $request->get('page') ?: 1;
 
@@ -170,10 +144,8 @@ class AccountController extends AbstractController
 
                 $order = $this->getDoctrine()->getRepository(Checkout::class)->find($id);
                 $this->denyAccessUnlessGranted('submit', $order);
-                $order->setStatus(DeliveryOrder::STATUS_ACCEPT);
-                $manager = $this->getDoctrine()->getManager();
-                $manager->persist($order);
-                $manager->flush();
+                $order->setStatus(Checkout::STATUS_ACCEPT);
+                $this->service->persistToTable($order);
 
                 return new JsonResponse(['message' => 'Done'], 200);
 
@@ -193,9 +165,7 @@ class AccountController extends AbstractController
                 $order = $this->getDoctrine()->getRepository(Checkout::class)->find($id);
                 $this->denyAccessUnlessGranted('submit', $order);
                 $order->setStatus(Checkout::STATUS_CANCEL);
-                $manager = $this->getDoctrine()->getManager();
-                $manager->persist($order);
-                $manager->flush();
+                $this->service->persistToTable($order);
 
                 return new JsonResponse(['message' => 'Done'], 200);
 
@@ -209,11 +179,10 @@ class AccountController extends AbstractController
      */
     public function sellerRequestsListAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_SELLER_MAIN');
 
-        $seller_id = $this->getUser()->getSeller()->getId();
+        $sellerId = $this->getUser()->getSeller()->getId();
         $requests = $this->getDoctrine()->getRepository(SellerRequests::class)
-            ->findBySeller($seller_id, $request->get('page'));
+            ->findBySeller($sellerId, $request->get('page'));
 
         $thisPage = $request->get('page') ?: 1;
 
@@ -231,27 +200,18 @@ class AccountController extends AbstractController
      */
     public function sellerManagersListAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_SELLER_MAIN');
 
-        $user = $this->getUser();
-        $managers_clear = [];
-        $managers = $this->getDoctrine()->getRepository(User::class)
-            ->findBySeller($user->getSeller()->getId(), $request->get('page'));
-
-        foreach ($managers as $manager) {
-            if ($manager !== $user) {
-                $managers_clear[] = $manager;
-            }
-        }
+        $managersClear = $this->service->getManagers($this->getUser(), $request);
 
         $thisPage = $request->get('page') ?: 1;
 
-        $maxPages = ceil($managers->count() / 4);
+        $maxPages = ceil($managersClear->count() / 4);
 
         return $this->render('account/managers.html.twig', [
             'thisPage' => $thisPage,
             'maxPages' => $maxPages,
-            'managers' => $managers_clear
+            'managers' => $managersClear,
+            'directory' => $this->getParameter('request_doc_directory')
         ]);
     }
 
@@ -261,7 +221,6 @@ class AccountController extends AbstractController
     public function sellerRequestSubmitAction(Request $request)
     {
         if ($request->isXMLHttpRequest()) {
-            $this->denyAccessUnlessGranted('ROLE_SELLER_MAIN');
             if (($id = $request->request->get('id')) == true) {
 
                 $this->service->submit($id);
@@ -279,7 +238,6 @@ class AccountController extends AbstractController
     public function sellerRequestCancelAction(Request $request)
     {
         if ($request->isXMLHttpRequest()) {
-            $this->denyAccessUnlessGranted('ROLE_SELLER_MAIN');
             if (($id = $request->request->get('id')) == true) {
 
                 $this->service->cancel($id);
@@ -289,6 +247,25 @@ class AccountController extends AbstractController
             }
         }
         return new JsonResponse(['message' => 'Update failure'], 404);
+    }
+
+    /**
+     * @Route("/account/sellers/list", name="sellers_choice")
+     */
+    public function choiceSellerAction(Request $request)
+    {
+        $sellers = $this->getDoctrine()->getRepository(Seller::class)
+            ->findByNamePaginate($request->get('page'), $request->get('search'));
+
+        $thisPage = $request->get('page') ?: 1;
+
+        $maxPages = ceil($sellers->count() / 4);
+
+        return $this->render('account/sellers.html.twig', [
+            'thisPage' => $thisPage,
+            'maxPages' => $maxPages,
+            'sellers' => $sellers
+        ]);
     }
 
 }

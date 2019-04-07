@@ -3,6 +3,7 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+    {{ include('partials/flashes.html.twig') }}
     <div class="form">
         {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
         <h4>Register</h4>

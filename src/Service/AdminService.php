@@ -27,6 +27,18 @@ class AdminService
         $this->mailer = $mailer;
     }
 
+    public function persistToTable($entity)
+    {
+        $this->manager->persist($entity);
+        $this->manager->flush();
+    }
+
+    public function removeFromTable($entity)
+    {
+        $this->manager->remove($entity);
+        $this->manager->flush();
+    }
+
     public function chartUserRegistry(int $count)
     {
         $repository = $this->manager->getRepository(User::class);
@@ -83,14 +95,12 @@ class AdminService
         $user->setSeller($seller);
 
         $this->authService->register($user, $domen, $this->authService->generateStr(), 'email/admin_request_submit.html.twig', 'Заявка одобрена');
-        $this->manager->remove($adminRequest);
-        $this->manager->flush();
+        $this->removeFromTable($adminRequest);
     }
 
     public function requestCancel(AdminRequests $adminRequest)
     {
-        $this->manager->remove($adminRequest);
-        $this->manager->flush();
+        $this->removeFromTable($adminRequest);
 
         $message = (new \Swift_Message('Заявка отлонена'))
             ->setFrom('delivery.dev@gmail.com')

@@ -39,8 +39,8 @@ class AuthService
         $repository = $this->manager->getRepository(User::class);
         while (1) {
             $token = $this->generate();
-            $user_check = $repository->getUserByToken($token);
-            if (!$user_check) {
+            $userCheck = $repository->getUserByToken($token);
+            if (!$userCheck) {
                 $user->setToken($token);
                 break;
             }

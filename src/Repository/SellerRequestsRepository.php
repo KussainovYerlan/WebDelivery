@@ -39,6 +39,18 @@ class SellerRequestsRepository extends ServiceEntityRepository
         return $paginator;
     }
 
+    public function findBySellerAndUser($sellerId , $userId)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.seller = :sellerId')
+            ->andWhere('s.user = :userId')
+            ->setParameter('sellerId', $sellerId)
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     // /**
     //  * @return SellerRequests[] Returns an array of SellerRequests objects
     //  */

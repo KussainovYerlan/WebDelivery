@@ -3,6 +3,7 @@
 {% block title %}Аккаунт{% endblock %}
 
 {% block body %}
+    {{ include('partials/flashes.html.twig') }}
     <div class="row" id="row-body">
         {{ include('account/account_menu.html.twig') }}
         <div class="col">
