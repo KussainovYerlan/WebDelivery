@@ -43,11 +43,6 @@ class Checkout
     private $user;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Product")
-     */
-    private $products;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -67,9 +62,14 @@ class Checkout
      */
     private $status;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CheckoutProduct", mappedBy="checkout", orphanRemoval=true)
+     */
+    private $checkoutProducts;
+
     public function __construct()
     {
-        $this->products = new ArrayCollection();
+        $this->checkoutProducts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -110,32 +110,6 @@ class Checkout
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Product[]
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): self
-    {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->contains($product)) {
-            $this->products->removeElement($product);
-        }
 
         return $this;
     }
@@ -218,6 +192,37 @@ class Checkout
     public function setStatusWait()
     {
         $this->status = self::STATUS_WAIT;
+    }
+
+    /**
+     * @return Collection|CheckoutProduct[]
+     */
+    public function getCheckoutProducts(): Collection
+    {
+        return $this->checkoutProducts;
+    }
+
+    public function addCheckoutProduct(CheckoutProduct $checkoutProduct): self
+    {
+        if (!$this->checkoutProducts->contains($checkoutProduct)) {
+            $this->checkoutProducts[] = $checkoutProduct;
+            $checkoutProduct->setCheckout($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCheckoutProduct(CheckoutProduct $checkoutProduct): self
+    {
+        if ($this->checkoutProducts->contains($checkoutProduct)) {
+            $this->checkoutProducts->removeElement($checkoutProduct);
+            // set the owning side to null (unless already changed)
+            if ($checkoutProduct->getCheckout() === $this) {
+                $checkoutProduct->setCheckout(null);
+            }
+        }
+
+        return $this;
     }
 
 }

@@ -18,7 +18,6 @@ class CheckoutType extends AbstractType
             ->add('seller')
             ->add('phone', TelType::class)
             ->add('user')
-            ->add('products')
         ;
     }
 

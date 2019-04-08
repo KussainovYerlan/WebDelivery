@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\Checkout;
+use App\Entity\CheckoutProduct;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,6 +12,8 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 /**
  * @Route("/product")
@@ -19,11 +23,18 @@ class ProductController extends AbstractController
     /**
      * @Route("/", name="product_index", methods={"GET"})
      */
-    public function index(ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository, Request $request): Response
     {
-        return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
-        ]);
+        $session = $request->getSession();
+        if ($session->get('seller') !== null) {
+            $seller = $session->get('seller');
+
+            return $this->render('product/index.html.twig', [
+                'products' => $productRepository->findBySeller($seller),
+            ]);
+        } else {
+            return $this->redirectToRoute('index');
+        }
     }
 
     /**
@@ -69,7 +80,6 @@ class ProductController extends AbstractController
      */
     public function show(Product $product): Response
     {
-
         return $this->render('product/show.html.twig', [
             'product' => $product,
         ]);

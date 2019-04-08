@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
+use App\Entity\Seller;
+use App\Repository\ProductRepository;
+use App\Entity\CheckoutProduct;
 use App\Entity\Checkout;
 use App\Form\CheckoutType;
 use App\Repository\CheckoutRepository;
@@ -9,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @Route("/checkout")
@@ -26,11 +31,45 @@ class CheckoutController extends AbstractController
     }
 
     /**
+     * @Route("/cart", name="checkout_cart", methods={"POST"})
+     */
+    public function shoppingCart(Request $request)
+    {
+        $session = $request->getSession();
+        $shoppingCart = json_decode($request->request->get('products'), true);
+        $session->set('shoppingCart', $shoppingCart);
+        return $this->redirectToRoute('checkout_new');
+    }
+
+    /**
      * @Route("/new", name="checkout_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
         $checkout = new Checkout();
+
+        $session = $request->getSession();
+
+        $sellerId = $session->get('seller')->getId();
+        $seller = $this->getDoctrine()
+            ->getRepository(Seller::class)
+            ->findOneById($sellerId)
+        ;
+        $checkout->setSeller($seller);
+
+        $shoppingCart = $session->get('shoppingCart');
+        foreach($shoppingCart as $id => $count) {
+            $product = $this->getDoctrine()
+                ->getRepository(Product::class)
+                ->findOneById($id)
+            ;
+            $checkoutProduct = new CheckoutProduct();
+            $checkoutProduct->setProduct($product)
+                ->setCount($count)
+            ;
+            $checkout->addCheckoutProduct($checkoutProduct);
+        }
+
         $form = $this->createForm(CheckoutType::class, $checkout);
         $form->handleRequest($request);
 
