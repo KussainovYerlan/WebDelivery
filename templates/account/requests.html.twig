@@ -48,7 +48,7 @@
                                     {% if item.getFile() %}
                                         <div class="manager-request-content-file" id = "manager-request-content-file-{{ item.getId() }}">
                                             <div class="manager-request-label">Файл:</div>
-                                            <a href="{{ asset('request_doc/') ~ item.getFile() }}"><button class="btn btn-info">View file</button></a>
+                                            <a href="{{ asset('request_doc/') ~ item.getFile()  }}"><button class="btn btn-info">View file</button></a>
                                         </div>
                                     {% endif %}
                                     <div class="manager-request-btn">

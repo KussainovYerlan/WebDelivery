@@ -14,7 +14,7 @@
             <!-- Menu with submenu -->
             <a href="{{ path('admin_dashboard') }}" class="bg-light list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="fa fa-tasks fa-fw mr-3"></span>
+                    <span class="fas fa-chart-area fa-fw mr-3"></span>
                     <span class="menu-collapsed">Главная</span>
                 </div>
             </a>
@@ -28,10 +28,32 @@
             <!-- Submenu content -->
             <div id='submenu2' class="collapse sidebar-submenu">
                 <a href="{{ path('admin_users') }}" class="list-group-item list-group-item-action bg-light">
-                    <span class="menu-collapsed">Покупатели</span>
+                    <span class="menu-collapsed">Пользователи</span>
                 </a>
                 <a href="{{ path('admin_requests') }}" class="list-group-item list-group-item-action bg-light">
                     <span class="menu-collapsed">Регистрация продавцов</span>
+                </a>
+            </div>
+            <a href="{{ path('admin_sellers') }}" class="bg-light list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-tasks fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Продавцы</span>
+                </div>
+            </a>
+            <a href="#submenu3" data-toggle="collapse" aria-expanded="false" class="bg-light list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fas fa-stream fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Категории</span>
+                    <span class="submenu-icon ml-auto"></span>
+                </div>
+            </a>
+            <!-- Submenu content -->
+            <div id='submenu3' class="collapse sidebar-submenu">
+                <a href="{{ path('admin_categories') }}" class="list-group-item list-group-item-action bg-light">
+                    <span class="menu-collapsed">Список категорий</span>
+                </a>
+                <a href="{{ path('admin_category_new') }}" class="list-group-item list-group-item-action bg-light">
+                    <span class="menu-collapsed">Новая категория</span>
                 </a>
             </div>
             <a href="{{ path('logout') }}" class="bg-light list-group-item list-group-item-action">

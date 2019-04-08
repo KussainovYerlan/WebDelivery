@@ -70,7 +70,7 @@ class UserRepository extends ServiceEntityRepository
                 'role' => '%' .$role .'%'
             ])
         ;
-        $paginator = $this->paginate($query->getQuery(), $page ?: 1, 10);
+        $paginator = $this->paginate($query->getQuery(), $page ?: 1, 4);
         return $paginator;
     }
 

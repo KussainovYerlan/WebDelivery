@@ -3,5 +3,6 @@
 {% block title %}Доставка еды{% endblock %}
 
 {% block body %}
-{{ form(form) }}
+    {{ form(form) }}
+    {{ include('partials/flashes.html.twig') }}
 {% endblock %}

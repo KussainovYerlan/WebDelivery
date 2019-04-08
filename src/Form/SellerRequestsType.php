@@ -17,9 +17,8 @@ class SellerRequestsType extends AbstractType
         $builder
             ->add('firstName')
             ->add('lastName')
-            ->add('resume', TextType::class)
+            ->add('resume')
             ->add('file', FileType::class)
-            ->add('seller')
         ;
     }
 

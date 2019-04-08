@@ -30,7 +30,7 @@ class ProductController extends AbstractController
             $seller = $session->get('seller');
 
             return $this->render('product/index.html.twig', [
-                'products' => $productRepository->findBySeller($seller),
+                'products' => $productRepository->findBySellerId($seller->getId()),
             ]);
         } else {
             return $this->redirectToRoute('index');

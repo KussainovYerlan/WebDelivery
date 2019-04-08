@@ -3,11 +3,7 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-    {% for message in app.flashes('notice') %}
-        <div class="success">
-            {{ message }}
-        </div>
-    {% endfor %}
+    {{ include('partials/flashes.html.twig') }}
     <div class="login-container">
         <div class="login-container-left">
             <form method="post">

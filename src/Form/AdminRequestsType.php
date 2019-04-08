@@ -19,8 +19,7 @@ class AdminRequestsType extends AbstractType
             ->add('company_description')
             ->add('company_file', FileType::class)
             ->add('email')
-            ->add('companyAddress')
-            ->add('Submit', SubmitType::class)
+            ->add('company_address')
         ;
     }
 

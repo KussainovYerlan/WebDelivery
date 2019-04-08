@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Seller;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -27,6 +28,27 @@ class SellerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+    
+    public function findByNamePaginate($page = 1, string $search = null)
+    {
+        $query = $this->createQueryBuilder('s')
+            ->where('s.name LIKE :search')
+            ->setParameters([
+                'search' => '%' . $search . '%',
+            ])
+        ;
+
+        return $this->paginate($query->getQuery(), $page ?: 1);
+    }
+
+    public function paginate($dql, $page = 1, $limit = 4)
+    {
+        $paginator = new Paginator($dql);
+        $paginator->getQuery()
+            ->setFirstResult($limit * ($page - 1))
+            ->setMaxResults($limit);
+        return $paginator;
     }
 
     // /**

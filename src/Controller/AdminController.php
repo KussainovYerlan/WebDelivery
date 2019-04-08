@@ -3,11 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\AdminRequests;
+use App\Entity\Category;
+use App\Entity\Product;
+use App\Entity\Seller;
 use App\Entity\User;
+use App\Form\CategoryType;
 use App\Service\AdminService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -29,7 +34,6 @@ class AdminController extends AbstractController
      */
     public function dashboardAction()
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $newUsers = $this->service->newUserRegistry();
         $doneOrdersToday = $this->service->getDoneOrdersToday();
         return $this->render('admin/dashboard.html.twig', [
@@ -47,7 +51,7 @@ class AdminController extends AbstractController
             ->findByLoginAndRole($request->get('page'), $request->get('search'), $request->get('role'));
         $thisPage = $request->get('page') ?: 1;
 
-        $maxPages = ceil($users->count() / 10);
+        $maxPages = ceil($users->count() / 4);
 
         return $this->render('admin/users.html.twig', [
             'thisPage' => $thisPage,
@@ -61,13 +65,10 @@ class AdminController extends AbstractController
      */
     public function deleteUser(Request $request)
     {
-        $this->denyAccessUnlessGranted(User::ROLE_ADMIN);
         if ($request->isXMLHttpRequest()) {
             if (($id = $request->request->get('id')) == true) {
                 $user = $this->getDoctrine()->getRepository(User::class)->find($id);
-                $manager = $this->getDoctrine()->getManager();
-                $manager->remove($user);
-                $manager->flush();
+                $this->service->removeFromTable($user);
 
                 return new JsonResponse(['message' => 'Done'], 200);
 
@@ -93,12 +94,19 @@ class AdminController extends AbstractController
     /**
      * @Route("/requests", name="requests")
      */
-    public function adminRequestsListAction()
+    public function adminRequestsListAction(Request $request)
     {
-        $requests = $this->getDoctrine()->getRepository(AdminRequests::class)->findAll();
+        $adminRequests = $this->getDoctrine()->getRepository(AdminRequests::class)->findAllPaginate($request->get('page'));
+
+        $thisPage = $request->get('page') ?: 1;
+
+        $maxPages = ceil($adminRequests->count() / 4);
 
         return $this->render('admin/requests.html.twig', [
-            'requests' => $requests
+            'thisPage' => $thisPage,
+            'maxPages' => $maxPages,
+            'requests' => $adminRequests,
+            'directory' => $this->getParameter('request_doc_directory')
         ]);
     }
 
@@ -129,6 +137,139 @@ class AdminController extends AbstractController
 
                 $adminRequest = $this->getDoctrine()->getRepository(AdminRequests::class)->find($id);
                 $this->service->requestCancel($adminRequest);
+                return new JsonResponse(['message' => 'Done'], 200);
+            }
+        }
+        return new JsonResponse(['message' => 'Update failure'], 404);
+    }
+
+    /**
+     * @Route("/sellers", name="sellers")
+     */
+    public function sellerListAction(Request $request)
+    {
+        $sellers = $this->getDoctrine()->getRepository(Seller::class)
+            ->findByNamePaginate($request->get('page'), $request->get('search'));
+
+        $thisPage = $request->get('page') ?: 1;
+
+        $maxPages = ceil($sellers->count() / 4);
+
+        return $this->render('admin/sellers.html.twig', [
+            'thisPage' => $thisPage,
+            'maxPages' => $maxPages,
+            'sellers' => $sellers
+        ]);
+    }
+
+    /**
+     * @Route("/sellers/delete", name="seller_delete")
+     */
+    public function sellerDeleteAction(Request $request)
+    {
+        if ($request->isXMLHttpRequest()) {
+            if (($id = $request->request->get('id')) == true) {
+                $seller = $this->getDoctrine()->getRepository(Seller::class)->find($id);
+                $this->service->removeFromTable($seller);
+                return new JsonResponse(['message' => 'Done'], 200);
+            }
+        }
+        return new JsonResponse(['message' => 'Update failure'], 404);
+    }
+
+    /**
+     * @Route("/sellers/{id}", name="seller_view")
+     */
+    public function sellerViewAction(Request $request)
+    {
+        $seller = $this->getDoctrine()->getRepository(Seller::class)->find($request->get('id'));
+
+        $products = $this->getDoctrine()->getRepository(Product::class)
+            ->findBySeller($seller, $request->get('page'), $request->get('search'));
+
+        $thisPage = $request->get('page') ?: 1;
+
+        $maxPages = ceil($products->count() / 4);
+
+        return $this->render('admin/view_seller.html.twig', [
+            'thisPage' => $thisPage,
+            'maxPages' => $maxPages,
+            'products' => $products,
+            'seller' => $seller,
+        ]);
+    }
+
+    /**
+     * @Route("/categories", name="categories")
+     */
+    public function categoriesListAction(Request $request)
+    {
+        $categories = $this->getDoctrine()->getRepository(Category::class)->search($request->get('page'), $request->get('search'));
+
+        $thisPage = $request->get('page') ?: 1;
+
+        $maxPages = ceil($categories->count() / 4);
+
+        return $this->render('admin/categories.html.twig', [
+            'thisPage' => $thisPage,
+            'maxPages' => $maxPages,
+            'categories' => $categories,
+        ]);
+    }
+
+    /**
+     * @Route("/categories/new", name="category_new", methods={"GET","POST"})
+     */
+    public function newCategoryAction(Request $request): Response
+    {
+        $category = new Category();
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->service->persistToTable($category);
+            return $this->redirectToRoute('admin_categories');
+        }
+
+        return $this->render('new_edit.html.twig', [
+            'category' => $category,
+            'form' => $form->createView(),
+            'title' => 'Создание категории',
+            'btn' => 'Создать'
+        ]);
+    }
+
+    /**
+     * @Route("/categories/edit/{id}", name="category_edit", methods={"GET","POST"})
+     */
+    public function editCategoryAction(Request $request): Response
+    {
+        $category = $this->getDoctrine()->getRepository(Category::class)->find($request->get('id'));
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->service->persistToTable($category);
+            return $this->redirectToRoute('admin_categories');
+        }
+
+        return $this->render('category/new_edit.html.twig', [
+            'category' => $category,
+            'form' => $form->createView(),
+            'title' => 'Редактирование категории',
+            'btn' => 'Изменить'
+        ]);
+    }
+
+    /**
+     * @Route("/categories/delete", name="category_delete")
+     */
+    public function categoryDeleteAction(Request $request)
+    {
+        if ($request->isXMLHttpRequest()) {
+            if (($id = $request->request->get('id')) == true) {
+                $seller = $this->getDoctrine()->getRepository(Category::class)->find($id);
+                $this->service->removeFromTable($seller);
                 return new JsonResponse(['message' => 'Done'], 200);
             }
         }

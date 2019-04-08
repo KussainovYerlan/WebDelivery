@@ -8,8 +8,9 @@ use App\Entity\SellerRequests;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Twig\Environment;
 
@@ -18,13 +19,45 @@ class AccountService
 
     private $manager;
     private $mailer;
+    private $encoder;
     private $templating;
 
-    public function __construct(\Swift_Mailer $mailer, Environment $templating, ObjectManager $manager)
+    public function __construct(\Swift_Mailer $mailer, Environment $templating, ObjectManager $manager, UserPasswordEncoderInterface $encoder)
     {
         $this->manager = $manager;
         $this->mailer = $mailer;
         $this->templating = $templating;
+        $this->encoder = $encoder;
+    }
+
+    public function persistToTable($entity)
+    {
+        $this->manager->persist($entity);
+        $this->manager->flush();
+    }
+
+    public function removeFromTable($entity)
+    {
+        $this->manager->remove($entity);
+        $this->manager->flush();
+    }
+
+    public function changePassword(FormInterface $form, User $user)
+    {
+        $oldPwd = $form->get('old_pass')->getData();
+        $newPwd = $form->get('new_password')->getData();
+
+        $checkPass = $this->encoder->isPasswordValid($user, $oldPwd);
+        if ($checkPass) {
+            $newPwd = $this->encoder->encodePassword($user, $newPwd);
+            $user->setPassword($newPwd);
+            $this->persistToTable($user);
+        } else {
+            return $this->templating->render('account/edit_password.html.twig', [
+                'form' => $form->createView(),
+                'error' => 'Неправильный пароль.'
+            ]);
+        }
     }
 
     public function submit(int $id)
@@ -69,8 +102,7 @@ class AccountService
         }
 
         $user = $sellerRequest->getUser();
-        $this->manager->remove($sellerRequest);
-        $this->manager->flush();
+        $this->removeFromTable($sellerRequest);
 
         $message = (new \Swift_Message('Заявка на роль менеджера.'))
             ->setFrom('delivery.dev@gmail.com')
@@ -86,5 +118,19 @@ class AccountService
                 'text/html'
             );
         $this->mailer->send($message);
+    }
+
+    public function getManagers(User $user, Request $request)
+    {
+        $managers = $this->manager->getRepository(User::class)
+            ->findBySeller($user->getSeller()->getId(), $request->get('page'));
+        $managersClear = [];
+        foreach ($managers as $manager) {
+            if ($manager !== $user) {
+                $managersClear[] = $manager;
+            }
+        }
+
+        return $managersClear;
     }
 }
