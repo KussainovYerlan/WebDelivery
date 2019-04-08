@@ -18,14 +18,6 @@ const setCartData = (o) => {
     localStorage.setItem('cart', JSON.stringify(o))
 }
 
-const submitOrder = () => {
-    let cartData = getCartData()
-    $.ajax({
-        type: 'POST',
-        url
-    })
-}
-
 const delFromCart = e => {
     let cartData = getCartData() || {},
         id = e.target.parentNode.id
@@ -53,7 +45,7 @@ const updateCartContent = () => {
         totalItems = '',
         totalSum = 0,
         totalCount = 0
-
+    
     if(cartData !== null){
         totalItems = `<table class="table">
                         <tbody id="shopping-cart_content">`
@@ -132,12 +124,17 @@ const openCart = () => {
 
 const sendCart = (e) => {
     let cartData = getCartData() || {}
+    let sendData = {}
+    for (let id in cartData) {
+        sendData[id] = cartData[id][0]
+    }
     $.ajax({
         type: "POST",
-        url: "/order/set_products",
+        url: '/checkout/cart',
         data: {
-            products: cartData,
-        }
+            products: JSON.stringify(sendData),
+        },
+        datatype: "json"
     })
 }
 
