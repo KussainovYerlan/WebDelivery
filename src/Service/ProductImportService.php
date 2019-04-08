@@ -9,10 +9,12 @@
 namespace App\Service;
 
 use App\Entity\Product;
+use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Csv;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use Symfony\Component\HttpFoundation\File\File;
 
 use Doctrine\ORM\EntityManager;
 
@@ -20,10 +22,20 @@ use Doctrine\ORM\EntityManager;
 
 class ProductImportService
 {
-    public function importCsv()
+    /**
+     * @var EntityManager
+     */
+    private $manager;
+
+    public function __construct(EntityManager $manager)
     {
-        $originalFileName = $this->file->getClientOriginalName();
-        $file = $this->file->getRealPath();
+        $this->manager = $manager;
+    }
+
+    public function importCsv($file)
+    {
+        $originalFileName = $file->getClientOriginalName();
+        $fileRealPAth = $this->file->getRealPath();
         //import products from csv and xml
 
         $arr_file = explode('.', $originalFileName);
@@ -33,23 +45,32 @@ class ProductImportService
         } elseif ('xml' == $extension) {
             $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xml();
         }
-        $spreadsheet = $reader->load($file);
+        $spreadsheet = $reader->load($fileRealPAth);
         $importProducts = $spreadsheet->getActiveSheet()->toArray();
         $this->pushProductToBase($importProducts);
         return true;
+
     }
     private function pushProductToBase($importProducts){
+        $productRepository = $this->manager->getRepository(Product::class);
+        $categoryRepository = $this->manager->getRepository(Category::class);
+
         foreach ($importProducts as $importProduct)
         {
             $importProductId=$importProduct[0];
-            $product = $this->repository->findOneBy(['external_id'=>$importProductId]);
+            $product = $productRepository->findOneBy(['external_id'=>$importProductId]);
+            $category = $categoryRepository->findOneBy(['name' => $importProduct[7]]);
+
+            if (!$category) {
+                continue;
+            }
+
             if ($product) {
                 $product->setName($importProduct[3]);
                 $product->setDescription($importProduct[4]);
                 $product->setCount($importProduct[5]);
                 $product->setPrice($importProduct[6]);
-              //  $product->setCategory($importProduct[1]);
-                $product->setCategory(1);
+                $product->setCategory($category);
             }
             else {
                 $product = new Product();
@@ -57,8 +78,7 @@ class ProductImportService
                 $product->setDescription($importProduct[4]);
                 $product->setCount($importProduct[5]);
                 $product->setPrice($importProduct[6]);
-                //$product->setCategory($importProduct[1]);
-                $product->setCategory(1);
+                $product->setCategory($category);
                 $product->setExternalId($importProduct[0]);
             }
             $this->manager->persist($product);
@@ -66,12 +86,4 @@ class ProductImportService
         }
         return true;
     }
-
-    public function __construct(EntityManager $manager,$file,$repository)
-    {
-        $this->manager = $manager;
-        $this->file = $file;
-        $this->repository = $repository;
-    }
-
 }

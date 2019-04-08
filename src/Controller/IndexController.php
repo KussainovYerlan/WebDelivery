@@ -19,6 +19,17 @@ class IndexController extends AbstractController
     /**
      * @Route("/", name="index")
      */
+
+    /**
+     * @var ProductImportService
+     */
+    private $productImportService;
+
+    public function __construct(ProductImportService $productImportService)
+    {
+        $this->productImportService = $productImportService;
+    }
+
     public function index(Request $request):Response
     {
         return $this->render('index/index.html.twig', [
@@ -29,14 +40,11 @@ class IndexController extends AbstractController
      */
     public function importCsv(Request $request):Response
     {
-        $repository = $this->getDoctrine()->getRepository(Product::class);
         $form = $this->createForm(ImportTableType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->getData()['importFile'];
-            $em = $this->getDoctrine()->getManager();
-            $table = new ProductImportService($em,$file,$repository);
-            $sheetData = $table->importCsv();
+            $this->productImportService->importCsv($file);
         }
         return $this->render('index/importcsv.html.twig', [
             'form' => $form->createView(),
