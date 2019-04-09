@@ -55,18 +55,13 @@ class IndexController extends AbstractController
      */
     public function searchProducts(Request $request):Response
     {
-        $form = $this->createForm(SearchProductType::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $search = $form->getData()->getName();
-            $products = $this->getDoctrine()
-                ->getRepository(Product::class)
-                ->searchProducts($search);
-        } else {
-            $products = false;
-        }
+        $search = $request ->get('query');
+
+        $products = $this->getDoctrine()
+            ->getRepository(Product::class)
+            ->searchProducts($search);
+
         return $this->render('index/search.html.twig', [
-            'form' => $form->createView(),
             'products' => $products,
         ]);
     }

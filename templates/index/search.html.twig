@@ -5,11 +5,15 @@
 
 
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Find') }}</button>
-
-    {{ form_end(form) }}
+    <div class="container">
+        <h2>Поиск продуктов</h2>
+        <form action="search">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Найти" name="query">
+            </div>
+            <button type="submit" class="btn btn-default">Найти</button>
+        </form>
+    </div>
 
     {{ dump(products) }}
 {% endblock %}
