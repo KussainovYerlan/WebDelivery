@@ -231,7 +231,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('admin_categories');
         }
 
-        return $this->render('new_edit.html.twig', [
+        return $this->render('category/new_edit.html.twig', [
             'category' => $category,
             'form' => $form->createView(),
             'title' => 'Создание категории',

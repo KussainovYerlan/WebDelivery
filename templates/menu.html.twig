@@ -10,9 +10,6 @@
             </li>
         </ul>
         <ul class="nav justify-content-end">
-            <li class="nav-item">
-                <a class="nav-link but-green" href="{{ path('product_index')}}">Продукты</a>
-            </li>
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') != true %}
                 <li class="nav-item">
                     <a class="nav-link but-green" href="{{ path('seller_requests_new')}}">Стать продавцом</a>

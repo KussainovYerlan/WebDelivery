@@ -24,11 +24,8 @@ final class Version20190403124919 extends AbstractMigration
 
         $this->addSql('ALTER TABLE delivery_order_product DROP FOREIGN KEY FK_22C2EA06ECFE8C54');
         $this->addSql('CREATE TABLE checkout (id INT AUTO_INCREMENT NOT NULL, seller_id INT NOT NULL, user_id INT NOT NULL, address VARCHAR(255) NOT NULL, status INT NOT NULL, INDEX IDX_AF382D4E8DE820D9 (seller_id), INDEX IDX_AF382D4EA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE checkout_product (checkout_id INT NOT NULL, product_id INT NOT NULL, INDEX IDX_2F21E0D4146D8724 (checkout_id), INDEX IDX_2F21E0D44584665A (product_id), PRIMARY KEY(checkout_id, product_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE checkout ADD CONSTRAINT FK_AF382D4E8DE820D9 FOREIGN KEY (seller_id) REFERENCES seller (id)');
         $this->addSql('ALTER TABLE checkout ADD CONSTRAINT FK_AF382D4EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
-        $this->addSql('ALTER TABLE checkout_product ADD CONSTRAINT FK_2F21E0D4146D8724 FOREIGN KEY (checkout_id) REFERENCES checkout (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE checkout_product ADD CONSTRAINT FK_2F21E0D44584665A FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE');
         $this->addSql('DROP TABLE delivery_order');
         $this->addSql('DROP TABLE delivery_order_product');
     }
@@ -46,6 +43,5 @@ final class Version20190403124919 extends AbstractMigration
         $this->addSql('ALTER TABLE delivery_order_product ADD CONSTRAINT FK_22C2EA064584665A FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE delivery_order_product ADD CONSTRAINT FK_22C2EA06ECFE8C54 FOREIGN KEY (delivery_order_id) REFERENCES delivery_order (id) ON DELETE CASCADE');
         $this->addSql('DROP TABLE checkout');
-        $this->addSql('DROP TABLE checkout_product');
     }
 }

@@ -49,7 +49,9 @@ class IndexController extends AbstractController
             $session->set('sellerId', $form->getData()['seller']->getId());
             $session->set('shoppingCart', '');
 
-            return $this->redirectToRoute('product_index');
+            return $this->redirectToRoute('product_index', [
+                'id' => $form->getData()['seller']->getId()
+            ]);
         }
 
         return $this->render('index/index.html.twig', [
