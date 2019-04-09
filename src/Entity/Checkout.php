@@ -151,12 +151,12 @@ class Checkout
      */
     public function setCostAtValue()
     {
-        $products = $this->getProducts();
+        $checkoutProducts = $this->getCheckoutProducts();
         $cost = 0;
 
-        foreach ($products as $item)
+        foreach ($checkoutProducts as $item)
         {
-            $cost += $item->getPrice();
+            $cost += $item->getCount() * $item->getProduct()->getPrice();
         }
 
         $this->cost = $cost;

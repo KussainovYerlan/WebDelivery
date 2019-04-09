@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Entity\Checkout;
+use App\Entity\Seller;
 use App\Entity\CheckoutProduct;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
@@ -26,11 +27,16 @@ class ProductController extends AbstractController
     public function index(ProductRepository $productRepository, Request $request): Response
     {
         $session = $request->getSession();
-        if ($session->get('seller') !== null) {
-            $seller = $session->get('seller');
+        if ($session->get('sellerId') !== null) {
+            $sellerId = $session->get('sellerId');
+            $seller = $this->getDoctrine()
+                ->getRepository(Seller::class)
+                ->findOneById($sellerId)
+            ;
 
             return $this->render('product/index.html.twig', [
-                'products' => $productRepository->findBySellerId($seller->getId()),
+                'seller' => $seller,
+                'products' => $productRepository->findBySellerId($sellerId),
             ]);
         } else {
             return $this->redirectToRoute('index');

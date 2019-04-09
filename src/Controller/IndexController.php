@@ -31,7 +31,10 @@ class IndexController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $session = $request->getSession();
-            $session->set('seller', $form->getData()['seller']);
+            $session->set('sellerId', $form->getData()['seller']->getId());
+            $session->set('shoppingCart', '');
+
+            return $this->redirectToRoute('product_index');
         }
 
         return $this->render('index/index.html.twig', [

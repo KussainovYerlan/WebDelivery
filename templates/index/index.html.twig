@@ -3,6 +3,13 @@
 {% block title %}Доставка еды{% endblock %}
 
 {% block body %}
-    {{ form(form) }}
-    {{ include('partials/flashes.html.twig') }}
+<div class="container">
+    <div class="row">
+        <div class="col">
+        {% form_theme form 'bootstrap_4_layout.html.twig' %}
+        {{ form(form) }}
+        {{ include('partials/flashes.html.twig') }}
+        </div>
+    </div>
+</div>
 {% endblock %}

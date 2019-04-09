@@ -38,7 +38,7 @@ class CheckoutController extends AbstractController
         $session = $request->getSession();
         $shoppingCart = json_decode($request->request->get('products'), true);
         $session->set('shoppingCart', $shoppingCart);
-        return $this->redirectToRoute('checkout_new');
+        return new Response();
     }
 
     /**
@@ -50,7 +50,7 @@ class CheckoutController extends AbstractController
 
         $session = $request->getSession();
 
-        $sellerId = $session->get('seller')->getId();
+        $sellerId = $session->get('sellerId');
         $seller = $this->getDoctrine()
             ->getRepository(Seller::class)
             ->findOneById($sellerId)
@@ -58,6 +58,7 @@ class CheckoutController extends AbstractController
         $checkout->setSeller($seller);
 
         $shoppingCart = $session->get('shoppingCart');
+        $entityManager = $this->getDoctrine()->getManager();
         foreach($shoppingCart as $id => $count) {
             $product = $this->getDoctrine()
                 ->getRepository(Product::class)
@@ -67,6 +68,7 @@ class CheckoutController extends AbstractController
             $checkoutProduct->setProduct($product)
                 ->setCount($count)
             ;
+            $entityManager->persist($checkoutProduct);
             $checkout->addCheckoutProduct($checkoutProduct);
         }
 
@@ -74,7 +76,6 @@ class CheckoutController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($checkout);
             $entityManager->flush();
 
