@@ -17,30 +17,32 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 /**
- * @Route("/product")
+ * @Route("/")
  */
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/", name="product_index", methods={"GET"})
+     * @Route("seller/{id}/products", name="product_index", methods={"GET"})
      */
-    public function index(ProductRepository $productRepository, Request $request): Response
+    public function index(Seller $seller, Request $request): Response
     {
-        $session = $request->getSession();
-        if ($session->get('sellerId') !== null) {
-            $sellerId = $session->get('sellerId');
-            $seller = $this->getDoctrine()
-                ->getRepository(Seller::class)
-                ->findOneById($sellerId)
-            ;
+        if ($seller){
+            $search = $request ->get('query');
+            $products = $this->getDoctrine()
+                ->getRepository(Product::class)
+                ->searchProducts($search, $seller->getId());
+            $thisPage = $request->get('page') ?: 1;
 
+            $maxPages = ceil($products->count() / 4);
             return $this->render('product/index.html.twig', [
+                'thisPage' => $thisPage,
+                'maxPages' => $maxPages,
                 'seller' => $seller,
-                'products' => $productRepository->findBySellerId($sellerId),
+                'products' => $products,
             ]);
-        } else {
-            return $this->redirectToRoute('index');
         }
+
+        return $this->redirectToRoute('index');
     }
 
     /**

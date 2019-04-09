@@ -66,15 +66,15 @@ class ProductImportService
                 continue;
             }
 
-            if ($product) {
+            if (!empty($product)) {
                 $product->setName($importProduct[3]);
                 $product->setDescription($importProduct[4]);
                 $product->setCount($importProduct[5]);
                 $product->setPrice($importProduct[6]);
                 $product->setCategory($category);
                 $product->setSeller($user->getSeller());
-            }
-            else {
+
+            } else {
                 $product = new Product();
                 $product->setName($importProduct[3]);
                 $product->setDescription($importProduct[4]);

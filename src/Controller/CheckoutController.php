@@ -56,6 +56,7 @@ class CheckoutController extends AbstractController
             ->findOneById($sellerId)
         ;
         $checkout->setSeller($seller);
+        $checkout->setUser($this->getUser());
 
         $shoppingCart = $session->get('shoppingCart');
         $entityManager = $this->getDoctrine()->getManager();

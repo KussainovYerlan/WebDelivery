@@ -19,16 +19,16 @@
                                     {{ item.getAddress() }}, {{ item.getCreatedAt()|date('Y-m-d') }}
                                 </button>
                                 <!-- span block start -->
-                                {% if item.getStatus() == constant('App\\Entity\\DeliveryOrder::STATUS_WAIT') %}
+                                {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_WAIT') %}
                                     <span class="badge badge-secondary order-status" id="order-status-snap-{{ item.getId() }}" >Ожидает подтверждения</span>
                                 {% endif %}
-                                {% if item.getStatus() == constant('App\\Entity\\DeliveryOrder::STATUS_CANCEL') %}
+                                {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_CANCEL') %}
                                     <span class="badge badge-danger order-status">Отменен</span>
                                 {% endif %}
-                                {% if item.getStatus() == constant('App\\Entity\\DeliveryOrder::STATUS_ACCEPT') %}
+                                {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_ACCEPT') %}
                                     <span class="badge badge-info order-status">Подтвержден</span>
                                 {% endif %}
-                                {% if item.getStatus() == constant('App\\Entity\\DeliveryOrder::STATUS_DONE') %}
+                                {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_DONE') %}
                                     <span class="badge badge-success order-status">Выполнен</span>
                                 {% endif %}
                                 <!-- span block end -->
@@ -55,7 +55,7 @@
                                         </div>
                                         <div class="order-history-content-btn">
                                         <!-- Display or not button "submit" -->
-                                        {% if item.getStatus() == constant('App\\Entity\\DeliveryOrder::STATUS_WAIT') %}
+                                        {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_WAIT') %}
                                             <button type="button" class="btn btn-success ajax-accept order-history-btn-{{ item.getId() }}" data-id="{{ item.getId() }}">Submit</button>
                                             <button type="button" class="btn btn-danger ajax-cancel order-history-btn-{{ item.getId() }}"  data-id="{{ item.getId() }}">Cancel</button>
                                         {% endif %}

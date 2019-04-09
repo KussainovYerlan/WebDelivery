@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Checkout;
 use App\Entity\DeliveryOrder;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -41,7 +42,7 @@ class OrderVoter extends Voter
         return false;
     }
 
-    protected function canAdd(User $user, DeliveryOrder $order)
+    protected function canAdd(User $user, Checkout $order)
     {
         foreach ($user->getRoles() as $item) {
             if ($item == "ROLE_USER") {
@@ -71,7 +72,7 @@ class OrderVoter extends Voter
         return false;
     }
 
-    protected function canSubmit(User $user, DeliveryOrder $order)
+    protected function canSubmit(User $user, Checkout $order)
     {
         foreach ($user->getRoles() as $item) {
             if (($item == "ROLE_SELLER_MAIN") || ($item == "ROLE_SELLER_MANAGER")) {

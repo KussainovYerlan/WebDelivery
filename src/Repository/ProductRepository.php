@@ -38,14 +38,16 @@ class ProductRepository extends ServiceEntityRepository
       * @return Product[] Returns an array of Product objects
       */
 
-    public function searchProducts(?string $search)
+    public function searchProducts(?string $search, $sellerId, $page = 1)
     {
-        return $this->createQueryBuilder('p')
+        $query = $this->createQueryBuilder('p')
             ->Where('p.name LIKE :search')
             ->setParameter('search', '%' . $search . '%')
-            ->getQuery()
-            ->getResult()
+            ->andWhere('p.seller = :seller')
+            ->setParameter('seller', $sellerId)
             ;
+
+        return $this->paginate($query->getQuery(), $page ?: 1);
     }
 
     public function findBySeller(Seller $seller, $page = 1, $search)
