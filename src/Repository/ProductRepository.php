@@ -21,6 +21,22 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    /**
+      * @return Product[] Returns an array of Product objects
+      */
+    public function findBySellerId($sellerId)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.seller = :seller')
+            ->setParameter('seller', $sellerId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+      * @return Product[] Returns an array of Product objects
+      */
 
     public function searchProducts(?string $search)
     {
@@ -40,7 +56,7 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('seller', $seller->getId())
             ->setParameter('search', '%' . $search . '%')
         ;
-
+        
         return $this->paginate($query->getQuery(), $page ?: 1);
     }
 
@@ -52,4 +68,45 @@ class ProductRepository extends ServiceEntityRepository
             ->setMaxResults($limit);
         return $paginator;
     }
+
+    // /**
+    //  * @return Product[] Returns an array of Product objects
+    //  */
+    /*
+    public function findByExampleField($value)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.seller = :seller')
+            ->setParameter('seller', $seller)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findOneById($id): ?Product
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    // /**
+    //  * @return Product[] Returns an array of Product objects
+    //  */
+    /*
+    public function findByExampleField($value)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('p.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    */
 }
