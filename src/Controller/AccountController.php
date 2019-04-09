@@ -8,10 +8,13 @@ use App\Entity\SellerRequests;
 use App\Entity\User;
 use App\Form\ChangePasswordType;
 use App\Form\EditProfileType;
+use App\Form\ImportTableType;
 use App\Service\AccountService;
+use App\Service\ProductImportService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -19,10 +22,15 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class AccountController extends AbstractController
 {
     private $service;
+    /**
+     * @var ProductImportService
+     */
+    private $productImportService;
 
-    public function __construct(AccountService $service)
+    public function __construct(AccountService $service, ProductImportService $importService)
     {
         $this->service = $service;
+        $this->productImportService = $importService;
     }
 
     /**
@@ -205,7 +213,7 @@ class AccountController extends AbstractController
 
         $thisPage = $request->get('page') ?: 1;
 
-        $maxPages = ceil($managersClear->count() / 4);
+        $maxPages = ceil(count($managersClear) / 4);
 
         return $this->render('account/managers.html.twig', [
             'thisPage' => $thisPage,
@@ -265,6 +273,26 @@ class AccountController extends AbstractController
             'thisPage' => $thisPage,
             'maxPages' => $maxPages,
             'sellers' => $sellers
+        ]);
+    }
+
+    /**
+     * @Route("/account/seller/import", name="importcsv")
+     */
+    public function importCsv(Request $request): Response
+    {
+        $form = $this->createForm(ImportTableType::class);
+        $form->handleRequest($request);
+
+        $user = $this->getUser();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->getData()['importFile'];
+            $this->productImportService->importCsv($file, $user);
+        }
+
+        return $this->render('index/importcsv.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 

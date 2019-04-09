@@ -5,10 +5,35 @@
 {% block body %}
     <div class="container">
 
+        <div class="modal" role="dialog" id="shopping-cart"><div class="modal-dialog" role="document">
+            <div class="modal-content card" tabindex="-1">
+                <div class="card-header bg-dark text-light">
+                    Корзина
+                </div>
+                <div class="card-body" id="shopping-cart_list">
+                </div>
+                <div class="card-footer">
+                    <div class="pull-right" style="margin: 10px">
+                        <div class="pull-right" style="margin: 5px">
+                            Стоимость: <b id="shopping-cart_total">0.00</b> P
+                        </div>
+                        <button class="btn btn-success" id="shopping-cart_clear">Очистить корзину</button>
+                        <a href="" class="btn btn-success pull-right">Оформить заказ</a>
+                    </div>
+                </div>
+            </div>
+        </div></div>
+
         <div class="row">
 
             <div class="col-lg-3">
+<<<<<<< HEAD
                 <h1 class="my-4"><a href="{{ path("index") }}">{{ seller.name }}</a></h1>
+=======
+
+                <h1 class="my-4">Название магазина</h1>
+
+>>>>>>> 15197710c8d6b5daf5b20fd134d2609b5d86fd92
                 <div class="list-group">
                     <a href="#" class="list-group-item">Категория 1</a>
                     <a href="#" class="list-group-item">Категория 2</a>
@@ -17,6 +42,24 @@
             </div>
 
             <div class="col-lg-9">
+
+                <div class="container">
+                    <h2>Поиск продуктов</h2>
+                    <form action="{{ path('product_index') }}">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <input type="text" class="form-control" value = "{{app.request.get('query')}}"   name="query">
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="submit" class="btn btn-">Найти</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
                 <div class="row">
                 {% for product in products %}
                     <div class="col-lg-4 col-md-6 mb-4">
@@ -43,7 +86,9 @@
                 {% endfor %}
                 </div>
 
+
             </div>
+
         
         </div>
 
