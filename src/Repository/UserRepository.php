@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -27,6 +28,59 @@ class UserRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
             ;
+    }
+
+    public function getCountByDay($year, $month, $day)
+    {
+        $ql = $this->createQueryBuilder('u')
+            ->select('COUNT(u.id)')
+            ->where('YEAR(u.CreatedAt) = :year')
+            ->andWhere('MONTH(u.CreatedAt) = :month')
+            ->andWhere('DAY(u.CreatedAt) = :day')
+            ->andWhere('u.token = :token')
+            ->setParameter('year', $year)
+            ->setParameter('month', $month)
+            ->setParameter('day', $day)
+            ->setParameter('token', '');
+            ;
+        return $ql->getQuery()->getSingleScalarResult();
+    }
+
+    public function findBySeller(int $id , $page = 1)
+    {
+        $query = $this->createQueryBuilder('u'          )
+            ->andWhere('u.seller = :id')
+            ->setParameter('id', $id)
+        ;
+
+        return $this->paginate($query->getQuery(), $page ?: 1);
+    }
+
+    public function findByLoginAndRole($page = 1, string $search = null, $role = null)
+    {
+        if ($role == "Любая")
+        {
+            $role = null;
+        }
+        $query = $this->createQueryBuilder('u')
+            ->where('u.login LIKE :search')
+            ->andWhere('u.role LIKE :role')
+            ->setParameters([
+                'search' => '%' . $search . '%',
+                'role' => '%' .$role .'%'
+            ])
+        ;
+        $paginator = $this->paginate($query->getQuery(), $page ?: 1, 4);
+        return $paginator;
+    }
+
+    public function paginate($dql, $page = 1, $limit = 4)
+    {
+        $paginator = new Paginator($dql);
+        $paginator->getQuery()
+            ->setFirstResult($limit * ($page - 1))
+            ->setMaxResults($limit);
+        return $paginator;
     }
 
     // /**

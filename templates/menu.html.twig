@@ -13,21 +13,30 @@
             <li class="nav-item">
                 <a class="nav-link but-green" href="{{ path('product_index')}}">Продукты</a>
             </li>
-        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            <li class="nav-item">
-                <a class="nav-link but-green" href="#">Аккаунт</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link but-green" href="{{ path('logout') }}">Выйти</a>
-            </li>
-        {% else %}
-            <li class="nav-item">
-                <a class="nav-link but-green" href="{{ path('app_register') }}">Регистрация</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link but-green" href="{{ path('app_login') }}">Войти</a>
-            </li>
-        {% endif %}
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') != true %}
+                <li class="nav-item">
+                    <a class="nav-link but-green" href="{{ path('seller_requests_new')}}">Стать продавцом</a>
+                </li>
+            {% endif %}
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and (is_granted('ROLE_ADMIN') != true) %}
+                <li class="nav-item">
+                    <a class="nav-link but-green" href="{{ path('profile') }}">Аккаунт</a>
+                </li>
+            {% endif %}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') != true %}
+                <li class="nav-item">
+                    <a class="nav-link but-green" href="{{ path('app_register') }}">Регистрация</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link but-green" href="{{ path('app_login') }}">Войти</a>
+                </li>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link but-green" href="{{ path('admin_dashboard') }}">Панель администратора</a>
+                </li>
+            {% endif %}
+
             <li class="nav-item">
                 <a class="btn btn-primary" id="shopping-cart_open" href="#">Корзина</a>
             </li>

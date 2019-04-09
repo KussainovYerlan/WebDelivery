@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Аккаунт{% endblock %}
+
+{% block body %}
+    {{ include('partials/flashes.html.twig') }}
+    <div class="row" id="row-body">
+        {{ include('account/account_menu.html.twig') }}
+        <div class="col">
+            <div class="container-fluid">
+                <div class="profile-wrapper">
+                    <div class="profile-wrapper-header">
+                        <h2 class="mt-4">Мой профиль</h2>
+                    </div>
+                    <div class="profile-wrapper-content">
+                        <div class="profile-wrapper-content-labels">
+                            <p>Ваш логин:</p>
+                            <p>Email:</p>
+                        </div>
+                        <div class="profile-wrapper-content-data">
+                            <p>{{ user.getLogin() }}</p>
+                            <p>{{ user.getEmail }}</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

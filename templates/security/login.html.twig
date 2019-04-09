@@ -3,11 +3,12 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+    {{ include('partials/flashes.html.twig') }}
     <div class="login-container">
         <div class="login-container-left">
             <form method="post">
                 <div class="form">
-                    {% if error %}
+                    {% if error|default(null) %}
                         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
 

@@ -13,10 +13,17 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  * @UniqueEntity(fields={"login"}, message="There is already an account with this login")
+ * @ORM\HasLifecycleCallbacks()
  *
  */
 class User implements UserInterface
 {
+
+    const ROLE_USER = 'ROLE_USER';
+    const ROLE_SELLER_MAIN = 'ROLE_SELLER_MAIN';
+    const ROLE_SELLER_MANAGER = 'ROLE_SELLER_MANAGER';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -27,23 +34,23 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(
-     *     message="Please enter your email."
+     *     message="Пожалуйста, введите email."
      * )
      * @Assert\Email(
-     *     message = "The email '{{ value }}' is not a valid email.",
+     *     message = "Email '{{ value }}' имеет неверный формат.",
      * )
      * @Assert\Length(
      *      max = 180,
-     *      maxMessage = "Your email must be shorter than {{ limit }} characters."
+     *      maxMessage = "Ваш email должен быть короче {{ limit }} символов."
      * )
      */
     private $email;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="string")
      *
      */
-    private $roles = [];
+    private $role;
 
     /**
      * @var string The hashed password
@@ -55,13 +62,13 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=120, unique=true)
      * @Assert\NotBlank(
-     *     message="Please enter your login."
+     *     message="Пожалуйства, введите свой логин."
      * )
      * @Assert\Length(
      *      min = 6,
      *      max = 120,
-     *      minMessage = "Your login must be longer than {{ limit }} characters.",
-     *      maxMessage = "Your login must be shorter than {{ limit }} characters."
+     *      minMessage = "Ваш логин должен быть длиннее {{ limit }} символов.",
+     *      maxMessage = "Ваш логин должен быть короче {{ limit }} символов."
      * )
      */
     private $login;
@@ -77,14 +84,25 @@ class User implements UserInterface
     private $seller;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\DeliveryOrder", mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Checkout", mappedBy="user", orphanRemoval=true)
      */
-    private $deliveryOrders;
+    private $checkouts;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SellerRequests", mappedBy="user", orphanRemoval=true)
+     */
+    private $requests;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $CreatedAt;
 
     public function __construct()
     {
         $this->orders = new ArrayCollection();
-        $this->deliveryOrders = new ArrayCollection();
+        $this->checkouts = new ArrayCollection();
+        $this->requests = new ArrayCollection();
     }
 
     public function __toString()
@@ -122,18 +140,14 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getRoles(): array
+    public function getRoles() : array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return [$this->role];
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles($role): self
     {
-        $this->roles = $roles;
+        $this->role = $role;
 
         return $this;
     }
@@ -169,15 +183,6 @@ class User implements UserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
-    /**
-     * @return Collection|Order[]
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-
 
     public function getLogin(): ?string
     {
@@ -216,33 +221,74 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|DeliveryOrder[]
+     * @return Collection|Checkout[]
      */
-    public function getDeliveryOrders(): Collection
+    public function getCheckouts(): Collection
     {
-        return $this->deliveryOrders;
+        return $this->checkouts;
     }
 
-    public function addDeliveryOrder(DeliveryOrder $deliveryOrder): self
+    public function addCheckout(Checkout $checkout): self
     {
-        if (!$this->deliveryOrders->contains($deliveryOrder)) {
-            $this->deliveryOrders[] = $deliveryOrder;
-            $deliveryOrder->setUser($this);
+        if (!$this->checkouts->contains($checkout)) {
+            $this->checkouts[] = $checkout;
+            $checkout->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeDeliveryOrder(DeliveryOrder $deliveryOrder): self
+    public function removeCheckout(Checkout $checkout): self
     {
-        if ($this->deliveryOrders->contains($deliveryOrder)) {
-            $this->deliveryOrders->removeElement($deliveryOrder);
+        if ($this->checkouts->contains($checkout)) {
+            $this->checkouts->removeElement($checkout);
             // set the owning side to null (unless already changed)
-            if ($deliveryOrder->getUser() === $this) {
-                $deliveryOrder->setUser(null);
+            if ($checkout->getUser() === $this) {
+                $checkout->setUser(null);
             }
         }
 
         return $this;
     }
+
+    /**
+     * @return Collection|SellerRequests[]
+     */
+    public function getRequests(): Collection
+    {
+        return $this->requests;
+    }
+
+    public function addRequest(SellerRequests $request): self
+    {
+        if (!$this->requests->contains($request)) {
+            $this->requests[] = $request;
+            $request->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequest(SellerRequests $request): self
+    {
+        if ($this->requests->contains($request)) {
+            $this->requests->removeElement($request);
+            // set the owning side to null (unless already changed)
+            if ($request->getUser() === $this) {
+                $request->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAt()
+    {
+        $this->CreatedAt = new \DateTime();
+    }
+
+
 }

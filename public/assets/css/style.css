@@ -78,6 +78,10 @@ body {
     margin-bottom: 5px;
 }
 
+.form-error {
+    color: #b62330;
+}
+
 #remember-me {
     margin-top:10px;
     margin-bottom: 8px!important;
@@ -133,6 +137,250 @@ body {
     padding: 20px;
     margin-left: 40px;
     margin-right: 40px;
+}
+
+/* Account sidebar */
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+}
+
+#sidebar-wrapper .sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+    width: 15rem;
+}
+
+#page-content-wrapper {
+    min-width: 50vw;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+}
+
+@media (min-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -15rem;
+    }
+}
+
+.width-all-green {
+    margin-left: 0 !important;
+    margin-right: 0!important;
+    background-color: #5BBD50;
+}
+
+/* Profile */
+.profile-wrapper {
+    padding: 15px 15px 15px 15px;
+    margin: 0;
+}
+
+.profile-wrapper-header {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e4e6e8 ;
+}
+
+.edit-profile-btn {
+    margin: 26px 13px 26px 26px;
+}
+
+.reset-pas-btn {
+    margin: 26px 13px 26px 13px;
+}
+
+.profile-wrapper-content {
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+    margin-top: 26px
+}
+
+.profile-wrapper-content-labels {
+    font-weight: 600;
+    color: #666666;
+    text-align: right;
+    margin-right: 13px;
+}
+
+.profile-wrapper-content-data {
+    margin-left: 13px;
+}
+
+.success {
+    background-color: #5BBD50;
+    color: #FFFFFF;
+    height: 100px;
+    font-size: 25px;
+    padding: 30px 52px;
+}
+
+.order-status {
+    font-size: 15px;
+    vertical-align: top !important;
+}
+.order-history-content-duo{
+    justify-content: space-between;
+}
+
+.order-history-content-btn {
+    display: flex;
+}
+
+.order-history-content-btn > button {
+    width: 78px;
+    height: 38px;
+    margin-right: 40px;
+}
+
+.order-history-content > div {
+    margin: 15px;
+}
+
+.order-history-content-cost {
+    font-size: 20px;
+}
+.card-manager > .card-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-manager > .card-header > h2 {
+    font-size: 26px;
+}
+
+.manager-request-header {
+    margin: 20px 40px 20px 40px;
+}
+
+.manager-request-content {
+    margin: 20px 40px 20px 40px;
+}
+
+.manager-request-content-email {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.manager-request-content-resume {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.manager-request-label {
+    font-weight: 600;
+}
+
+.manager-request-content-file {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.manager-request-content-file > button {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.manager-request-content-file > div {
+    display: inline-block;
+}
+
+.manager-request-btn {
+    margin-top: 30px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.manager-request-btn > button {
+    width: 13%;
+}
+
+/* sidebar*/
+#body-row {
+    margin-left:0;
+    margin-right:0;
+}
+#sidebar-container {
+    min-height: 100vh;
+    padding: 0;
+}
+
+/* Sidebar sizes when expanded and expanded */
+.sidebar-expanded {
+    width: 230px;
+}
+.sidebar-collapsed {
+    width: 60px;
+}
+
+/* Menu item*/
+#sidebar-container .list-group a {
+    height: 50px;
+}
+
+/* Submenu item*/
+#sidebar-container .list-group .sidebar-submenu a {
+    height: 45px;
+    padding-left: 30px;
+}
+.sidebar-submenu {
+    font-size: 0.9rem;
+}
+
+/* Separators */
+.sidebar-separator-title {
+    height: 35px;
+}
+.sidebar-separator {
+    height: 25px;
+}
+.logo-separator {
+    height: 60px;
+}
+
+
+/* Admin styles */
+.card-body-icon {
+    position: absolute;
+    z-index: 0;
+    top: -1rem;
+    right: 0.5rem;
+    opacity: 0.4;
+    font-size: 5rem;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.search-form {
+    margin-top: 20px;
+}
+
+.seller-content {
+    margin: 20px 10px 10px 0px;
+    font-size: 18px;
+}
+
+.invalid-feedback {
+    display: block !important;
 }
 
 
