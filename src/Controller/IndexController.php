@@ -50,7 +50,8 @@ class IndexController extends AbstractController
             $session->set('shoppingCart', '');
 
             return $this->redirectToRoute('product_index', [
-                'id' => $form->getData()['seller']->getId(),
+
+                'id' => $form->getData()['seller']->getId()
             ]);
         }
 
