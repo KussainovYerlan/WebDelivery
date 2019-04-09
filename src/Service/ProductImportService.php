@@ -10,6 +10,7 @@ namespace App\Service;
 
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Csv;
@@ -32,10 +33,10 @@ class ProductImportService
         $this->manager = $manager;
     }
 
-    public function importCsv($file)
+    public function importCsv($file,?User $user)
     {
         $originalFileName = $file->getClientOriginalName();
-        $fileRealPAth = $this->file->getRealPath();
+        $fileRealPAth = $file->getRealPath();
         //import products from csv and xml
 
         $arr_file = explode('.', $originalFileName);
@@ -47,15 +48,15 @@ class ProductImportService
         }
         $spreadsheet = $reader->load($fileRealPAth);
         $importProducts = $spreadsheet->getActiveSheet()->toArray();
-        $this->pushProductToBase($importProducts);
+        $this->pushProductToBase($importProducts, $user);
         return true;
 
     }
-    private function pushProductToBase($importProducts){
+    private function pushProductToBase($importProducts, ?User $user){
         $productRepository = $this->manager->getRepository(Product::class);
         $categoryRepository = $this->manager->getRepository(Category::class);
 
-        foreach ($importProducts as $importProduct)
+        foreach ($importProducts as $key => $importProduct)
         {
             $importProductId=$importProduct[0];
             $product = $productRepository->findOneBy(['external_id'=>$importProductId]);
@@ -71,6 +72,7 @@ class ProductImportService
                 $product->setCount($importProduct[5]);
                 $product->setPrice($importProduct[6]);
                 $product->setCategory($category);
+                $product->setSeller($user->getSeller());
             }
             else {
                 $product = new Product();
@@ -80,6 +82,7 @@ class ProductImportService
                 $product->setPrice($importProduct[6]);
                 $product->setCategory($category);
                 $product->setExternalId($importProduct[0]);
+                $product->setSeller($user->getSeller());
             }
             $this->manager->persist($product);
             $this->manager->flush();
