@@ -383,5 +383,22 @@ body {
     display: block !important;
 }
 
+.forgot-password-clean {
+    margin-top: 2px;
+    margin-left: 10px
+}
+
+.modal-dialog {
+    width: 360px;
+}
+
+.error-email{
+    padding-top: 0px!important;
+}
+
+.error-email-text{
+    color: red;
+}
+
 
 

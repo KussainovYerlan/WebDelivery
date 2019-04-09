@@ -23,13 +23,13 @@
                                     <span class="badge badge-secondary order-status" id="order-status-snap-{{ item.getId() }}" >Ожидает подтверждения</span>
                                 {% endif %}
                                 {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_CANCEL') %}
-                                    <span class="badge badge-danger order-status">Отменен</span>
+                                    <span class="badge badge-danger order-status" id="order-status-snap-{{ item.getId() }}">Отменен</span>
                                 {% endif %}
                                 {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_ACCEPT') %}
-                                    <span class="badge badge-info order-status">Подтвержден</span>
+                                    <span class="badge badge-info order-status" id="order-status-snap-{{ item.getId() }}">Подтвержден</span>
                                 {% endif %}
                                 {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_DONE') %}
-                                    <span class="badge badge-success order-status">Выполнен</span>
+                                    <span class="badge badge-success order-status" id="order-status-snap-{{ item.getId() }}">Выполнен</span>
                                 {% endif %}
                                 <!-- span block end -->
                             </h2>
@@ -53,13 +53,7 @@
                                                 Телефон для связи: {{ item.getPhone() }}
                                             </div>
                                         </div>
-                                        <div class="order-history-content-btn">
-                                        <!-- Display or not button "submit" -->
-                                        {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_WAIT') %}
-                                            <button type="button" class="btn btn-success ajax-accept order-history-btn-{{ item.getId() }}" data-id="{{ item.getId() }}">Submit</button>
-                                            <button type="button" class="btn btn-danger ajax-cancel order-history-btn-{{ item.getId() }}"  data-id="{{ item.getId() }}">Cancel</button>
-                                        {% endif %}
-                                        </div>
+
                                     </div>
                                     <!-- Products in order -->
                                     <div class="order-history-content-product">
@@ -88,6 +82,14 @@
                                         Общая стоимость: {{ item.getCost() }} руб
                                     </div>
                                 </div>
+                                {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_ACCEPT') %}
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="col-md-2 btn btn-success ajax-accept order-history-btn-{{ item.getId() }}" data-id="{{ item.getId() }}">Выполнен</button>
+                                        <div class="col-md-2"></div>
+                                        <button type="button" class="col-md-2 btn btn-danger ajax-cancel order-history-btn-{{ item.getId() }}"  data-id="{{ item.getId() }}">Отменен</button>
+                                    </div>
+                                {% endif %}
+
                             </div>
                             <!-- Card body end -->
                         </div>
@@ -99,19 +101,19 @@
                             <nav>
                                 <ul class="pagination justify-content-center">
                                     <li class="page-item" {{ thisPage == 1 ? 'class="disabled"' }}>
-                                        <a class="page-link" href="{{ path('seller_orders', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}">«</a>
+                                        <a class="page-link" href="{{ path('admin_admin_orders', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}">«</a>
                                     </li>
 
                                     {% for i in 1..maxPages %}
                                         {% if i > 0 %}
                                             <li class="page-item {{ thisPage == i ? 'active' }}" >
-                                                <a class="page-link" href="{{ path('seller_orders', {page: i}) }}">{{ i }}</a>
+                                                <a class="page-link" href="{{ path('admin_admin_orders', {page: i}) }}">{{ i }}</a>
                                             </li>
                                         {% endif %}
                                     {% endfor %}
 
                                     <li class="page-item" {{ thisPage == maxPages ? 'class="disabled"' }}>
-                                        <a class="page-link" href="{{ path('seller_orders', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage}) }}">»</a>
+                                        <a class="page-link" href="{{ path('admin_admin_orders', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage}) }}">»</a>
                                     </li>
                                 </ul>
                             </nav>
@@ -139,7 +141,7 @@
                     {
                         let id = $(this).data('id');
                         $.ajax({
-                            url:'{{ (path('seller_orders_submit')) }}',
+                            url:'{{ (path('admin_admin_orders_done')) }}',
                             type: "POST",
                             dataType: "json",
                             data: {
@@ -155,8 +157,8 @@
                                 $(but_class).each(function () {
                                     $(this).css({'display' : 'none'});
                                 });
-                                $(span_id).removeClass('badge-secondary').addClass('badge-info');
-                                $(span_id).text('Подтвержден')
+                                $(span_id).removeClass('badge-info').addClass('badge-success');
+                                $(span_id).text('Выполнен')
                             },
                             error: function (error) {
                                 alert(error['message'])
@@ -171,7 +173,7 @@
                 {
                     let id = $(this).data('id');
                     $.ajax({
-                        url:'{{ (path('seller_orders_cancel')) }}',
+                        url:'{{ (path('admin_admin_orders_cancel')) }}',
                         type: "POST",
                         dataType: "json",
                         data: {
@@ -187,7 +189,7 @@
                             $(but_class).each(function () {
                                 $(this).detach();
                             });
-                            $(span_id).removeClass('badge-secondary').addClass('badge-danger');
+                            $(span_id).removeClass('badge-info').addClass('badge-danger');
                             $(span_id).text('Отменен')
                         },
                         error: function (error) {

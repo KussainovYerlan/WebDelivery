@@ -16,7 +16,7 @@ class OrderVoter extends Voter
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
         return in_array($attribute, ['add', 'view', 'submit'])
-            && $subject instanceof DeliveryOrder;
+            && $subject instanceof Checkout;
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -46,11 +46,11 @@ class OrderVoter extends Voter
     {
         foreach ($user->getRoles() as $item) {
             if ($item == "ROLE_USER") {
-                $products = $order->getProducts();
+                $products = $order->getCheckoutProducts();
                 $seller = $order->getSeller();
                 foreach ($products as $product)
                 {
-                    if ($product->getSeller() !== $seller)
+                    if ($product->getProduct()->getSeller() !== $seller)
                     {
                         return false;
                     }
@@ -74,13 +74,12 @@ class OrderVoter extends Voter
 
     protected function canSubmit(User $user, Checkout $order)
     {
-        foreach ($user->getRoles() as $item) {
-            if (($item == "ROLE_SELLER_MAIN") || ($item == "ROLE_SELLER_MANAGER")) {
-                if ($order->getSeller() === $user->getSeller())
+        if (($user->getRoles() == "ROLE_SELLER_MAIN") || ($user->getRoles() == "ROLE_SELLER_MANAGER")) {
+            foreach ($order->getCheckoutProducts() as $item)
+                if ($item->getProduct()->getSeller() !== $user->getSeller())
                 {
                     return true;
                 }
-            }
         }
         return false;
     }

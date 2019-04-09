@@ -30,6 +30,27 @@ class UserRepository extends ServiceEntityRepository
             ;
     }
 
+
+    public function findByEmail($email)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.email = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
+    public function getUserByResetToken($value)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.reset_token = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
     public function getCountByDay($year, $month, $day)
     {
         $ql = $this->createQueryBuilder('u')

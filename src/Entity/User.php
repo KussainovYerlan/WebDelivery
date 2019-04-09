@@ -98,6 +98,7 @@ class User implements UserInterface
      */
     private $CreatedAt;
 
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -289,6 +290,5 @@ class User implements UserInterface
     {
         $this->CreatedAt = new \DateTime();
     }
-
 
 }

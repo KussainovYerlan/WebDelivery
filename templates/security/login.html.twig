@@ -33,6 +33,9 @@
                                 <input type="password" name="password" id="inputPassword" placeholder="Password" required>
                             </div>
                         </div>
+                        <div class="forgot-password-clean mt-1">
+                            <a href="#" data-toggle="modal" data-target="#forgot">Забыли пароль?</a>
+                        </div>
 
                         <input type="hidden" name="_csrf_token"
                                value="{{ csrf_token('authenticate') }}"
@@ -59,5 +62,72 @@
             </div>
         </div>
     </div>
+    <div class="modal fade forgot-password" id="forgot" tabindex="-1" role="dialog" aria-labelledby="forgotArea" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mt-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12 col-md-offset-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="text-center">
+                                            <h3><i class="fa fa-lock fa-4x"></i></h3>
+                                            <h2 class="text-center">Забыли пароль?</h2>
+                                            <p>Вы можете восстановить его здесь.</p>
+                                            <div class="panel-body">
+                                                <form id="register-form" role="form" autocomplete="off" class="form error-email" method="post">
+                                                    <p class="error-email-text"></p>
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input id="email_forgot" name="email_forgot" placeholder="Email" class="form-control"  type="email">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input id="forgot-reset" name="recover-submit" class="btn btn-lg btn-primary btn-block" value="Восстановить" type="button">
+                                                    </div>
 
+                                                    <input type="hidden" class="hide" name="token" id="token" value="">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).on('click', '#forgot-reset', function(){
+            let email = $('input#email_forgot').val();
+                $.ajax({
+                    url:'{{ path('app_forgot_password') }}',
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'email':email
+                    },
+                    async: true,
+                    success: function ()
+                    {
+                        console.log(1);
+                        $('.text-center').html("<i class=\"far fa-check-circle fa-4x\"></i></h3><h2 class=\"text-center\">Ваш пароль отправлен на почту</h2>");
+                    },
+                    error: function (error) {
+                        $('.error-email-text').text('Email не найден');
+                    }
+                });
+        });
+    </script>
 {% endblock %}
