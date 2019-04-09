@@ -1,5 +1,6 @@
 .idea/
 public/assets/request_doc/
+public/uploads/
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
