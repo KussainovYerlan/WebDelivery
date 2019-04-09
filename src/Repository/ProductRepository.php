@@ -45,11 +45,9 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('search', '%' . $search . '%')
             ->andWhere('p.seller = :seller')
             ->setParameter('seller', $sellerId)
-<<<<<<< HEAD
-            ;
-=======
+
         ;
->>>>>>> hot_fix
+
 
         return $this->paginate($query->getQuery(), $page ?: 1);
     }

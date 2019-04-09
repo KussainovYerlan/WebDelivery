@@ -39,11 +39,8 @@
 
                 <div class="container">
                     <h2>Поиск продуктов</h2>
-<<<<<<< HEAD
-                    <form action="{{ path('product_index', { 'id' : seller.getId()}) }}">
-=======
                     <form action="{{ path('product_index', {'id' : app.request.get('id')}) }}">
->>>>>>> hot_fix
+
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-11">
