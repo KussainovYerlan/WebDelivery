@@ -370,9 +370,12 @@ class AccountController extends AbstractController
      */
     public function sellerEditProduct(Request $request, Product $product): Response
     {
-        $product->setImage(
-            new File($this->getParameter('product_images_directory').'/'.$product->getImage())
-        );
+        if ($product->getImage() !== null) {
+            $product->setImage(
+                new File($this->getParameter('product_images_directory').'/'.$product->getImage())
+            );
+        }
+
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
