@@ -2,16 +2,148 @@
 
 {% block title %}Доставка еды{% endblock %}
 
-
-
 {% block body %}
-<div class="container">
-    <div class="row">
-        <div class="col">
-        {% form_theme form 'bootstrap_4_layout.html.twig' %}
-        {{ form(form) }}
-        {{ include('partials/flashes.html.twig') }}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+            {% form_theme form 'bootstrap_4_layout.html.twig' %}
+            {{ form(form) }}
+            {{ include('partials/flashes.html.twig') }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="geocomplete">Label</label>
+                <input class="form-control" id="geocomplete" type="text">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary ajax-select mt-3">Выбрать</button>
+            </div>
+        </div>
+        <div id="map" style="display: none"></div>
+    </div>
+    <div class="modal fade" id="modalSeller" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel" style="text-align: center">Доступные вам магазины</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body d-flex flex-wrap pl-5 pr-5" id="modal-body-cards">
+
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=8d36ed54-0fd4-4fe0-9be9-bc5dfba1c6c7&lang=ru_RU" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+        ymaps.ready(init);
+
+        function init() {
+            let circle;
+            var myMap = new ymaps.Map("map", {
+                center: [55.030199, 82.920430],
+                zoom: 12
+            }, {
+                searchControlProvider: 'yandex#search'
+            }),
+                objectManager = new ymaps.ObjectManager({
+                    // Мы хотим загружать данные для балуна перед открытием, поэтому
+                    // запретим автоматически открывать балун по клику.
+                    geoObjectOpenBalloonOnClick: false
+                });
+            let suggestView = new ymaps.SuggestView('geocomplete');
+
+            $.ajax({
+                url:'{{ (path('index_points')) }}',
+                type: "POST",
+                dataType: "json",
+                async: true,
+                success: function (response)
+                {
+                    let myGeocoder;
+                    let firstGeoObject;
+                    let coordsSingle;
+                    let placemark;
+                    for (let key in response.addresses){
+                        myGeocoder = ymaps.geocode(response.addresses[key]['address'], {results: 1});
+                        myGeocoder.then(function (res) {
+                            firstGeoObject = res.geoObjects.get(0);
+                            coordsSingle = firstGeoObject.geometry.getCoordinates();
+                            placemark = new ymaps.Placemark(coordsSingle);
+                            myMap.geoObjects
+                                .add(new ymaps.Placemark(coordsSingle, {
+                                    balloonContent: response.addresses[key]['id']
+                                }));
+                        }, function (err) {
+                            // Обработка ошибки.
+                        });
+                    }
+                },
+                error: function (error) {
+                }
+            });
+
+            $('.ajax-select').click(() => {
+                if (circle)
+                {
+                    myMap.geoObjects.remove(circle);
+                }
+                let myGeocoder = ymaps.geocode($('#geocomplete').val(), {results: 1});
+                myGeocoder.then(function (res) {
+                    let secondGeoObject = res.geoObjects.get(0);
+                    let coordsOne = secondGeoObject.geometry.getCoordinates();
+                    let ids = [];
+                    circle = new ymaps.Circle([coordsOne, 2500], null);
+                    myMap.geoObjects.add(circle);
+                    let objectsInsideCircle = ymaps.geoQuery(myMap.geoObjects).searchInside(circle);
+                    for (i = 0; i < objectsInsideCircle.getLength(); i++)
+                    {
+                        ids[i] = objectsInsideCircle.get(i).properties.get('balloonContent');
+                    }
+                    console.log(ids);
+                    $.ajax({
+                        url:'{{ (path('index_sellers')) }}',
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'ids' : ids
+                        },
+                        async: true,
+                        success: function (response)
+                        {
+                            $('#modal-body-cards').html('');
+                            for (key in response.sellers)
+                            {
+                                $('#modal-body-cards').append('<div class="d-flex justify-content-center ml-2 mr-2 mb-2 mt-2" id="modal-body-cards">\n' +
+                                    '        <div class="card card-href" style="width: 10rem; height: auto">\n' +
+                                    '            <a href="' + response.sellers[key]['path'] + '" class="card-href">' +
+                                    '               <div class="card-body pb-2 justify-content-center card-href">\n' +
+                                    '                   <h5 class="card-title">' + response.sellers[key]['name'] + '</h5>\n' +
+                                    '                </div></a>\n' +
+                                    '        </div>\n' +
+                                    '    </div></a>');
+                            }
+                            $('#modalSeller').modal('show');
+                        },
+                        error: function (error) {
+                            $('#modal-body-cards').html('');
+                            $('#modal-body-cards').append('<p class="h5" style="text-align: center">Извините, но рядом с вами нет магазинов, которые могут вас обслужить.</p>');
+                            $('#modalSeller').modal('show');
+                        }
+                    });
+                });
+            });
+        }
+    </script>
+{% endblock %}
+

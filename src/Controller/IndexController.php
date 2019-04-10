@@ -11,6 +11,7 @@ use App\Form\SearchProductType;
 use App\Service\TokenGenerator;
 use App\Service\ProductImportService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -58,6 +59,40 @@ class IndexController extends AbstractController
         return $this->render('index/index.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/points", name="index_points")
+     */
+    public function getAddresses(Request $request){
+        $addresses = $this->getDoctrine()->getRepository(Seller::class)->getAddresses();
+
+        return new JsonResponse(['addresses' => $addresses], 200);
+    }
+
+    /**
+     * @Route("/getseller", name="index_sellers")
+     */
+    public function getSellers(Request $request){
+        if ($request->isXMLHttpRequest()) {
+            if (($ids = $request->request->get('ids')) == true) {
+                $sellers = [];
+                foreach ($ids as $id)
+                {
+                    $seller = $this->getDoctrine()->getRepository(Seller::class)->find($id);
+                    $sellers[$id]['id'] = $seller->getId();
+                    $sellers[$id]['name'] = $seller->getName();
+                    $sellers[$id]['path'] = $this->generateUrl('product_index', [ 'id' => $seller->getId()]);
+                }
+
+                return new JsonResponse(['sellers' => $sellers], 200);
+
+            }
+        }
+        return new JsonResponse(['message' => 'Update failure'], 404);
+        $addresses = $this->getDoctrine()->getRepository(Seller::class)->getAddresses();
+
+        return new JsonResponse(['addresses' => $addresses], 200);
     }
 
 }

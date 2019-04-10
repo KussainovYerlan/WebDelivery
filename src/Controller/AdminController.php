@@ -278,7 +278,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("orders", name="admin_orders")
+     * @Route("/orders", name="admin_orders")
      */
     public function adminOrdersListAction(Request $request)
     {

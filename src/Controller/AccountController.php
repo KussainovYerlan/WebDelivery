@@ -358,8 +358,16 @@ class AccountController extends AbstractController
 
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($product);
-            $entityManager->flush();
+            if ($checkouts = $this->service->checkProduct($product))
+            {
+                $entityManager->remove($product);
+                foreach ($checkouts as $item)
+                {
+                    $entityManager->remove($item);
+                }
+                $entityManager->flush();
+                return $this->redirectToRoute('seller_product_list');
+            }
         }
 
         return $this->redirectToRoute('seller_product_list');
