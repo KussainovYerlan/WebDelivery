@@ -4,6 +4,8 @@
 namespace App\Service;
 
 
+use App\Entity\CheckoutProduct;
+use App\Entity\Product;
 use App\Entity\SellerRequests;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -131,5 +133,11 @@ class AccountService
         }
 
         return $managersClear;
+    }
+
+    public function checkProduct(Product $product)
+    {
+        $checkouts = $this->manager->getRepository(CheckoutProduct::class)->findBy(['product' => $product]);
+        return $checkouts;
     }
 }
