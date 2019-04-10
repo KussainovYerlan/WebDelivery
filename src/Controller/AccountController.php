@@ -6,7 +6,9 @@ use App\Entity\Checkout;
 use App\Entity\Seller;
 use App\Entity\SellerRequests;
 use App\Entity\User;
+use App\Entity\Product;
 use App\Form\ChangePasswordType;
+use App\Form\ProductType;
 use App\Form\EditProfileType;
 use App\Form\ImportTableType;
 use App\Service\AccountService;
@@ -15,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -296,4 +299,95 @@ class AccountController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/account/seller/products", name="seller_product_list", methods={"GET"})
+     */
+    public function sellerProductList(Request $request): Response
+    {
+        $seller = $this->getUser()->getSeller();
+
+        if ($seller)
+        {
+            $products = $this->getDoctrine()->getRepository(Product::class)
+                ->searchProducts($request->get('query'), $seller->getId(), $request->get('page'));
+
+            $thisPage = $request->get('page') ?: 1;
+
+            $maxPages = ceil($products->count() / 4);
+            return $this->render('account/product/list.html.twig', [
+                'thisPage' => $thisPage,
+                'maxPages' => $maxPages,
+                'seller' => $seller,
+                'products' => $products,
+            ]);
+        }
+
+        return $this->redirectToRoute('index');
+    }
+
+    /**
+     * @Route("/account/seller/products/new", name="seller_product_new", methods={"GET","POST"})
+     */
+    public function sellerCreateProduct(Request $request): Response
+    {
+        $product = new Product();
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $product->setSeller($this->getUser()->getSeller());
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($product);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('seller_product_list');
+        }
+
+        return $this->render('account/product/new.html.twig', [
+            'product' => $product,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/account/seller/products/{id}", name="seller_product_delete", methods={"DELETE"})
+     */
+    public function sellerDeleteProduct(Request $request, Product $product): Response
+    {
+
+        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($product);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('seller_product_list');
+    }
+
+    /**
+     * @Route("/account/seller/products/{id}/edit", name="seller_product_edit", methods={"GET","POST"})
+     */
+    public function sellerEditProduct(Request $request, Product $product): Response
+    {
+        $product->setImage(
+            new File($this->getParameter('product_images_directory').'/'.$product->getImage())
+        );
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('seller_product_list', [
+                'id' => $product->getId(),
+            ]);
+        }
+
+        return $this->render('account/product/edit.html.twig', [
+            'product' => $product,
+            'form' => $form->createView(),
+        ]);
+    }
 }

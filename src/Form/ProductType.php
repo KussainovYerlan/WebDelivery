@@ -19,7 +19,6 @@ class ProductType extends AbstractType
             ->add('price')
             ->add('external_id')
             ->add('category')
-            ->add('seller')
             ->add('image', FileType::class)
         ;
     }
