@@ -45,9 +45,7 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('search', '%' . $search . '%')
             ->andWhere('p.seller = :seller')
             ->setParameter('seller', $sellerId)
-
         ;
-
 
         return $this->paginate($query->getQuery(), $page ?: 1);
     }
@@ -64,7 +62,7 @@ class ProductRepository extends ServiceEntityRepository
         return $this->paginate($query->getQuery(), $page ?: 1);
     }
 
-    public function paginate($dql, $page = 1, $limit = 4)
+    public function paginate($dql, $page = 1, $limit = 9)
     {
         $paginator = new Paginator($dql);
         $paginator->getQuery()
