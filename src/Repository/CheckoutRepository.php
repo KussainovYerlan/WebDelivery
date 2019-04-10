@@ -47,6 +47,14 @@ class CheckoutRepository extends ServiceEntityRepository
         return $this->paginate($query->getQuery(), $page ?: 1);
     }
 
+    public function findAllPaginate($page = 1)
+    {
+        $query = $this->createQueryBuilder('d')
+        ;
+
+        return $this->paginate($query->getQuery(), $page ?: 1);
+    }
+
     public function findByUser(int $id , $page = 1)
     {
         $query = $this->createQueryBuilder('d'          )

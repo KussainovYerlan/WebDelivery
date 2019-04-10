@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\AdminRequests;
 use App\Entity\Category;
+use App\Entity\Checkout;
 use App\Entity\Product;
 use App\Entity\Seller;
 use App\Entity\User;
@@ -271,6 +272,63 @@ class AdminController extends AbstractController
                 $seller = $this->getDoctrine()->getRepository(Category::class)->find($id);
                 $this->service->removeFromTable($seller);
                 return new JsonResponse(['message' => 'Done'], 200);
+            }
+        }
+        return new JsonResponse(['message' => 'Update failure'], 404);
+    }
+
+    /**
+     * @Route("orders", name="admin_orders")
+     */
+    public function adminOrdersListAction(Request $request)
+    {
+        $orders = $this->getDoctrine()->getRepository(Checkout::class)
+            ->findAllPaginate($request->get('page'));
+
+        $thisPage = $request->get('page') ?: 1;
+
+        $maxPages = ceil($orders->count() / 4);
+
+        return $this->render('admin/orders.html.twig', [
+            'thisPage' => $thisPage,
+            'maxPages' => $maxPages,
+            'orders' => $orders
+        ]);
+    }
+
+    /**
+     * @Route("orders/submit", name="admin_orders_done")
+     */
+    public function adminOrdersDoneAction(Request $request)
+    {
+        if ($request->isXMLHttpRequest()) {
+            if (($id = $request->request->get('id')) == true) {
+
+                $order = $this->getDoctrine()->getRepository(Checkout::class)->find($id);
+                $order->setStatus(Checkout::STATUS_DONE);
+                $this->service->persistToTable($order);
+
+                return new JsonResponse(['message' => 'Done'], 200);
+
+            }
+        }
+        return new JsonResponse(['message' => 'Update failure'], 404);
+    }
+
+    /**
+     * @Route("orders/cancel", name="admin_orders_cancel")
+     */
+    public function sellerOrdersCancelAction(Request $request)
+    {
+        if ($request->isXMLHttpRequest()) {
+            if (($id = $request->request->get('id')) == true) {
+
+                $order = $this->getDoctrine()->getRepository(Checkout::class)->find($id);
+                $order->setStatus(Checkout::STATUS_CANCEL);
+                $this->service->persistToTable($order);
+
+                return new JsonResponse(['message' => 'Done'], 200);
+
             }
         }
         return new JsonResponse(['message' => 'Update failure'], 404);

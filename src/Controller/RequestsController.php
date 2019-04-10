@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\AdminRequests;
 use App\Entity\Seller;
 use App\Entity\SellerRequests;
+use App\Entity\User;
 use App\Form\AdminRequestsType;
 use App\Form\SellerRequestsType;
 use App\Service\RequestService;
@@ -35,8 +36,17 @@ class RequestsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getDoctrine()->getRepository(User::class)
+                ->findBy(['email' => $file = $form->get('email')->getData() ]);
+            if ($user)
+            {
+                $this->addFlash('warning', 'Пользователь с таким email уже зарегистрирован.');
+                return $this->render('admin_requests/new.html.twig', [
+                    'admin_request' => $adminRequest,
+                    'form' => $form->createView(),
+                ]);
+            }
             $this->service->addNewSeller($form, $adminRequest);
-
             $this->addFlash('notice', 'Ваша заявка отправлена на рассмотрение');
             return $this->redirectToRoute('index');
         }

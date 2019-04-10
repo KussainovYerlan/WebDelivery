@@ -3,6 +3,7 @@
 namespace App\Service;
 
 
+use App\Entity\Seller;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\RouterInterface;
@@ -91,6 +92,36 @@ class AuthService
             $str .= $chars[rand(0, $size)];
 
         return $str;
+    }
+
+    public function forgotPasswordService(User $user)
+    {
+        $plainPassword = $this->generateStr();
+        $user->setPassword(
+            $this->passwordEncoder->encodePassword(
+                $user,
+                $plainPassword
+            )
+        );
+
+        $this->manager->persist($user);
+        $this->manager->flush();
+
+        $message = (new \Swift_Message('Восстановление пароля'))
+            ->setFrom('delivery.dev@gmail.com')
+            ->setTo($user->getEmail())
+            ->setBody(
+                $this->templating->render(
+                    'email/reset_password.html.twig',
+                    [
+                        'name' => $user->getLogin(),
+                        'password' => $plainPassword,
+                    ]
+                ),
+                'text/html'
+            );
+        $this->mailer->send($message);
+
     }
 
 }

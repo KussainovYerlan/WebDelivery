@@ -3,6 +3,7 @@
 {% block title %}Заявка продавца{% endblock %}
 
 {% block body %}
+    {{ include('partials/flashes.html.twig') }}
     <div class="d-flex justify-content-center">
         {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'col col-md-9 text-center border border-light p-5'}}) }}
         <div class="form-row col-md-12 d-flex justify-content-center">

@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
 use App\Service\AuthService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -58,5 +59,24 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/login/reset", name="app_forgot_password")
+     */
+    public function forgotPasswordAction(Request $request)
+    {
+        if ($request->isXMLHttpRequest()) {
+            if (($emailForgot = $request->request->get('email')) == true) {
+                $user = $this->getDoctrine()->getRepository(User::class)
+                    ->findByEmail($emailForgot);
+                if ($user)
+                {
+                    $this->service->forgotPasswordService($user);
+                    return new JsonResponse(['message' => 'Done'], 200);
+                }
+            }
+        }
+        return new JsonResponse(['message' => 'error'], 404);
     }
 }
