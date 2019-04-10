@@ -438,6 +438,12 @@ body {
     position: relative;
 }
 
+#shopping-cart_total {
+    background-color: green;
+    border-radius: 15%;
+    padding: 5px 10px;
+}
+
 #shopping-cart_total-count {
     display: none;
     position: absolute;
@@ -496,5 +502,14 @@ body {
 
 .card-href:hover {
     box-shadow: -2px 3px 21px 4px rgba(0,0,0,0.05);
+    text-decoration: none;
+}
+
+.text-logo {
+    color: #303030;
+    text-decoration: none;
+}
+
+.text-logo:hover {
     text-decoration: none;
 }

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ProductController extends AbstractController
 {
@@ -45,12 +45,16 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/product/{id}", name="product_show", methods={"GET"})
+     * @Route("/product/{id}", name="product_show", methods={"POST", "GET"})
      */
     public function show(Product $product): Response
     {
-        return $this->render('product/show.html.twig', [
-            'product' => $product,
-        ]);
+        return new JsonResponse(['product' => [
+            'name' => $product->getName(),
+            'description' => $product->getDescription(),
+            'price' => $product->getPrice(),
+            'category' => $product->getCategory()->getName(),
+            'image' => $product->getImage(),
+        ]], 200);
     }
 }

@@ -10,11 +10,11 @@
             <div class="modal-body" id="shopping-cart_list">
             </div>
             <div class="modal-footer">
-                <div class="pull-right">
-                    Стоимость: <b id="shopping-cart_total">0.00</b> P
-                </div>
                 <button class="btn btn-success" id="shopping-cart_clear">Очистить корзину</button>
-                <a href="{{ path("checkout_new") }}" class="btn btn-success" id="shopping-cart_send">Оформить заказ</a>
+                <a href="{{ path("checkout_new") }}" class="btn btn-success" id="shopping-cart_send">
+                    Оформить заказ
+                    <span id="shopping-cart_total">0.00</span>
+                </a>
             </div>
         </div>
     </div>
