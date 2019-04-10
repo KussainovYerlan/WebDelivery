@@ -36,24 +36,21 @@
             </div>
 
             <div class="col-lg-9">
-
-                <div class="container">
-                    <h2>Поиск продуктов</h2>
-                    <form action="{{ path('product_index', {'id' : app.request.get('id')}) }}">
-
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-md-11">
-                                    <input type="text" class="form-control" value = "{{app.request.get('query')}}"   name="query">
-                                </div>
-                                <div class="col-md-1">
-                                    <button type="submit" class="btn btn-">Найти</button>
+                {# Search products #}
+                <div class="row">
+                    <div class="col">
+                        <form action="{{ path('product_index', {'id' : app.request.get('id')}) }}">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" value="{{app.request.get('query')}}" name="query" placeholder="Поиск в магазине {{ seller.name }}">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-outline-secondary">
+                                        <i class="icon ion-md-search"></i>
+                                    </button>
                                 </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-
 
                 <div class="row">
                 {% for product in products %}
@@ -81,31 +78,30 @@
                 {% endfor %}
                 </div>
 
+                <div class="row justify-content-md-center">
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" {{ thisPage == 1 ? 'class="disabled"' }}>
+                                <a class="page-link" href="{{ path('product_index', {page: thisPage-1 < 1 ? 1 : thisPage-1, query: app.request.get('query'), 'id' : app.request.get('id')}) }}">«</a>
+                            </li>
+
+                            {% for i in 1..maxPages %}
+                                {% if i > 0 %}
+                                    <li class="page-item {{ thisPage == i ? 'active' }}" >
+                                        <a class="page-link" href="{{ path('product_index', {page: i, query: app.request.get('query'), 'id' : app.request.get('id')}) }}">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            <li class="page-item" {{ thisPage == maxPages ? 'class="disabled"' }}>
+                                <a class="page-link" href="{{ path('product_index', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage, query: app.request.get('query'), 'id' : app.request.get('id')}) }}">»</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
 
             </div>
 
-        
-        </div>
-        <div class="row">
-            <nav>
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" {{ thisPage == 1 ? 'class="disabled"' }}>
-                        <a class="page-link" href="{{ path('product_index', {page: thisPage-1 < 1 ? 1 : thisPage-1, query: app.request.get('query'), 'id' : app.request.get('id')}) }}">«</a>
-                    </li>
-
-                    {% for i in 1..maxPages %}
-                        {% if i > 0 %}
-                            <li class="page-item {{ thisPage == i ? 'active' }}" >
-                                <a class="page-link" href="{{ path('product_index', {page: i, query: app.request.get('query'), 'id' : app.request.get('id')}) }}">{{ i }}</a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-
-                    <li class="page-item" {{ thisPage == maxPages ? 'class="disabled"' }}>
-                        <a class="page-link" href="{{ path('product_index', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage, query: app.request.get('query'), 'id' : app.request.get('id')}) }}">»</a>
-                    </li>
-                </ul>
-            </nav>
         </div>
 
     </div>
