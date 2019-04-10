@@ -20,6 +20,15 @@ class SellerRepository extends ServiceEntityRepository
         parent::__construct($registry, Seller::class);
     }
 
+    public function getAddresses()
+    {
+        return $this->createQueryBuilder('s')
+            ->select('s.address, s.id')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findOneById($id): ?Seller
     {
         return $this->createQueryBuilder('s')

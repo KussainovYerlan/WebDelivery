@@ -433,8 +433,6 @@ body {
     color: blue;
 }
 
-/* Choose seller */
-
 /* Shopping cart */
 #shopping-cart_open {
     position: relative;
@@ -471,6 +469,7 @@ body {
     width: 100%;
 }
 
+/* Signin form */
 .form-signin {
     display: flex;
     flex-direction: column;
@@ -481,4 +480,19 @@ body {
 
 .text-center {
     text-align: center;
+}
+
+.modal-width-forgot {
+    width: 400px;
+}
+
+.card-href{
+    text-decoration: none;
+    color: #000000;
+    text-align: center;
+}
+
+.card-href:hover {
+    box-shadow: -2px 3px 21px 4px rgba(0,0,0,0.05);
+    text-decoration: none;
 }
