@@ -87,11 +87,14 @@
                 </a>
                 <!-- Submenu content -->
                 <div id='submenu3' class="collapse sidebar-submenu">
-                    <a href="#" class="list-group-item list-group-item-action bg-light">
+                    <a href="{{ path('seller_product_list') }}" class="list-group-item list-group-item-action bg-light">
+                        <span class="menu-collapsed">Список товаров</span>
+                    </a>
+                    <a href="{{ path('seller_product_new') }}" class="list-group-item list-group-item-action bg-light">
                         <span class="menu-collapsed">Добавить товар</span>
                     </a>
                     <a href="{{ path('importcsv') }}" class="list-group-item list-group-item-action bg-light">
-                        <span class="menu-collapsed">Импорт заказа</span>
+                        <span class="menu-collapsed">Импорт товаров</span>
                     </a>
                 </div>
                 {% endif %}

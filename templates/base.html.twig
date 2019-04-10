@@ -14,8 +14,10 @@
     <body>
         {% include('menu.html.twig') %}
         {% include('includes/shopping_cart.html.twig') %}
+        <div class="container">
         {% block body %}
         {% endblock %}
+        </div>
         {% block javascripts %}
             <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
             <script src="{{ asset('js/pooper.js') }}"></script>
