@@ -3,27 +3,25 @@
 {% block title %}Доставка еды{% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="form-input-address">
         <div class="row">
+            <img class="mb-2 align-self-center" width="100px" height="100px" src="{{ asset('img/' ~ 'logo.svg') }}">
             <div class="col">
-            {% form_theme form 'bootstrap_4_layout.html.twig' %}
-            {{ form(form) }}
-            {{ include('partials/flashes.html.twig') }}
-            </div>
+                <h1 class="text-logo">Web Delivery</h1>
+                <p class="text-muted">Faster than can you say blueberry pie</p>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <label for="geocomplete">Label</label>
-                <input class="form-control" id="geocomplete" type="text">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <i class="input-group-text icon ion-md-navigate"></i>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2">
-                <button type="button" class="btn btn-primary ajax-select mt-3">Выбрать</button>
+            <input class="form-control" id="geocomplete" type="text" placeholder="Введите ваш адрес">
+            <div class="input-group-append">
+                <button type="button" class="btn btn-primary ajax-select">Выбрать</button>
             </div>
         </div>
         <div id="map" style="display: none"></div>
     </div>
+
     <div class="modal fade" id="modalSeller" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -34,7 +32,6 @@
                     </button>
                 </div>
                 <div class="modal-body d-flex flex-wrap pl-5 pr-5" id="modal-body-cards">
-
                 </div>
             </div>
         </div>

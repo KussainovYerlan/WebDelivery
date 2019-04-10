@@ -56,7 +56,7 @@ const updateCartContent = () => {
                             <td><b>${cartData[item][2]}</b><br><small>${cartData[item][3]}</smal></td>
                             <td>${cartData[item][0]}</td>
                             <td>x</td>
-                            <td class="btn-del">${cartData[item][4]} Р</td>
+                            <td class="btn-del">${cartData[item][4]}</td>
                             </tr>`
             totalCount += parseInt(cartData[item][0])
             totalSum += parseInt(cartData[item][4]) * parseInt(cartData[item][0])

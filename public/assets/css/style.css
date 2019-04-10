@@ -453,13 +453,15 @@ body {
     line-height: 25px;
 }
 
-.choose-seller__container {
+/* Form input address */
+.form-input-address {
     display: flex;
+    flex-direction: column;
     width: 900px;
     height: 300px;
     margin: 100px auto;
     background-color: white;
-    padding: 40px;
+    padding: 80px;
 }
 
 /* Register form */
