@@ -1,15 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Product{% endblock %}
+{% block title %}Новый продукт{% endblock %}
 
 {% block body %}
-    <h1>Create new Product</h1>
-
-<<<<<<< HEAD:templates/account/product/new.html.twig
-    {{ include('account/product/_form.html.twig') }}
-
-    <a href="{{ path('seller_product_list') }}">back to list</a>
-=======
-    {{ include('product/_form.html.twig') }}
->>>>>>> 90346dc67521f003d1b57ca0164198554e40792a:templates/product/new.html.twig
+<div class="row" id="row-body">
+    {{ include('account/account_menu.html.twig') }}
+    <div class="col-lg-9">
+        <h3>Создать новый продукт</h3>
+        {{ include('account/product/_form.html.twig') }}
+    </div>
+</div>
 {% endblock %}
