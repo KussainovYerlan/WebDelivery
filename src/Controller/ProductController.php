@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Seller;
 use App\Form\ProductType;
@@ -20,11 +21,13 @@ class ProductController extends AbstractController
     public function index(int $id, Request $request): Response
     {
         $seller = $this->getDoctrine()->getRepository(Seller::class)->find($id);
+        $request->getSession()->set('sellerId', $id);
 
         if ($seller)
         {
+            $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
             $products = $this->getDoctrine()->getRepository(Product::class)
-                ->searchProducts($request->get('query'), $seller->getId(), $request->get('page'));
+                ->searchProducts($request->get('query'), $request->get('category'), $seller->getId(), $request->get('page'));
 
             $thisPage = $request->get('page') ?: 1;
 
@@ -34,6 +37,7 @@ class ProductController extends AbstractController
                 'maxPages' => $maxPages,
                 'seller' => $seller,
                 'products' => $products,
+                'categories' => $categories
             ]);
         }
 

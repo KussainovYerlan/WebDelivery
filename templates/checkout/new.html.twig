@@ -45,7 +45,7 @@
             </div>
             {{ form_start(form) }}
             <div class="mb-3">
-                {{ form_label(form.address, 'Адресс доставки' ) }}
+                {{ form_label(form.address, 'Адрес доставки' ) }}
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1">
@@ -72,4 +72,16 @@
             {{ form_end(form) }}
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+<script src="https://api-maps.yandex.ru/2.1/?apikey=8d36ed54-0fd4-4fe0-9be9-bc5dfba1c6c7&lang=ru_RU" type="text/javascript">
+</script>
+<script type="text/javascript">
+    ymaps.ready(init);
+
+    function init() {
+        let suggestView = new ymaps.SuggestView('checkout_address');
+    }
+</script>
 {% endblock %}

@@ -11,6 +11,7 @@ use App\Form\ChangePasswordType;
 use App\Form\ProductType;
 use App\Form\EditProfileType;
 use App\Form\ImportTableType;
+use App\Form\RegistrationFormType;
 use App\Service\AccountService;
 use App\Service\ProductImportService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -54,6 +55,7 @@ class AccountController extends AbstractController
     public function profileEditAction(Request $request)
     {
         $user = $this->getUser();
+        dump($user->getPassword());
         $form = $this->createForm(EditProfileType::class, $user);
         $form->handleRequest($request);
 
@@ -154,7 +156,6 @@ class AccountController extends AbstractController
             if (($id = $request->request->get('id')) == true) {
 
                 $order = $this->getDoctrine()->getRepository(Checkout::class)->find($id);
-                $this->denyAccessUnlessGranted('submit', $order);
                 $order->setStatus(Checkout::STATUS_ACCEPT);
                 $this->service->persistToTable($order);
 
@@ -174,7 +175,6 @@ class AccountController extends AbstractController
             if (($id = $request->request->get('id')) == true) {
 
                 $order = $this->getDoctrine()->getRepository(Checkout::class)->find($id);
-                $this->denyAccessUnlessGranted('submit', $order);
                 $order->setStatus(Checkout::STATUS_CANCEL);
                 $this->service->persistToTable($order);
 

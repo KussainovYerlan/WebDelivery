@@ -17,16 +17,16 @@
                                             <button class="btn btn-link order-history-btn" type="button" data-toggle="collapse" data-target="#collapse{{ item.getId() }}" aria-expanded="true" aria-controls="collapse{{ item.getId() }}">
                                                 {{ item.getAddress() }}, {{ item.getCreatedAt()|date('Y-m-d') }}
                                             </button>
-                                                {% if item.getStatus() == constant('App\\Entity\\DeliveryOrder::STATUS_WAIT') %}
+                                                {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_WAIT') %}
                                                     <span class="badge badge-secondary order-status">Ожидает подтверждения</span>
                                                 {% endif %}
-                                                {% if item.getStatus() == constant('App\\Entity\\DeliveryOrder::STATUS_CANCEL') %}
+                                                {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_CANCEL') %}
                                                     <span class="badge badge-danger order-status">Отменен</span>
                                                 {% endif %}
-                                                {% if item.getStatus() == constant('App\\Entity\\DeliveryOrder::STATUS_ACCEPT') %}
+                                                {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_ACCEPT') %}
                                                     <span class="badge badge-info order-status">Подтвержден</span>
                                                 {% endif %}
-                                                {% if item.getStatus() == constant('App\\Entity\\DeliveryOrder::STATUS_DONE') %}
+                                                {% if item.getStatus() == constant('App\\Entity\\Checkout::STATUS_DONE') %}
                                                     <span class="badge badge-success order-status">Выполнен</span>
                                                 {% endif %}
                                         </h2>
@@ -51,14 +51,16 @@
                                                             <th scope="col">#</th>
                                                             <th scope="col">Название</th>
                                                             <th scope="col">Цена, руб</th>
+                                                            <th scope="col">Кол-во</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                        {% for product in item.getProducts() %}
+                                                        {% for product in item.getCheckoutProducts() %}
                                                             <tr>
                                                                 <th scope="col">{{ loop.index }}</th>
-                                                                <th scope="col">{{ product.getName() }}</th>
-                                                                <th scope="col">{{ product.getPrice }}</th>
+                                                                <th scope="col">{{ product.getProduct().getName() }}</th>
+                                                                <th scope="col">{{ product.getProduct().getPrice() }}</th>
+                                                                <th scope="col">{{ product.getCount() }}</th>
                                                             </tr>
                                                         {% endfor %}
                                                         </tbody>

@@ -55,6 +55,12 @@ class CheckoutController extends AbstractController
             ->getRepository(Seller::class)
             ->findOneById($sellerId)
         ;
+
+        if ($session->get('userAddress'))
+        {
+            $checkout->setAddress($session->get('userAddress'));
+        }
+
         $checkout->setSeller($seller);
         $checkout->setUser($this->getUser());
 

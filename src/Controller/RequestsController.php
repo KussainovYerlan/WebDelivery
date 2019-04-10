@@ -70,6 +70,8 @@ class RequestsController extends AbstractController
             return $this->redirectToRoute('sellers_choice');
         }
         $sellerRequest->setSeller($seller);
+        $sellerRequest->setFirstName($this->getUser()->getName());
+        $sellerRequest->setLastName($this->getUser()->getSurname());
         $form = $this->createForm(SellerRequestsType::class, $sellerRequest);
         $form->handleRequest($request);
 

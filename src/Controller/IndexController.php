@@ -76,6 +76,7 @@ class IndexController extends AbstractController
     public function getSellers(Request $request){
         if ($request->isXMLHttpRequest()) {
             if (($ids = $request->request->get('ids')) == true) {
+                $request->getSession()->set('userAddress', $request->request->get('userAddress'));
                 $sellers = [];
                 foreach ($ids as $id)
                 {

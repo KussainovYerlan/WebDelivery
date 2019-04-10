@@ -29,9 +29,10 @@
             <div class="col-lg-3">
                 <h1><a href="{{ path("index") }}">{{ seller.name }}</a></h1>
                 <div class="list-group">
-                    <a href="#" class="list-group-item">Категория 1</a>
-                    <a href="#" class="list-group-item">Категория 2</a>
-                    <a href="#" class="list-group-item">Категория 3</a>
+                    <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: null, id: app.request.get('id')}) }}" class="list-group-item">Все продукты</a>
+                    {% for category in categories %}
+                        <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: category.getId(), id: app.request.get('id')}) }}" class="list-group-item">{{ category.getName() }}</a>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -78,8 +79,8 @@
                                 </p>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
-                                <button class="btn btn-sm btn-outline-secondary" id="{{ product.id }}">В корзину</button>
-                                <span class="text-muted">{{ product.price }} Р</span>
+                                <button class="btn btn-sm btn-outline-secondary btn-add" id="{{ product.id }}">В корзину</button>
+                                <span class="text-muted product-price">{{ product.price }} Р</span>
                             </div>
                         </div>
                     </div>
@@ -90,19 +91,19 @@
                     <nav>
                         <ul class="pagination justify-content-center">
                             <li class="page-item" {{ thisPage == 1 ? 'class="disabled"' }}>
-                                <a class="page-link" href="{{ path('product_index', {page: thisPage-1 < 1 ? 1 : thisPage-1, query: app.request.get('query'), 'id' : app.request.get('id')}) }}">«</a>
+                                <a class="page-link" href="{{ path('product_index', {page: thisPage-1 < 1 ? 1 : thisPage-1, query: app.request.get('query'), 'id' : app.request.get('id'), category: app.request.get('category')}) }}">«</a>
                             </li>
 
                             {% for i in 1..maxPages %}
                                 {% if i > 0 %}
                                     <li class="page-item {{ thisPage == i ? 'active' }}" >
-                                        <a class="page-link" href="{{ path('product_index', {page: i, query: app.request.get('query'), 'id' : app.request.get('id')}) }}">{{ i }}</a>
+                                        <a class="page-link" href="{{ path('product_index', {page: i, query: app.request.get('query'), 'id' : app.request.get('id'), category: app.request.get('category')}) }}">{{ i }}</a>
                                     </li>
                                 {% endif %}
                             {% endfor %}
 
                             <li class="page-item" {{ thisPage == maxPages ? 'class="disabled"' }}>
-                                <a class="page-link" href="{{ path('product_index', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage, query: app.request.get('query'), 'id' : app.request.get('id')}) }}">»</a>
+                                <a class="page-link" href="{{ path('product_index', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage, query: app.request.get('query'), 'id' : app.request.get('id'), category: app.request.get('category')}) }}">»</a>
                             </li>
                         </ul>
                     </nav>

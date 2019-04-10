@@ -3,39 +3,52 @@
 {% block title %}Смена пароля{% endblock %}
 
 {% block body %}
+
     <div class="row" id="row-body">
         {{ include('account/account_menu.html.twig') }}
         <div class="col">
-            <div class="form">
+            <div class="col-md-12 order-md-1">
+                <h4 class="mb-3">Редактирование профиля</h4>
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                <h4>Редактирование профиля</h4>
-                <div class="register-top-grid">
-                    <div class="register__item">
-                        <div class="register__item-label">
-                            Email
-                        </div>
-                        <div class="form-error">
-                            {{ form_errors(form.email) }}
-                        </div>
-                        <div class="register__item-widget">
-                            {{ form_widget(form.email) }}
-                        </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="firstName">Имя</label>
+                        {{ form_widget(form.name, {'attr': { 'class' : 'form-control'}}) }}
                     </div>
-                    <div class="register__item">
-                        <div class="register__item-label">
-                            Логин
-                        </div>
-                        <div class="form-error">
-                            {{ form_errors(form.login) }}
-                        </div>
-                        <div class="register__item-widget">
-                            {{ form_widget(form.login) }}
-                        </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="lastName">Фамилия</label>
+                        {{ form_widget(form.surname, {'attr': { 'class' : 'form-control'}}) }}
                     </div>
                 </div>
-                <div class="form-but">
-                    <button class="btn" type="submit">Изменить</button>
+                <div class="mb-3">
+                    {{ form_label(form.email, 'Email' ) }}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="icon ion-ios-mail"></i>
+                        </span>
+                        </div>
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
+                    </div>
+                    <div class="mt-1 form-error">
+                        {{ form_errors(form.email, {'attr': {'class': 'invalid-feedback'}} ) }}
+                    </div>
                 </div>
+                <div class="mb-3">
+                    {{ form_label(form.login, 'Логин' ) }}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="icon ion-ios-person"></i>
+                        </span>
+                        </div>
+                        {{ form_widget(form.login, {'attr': {'class': 'form-control', 'placeholder': 'Логин'}}) }}
+                    </div>
+                    <div class="mt-1 form-error">
+                        {{ form_errors(form.login, {'attr': {'class': 'invalid-feedback'}}) }}
+                    </div>
+                </div>
+                <button class="btn btn-primary">{{ button_label|default('Сохранить') }}</button>
                 {{ form_end(form) }}
             </div>
         </div>

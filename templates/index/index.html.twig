@@ -116,7 +116,8 @@
                         type: "POST",
                         dataType: "json",
                         data: {
-                            'ids' : ids
+                            'ids' : ids,
+                            'userAddress' : $('#geocomplete').val()
                         },
                         async: true,
                         success: function (response)

@@ -56,3 +56,15 @@
         {{ form_end(form) }}
     </div>
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=8d36ed54-0fd4-4fe0-9be9-bc5dfba1c6c7&lang=ru_RU" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+        ymaps.ready(init);
+
+        function init() {
+            let suggestView = new ymaps.SuggestView('admin_requests_company_address');
+        }
+    </script>
+{% endblock %}

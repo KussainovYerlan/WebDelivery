@@ -20,20 +20,20 @@ class RegistrationFormType extends AbstractType
             ->add('surname')
             ->add('email')
             ->add('login', TextType::class, [
-                'help' => 'Your login should be at least 6 characters'
+                'help' => 'Ваш логин должен быть длиннее 6 символов'
             ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
-                'help' => 'Your password should be at least 6 characters',
+                'help' => 'Ваш пароль должен быть длиннее 6 символов',
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password.',
+                        'message' => 'Пожалуйста, введите свой пароль',
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Your password is shorter than {{ limit }} characters',
+                        'minMessage' => 'Вам пароль должен быть короче {{ limit }} символов',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
