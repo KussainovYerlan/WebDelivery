@@ -36,52 +36,11 @@ class ProductController extends AbstractController
                 'products' => $products,
             ]);
         }
-        
+
         return $this->redirectToRoute('index');
     }
 
     /**
-<<<<<<< HEAD
-=======
-     * @Route("/product/new", name="product_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $product = new Product();
-        $form = $this->createForm(ProductType::class, $product);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
-            $file = $form->get('image')->getData();
-            $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
-
-            try {
-                $file->move(
-                    $this->getParameter('product_images_directory'),
-                    $fileName
-                );
-            } catch (FileException $e) {
-                // ... handle exception if something happens during file upload
-            }
-
-            $product->setImage($fileName);
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($product);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('index');
-        }
-
-        return $this->render('product/new.html.twig', [
-            'product' => $product,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
->>>>>>> 90346dc67521f003d1b57ca0164198554e40792a
      * @Route("/product/{id}", name="product_show", methods={"GET"})
      */
     public function show(Product $product): Response
