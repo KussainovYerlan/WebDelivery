@@ -110,9 +110,10 @@ const updateTotalCount = () => {
     }
 
     if (totalCount > 0){
-        d.getElementById('shopping-cart_open').innerHTML = 'Корзина ' + totalCount
+        d.getElementById('shopping-cart_total-count').style.display = 'block'
+        d.getElementById('shopping-cart_total-count').innerHTML = totalCount
     } else {
-        d.getElementById('shopping-cart_open').innerHTML = 'Корзина';
+        d.getElementById('shopping-cart_total-count').style.display = 'none'
     }
 }
 
