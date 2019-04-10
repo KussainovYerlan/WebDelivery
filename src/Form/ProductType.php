@@ -19,7 +19,9 @@ class ProductType extends AbstractType
             ->add('price')
             ->add('external_id')
             ->add('category')
-            ->add('image', FileType::class)
+            ->add('image', FileType::class, [
+                'required' => false,
+            ])
         ;
     }
 
