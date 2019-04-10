@@ -16,6 +16,8 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('name')
+            ->add('surname')
             ->add('email')
             ->add('login', TextType::class, [
                 'help' => 'Your login should be at least 6 characters'

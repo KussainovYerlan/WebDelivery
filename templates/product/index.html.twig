@@ -27,7 +27,7 @@
         <div class="row">
 
             <div class="col-lg-3">
-                <h1 class="my-4"><a href="{{ path("index") }}">{{ seller.name }}</a></h1>
+                <h1><a href="{{ path("index") }}">{{ seller.name }}</a></h1>
                 <div class="list-group">
                     <a href="#" class="list-group-item">Категория 1</a>
                     <a href="#" class="list-group-item">Категория 2</a>
@@ -38,7 +38,7 @@
             <div class="col-lg-9">
                 {# Search products #}
                 <div class="row">
-                    <div class="col">
+                    <div class="col-10">
                         <form action="{{ path('product_index', {'id' : app.request.get('id')}) }}">
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control" value="{{app.request.get('query')}}" name="query" placeholder="Поиск в магазине {{ seller.name }}">
@@ -50,8 +50,16 @@
                             </div>
                         </form>
                     </div>
+                    <div class="col-2">
+                        <a class="btn btn-primary" id="shopping-cart_open" href="#">
+                            <i class="icon ion-md-cart"></i>
+                            Корзина
+                            <div id="shopping-cart_total-count">27</div>
+                        </a>
+                    </div>
                 </div>
 
+                {# Products cards #}
                 <div class="row">
                 {% for product in products %}
                     <div class="col-lg-4 col-md-6 mb-4">
@@ -61,7 +69,6 @@
                                 <h4 class="card-title">
                                     <a href="#" class="product-name">{{ product.name }}</a>
                                 </h4>
-                                <h5 class="product-price">{{ product.price }}</h5>
                                 <p class="card-text product-description">
                                 {% if product.description|length > 100 %}
                                     {{ product.description[:100] }}...
@@ -70,8 +77,9 @@
                                 {% endif %}
                                 </p>
                             </div>
-                            <div class="card-footer">
-                                <button class="btn btn-primary btn-add" id="{{ product.id }}">В корзину</button>
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <button class="btn btn-sm btn-outline-secondary" id="{{ product.id }}">В корзину</button>
+                                <span class="text-muted">{{ product.price }} Р</span>
                             </div>
                         </div>
                     </div>

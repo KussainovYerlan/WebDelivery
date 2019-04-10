@@ -100,11 +100,25 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     *     message="Пожалуйста, введите email."
+     * )
+     * @Assert\Length(
+     *     max = 180,
+     *     maxMessage = "Ваше имя должно быть короче {{ limit }} символов."
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     *     message="Пожалуйста, введите email."
+     * )
+     * @Assert\Length(
+     *     max = 180,
+     *     maxMessage = "Ваша фамилия должна быть короче {{ limit }} символов."
+     * )
      */
     private $surname;
 

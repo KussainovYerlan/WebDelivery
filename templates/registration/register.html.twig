@@ -4,52 +4,70 @@
 
 {% block body %}
     {{ include('partials/flashes.html.twig') }}
-    <div class="form">
+    <div class="form-register">
         {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
-        <h4>Register</h4>
-        <div class="register-top-grid">
-            <div class="register__item">
-                <div class="register__item-label">
-                    {{ form_label(registrationForm.email) }}
-                </div>
-                <div class="form-error">
-                    {{ form_errors(registrationForm.email) }}
-                </div>
-                <div class="register__item-widget">
-                    {{ form_widget(registrationForm.email) }}
-                </div>
+        <h4 class="text-center">Регистрация</h4>
+        <div class="register__item">
+            <div class="register__item-label">
+                {{ form_label(registrationForm.name, 'Имя') }}
             </div>
-            <div class="register__item">
-                <div class="register__item-label">
-                    {{ form_label(registrationForm.login) }}
-                </div>
-                <div class="form-error">
-                    {{ form_errors(registrationForm.login) }}
-                </div>
-                <div class="register__item-widget">
-                    {{ form_widget(registrationForm.login) }}
-                </div>
-                <div class="form-help">
-                    {{ form_help(registrationForm.login) }}
-                </div>
+            <div class="form-error">
+                {{ form_errors(registrationForm.name) }}
             </div>
-            <div class="register__item">
-                <div class="register__item-label" style="margin-bottom: 5px">
-                    Password
-                </div>
-                <div class="form-error">
-                    {{ form_errors(registrationForm.plainPassword) }}
-                </div>
-                <div class="register__item-widget">
-                    {{ form_widget(registrationForm.plainPassword) }}
-                </div>
-                <div class="form-help">
-                    {{ form_help(registrationForm.plainPassword) }}
-                </div>
+            <div class="register__item-widget">
+                {{ form_widget(registrationForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Введите Ваше имя'}}) }}
             </div>
         </div>
-        <div class="form-but">
-            <button class="btn">Submit</button>
+        <div class="register__item">
+            <div class="register__item-label">
+                {{ form_label(registrationForm.surname, 'Фамилия') }}
+            </div>
+            <div class="form-error">
+                {{ form_errors(registrationForm.surname) }}
+            </div>
+            <div class="register__item-widget">
+                {{ form_widget(registrationForm.surname, {'attr': {'class': 'form-control', 'placeholder': 'Введите Вашу фамилию'}}) }}
+            </div>
+        </div>
+        <div class="register__item">
+            <div class="register__item-label">
+                {{ form_label(registrationForm.email) }}
+            </div>
+            <div class="form-error">
+                {{ form_errors(registrationForm.email) }}
+            </div>
+            <div class="register__item-widget">
+                {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Адрес электронной почты'}}) }}
+            </div>
+        </div>
+        <div class="register__item">
+            <div class="register__item-label">
+                {{ form_label(registrationForm.login, 'Логин') }}
+            </div>
+            <div class="form-error">
+                {{ form_errors(registrationForm.login) }}
+            </div>
+            <div class="register__item-widget">
+                {{ form_widget(registrationForm.login, {'attr': {'class': 'form-control', 'placeholder': 'Введите логин'}}) }}
+            </div>
+            <div class="form-help">
+                {{ form_help(registrationForm.login) }}
+            </div>
+        </div>
+        <div class="register__item">
+            <div class="register__item-label" style="margin-bottom: 5px">
+                Пароль
+            </div>
+            <div class="form-error">
+                {{ form_errors(registrationForm.plainPassword) }}
+            </div>
+            <div class="register__item-widget">
+                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Введите пароль'}}) }}
+            </div>
+            <div class="form-help">
+                {{ form_help(registrationForm.plainPassword) }}
+            </div>
+            <button class="btn btn-primary">Подтвердить</button>
         </div>
         {{ form_end(registrationForm) }}
     </div>

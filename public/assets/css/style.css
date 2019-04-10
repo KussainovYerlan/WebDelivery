@@ -400,6 +400,7 @@ body {
     color: red;
 }
 
+/* Seller delete and edit controls */ 
 .product__control{
     display: flex;
     justify-content: space-between;
@@ -430,4 +431,54 @@ body {
 
 .product__control__edit:hover {
     color: blue;
+}
+
+/* Choose seller */
+
+/* Shopping cart */
+#shopping-cart_open {
+    position: relative;
+}
+
+#shopping-cart_total-count {
+    display: none;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    text-align: center;
+    line-height: 25px;
+}
+
+.choose-seller__container {
+    display: flex;
+    width: 900px;
+    height: 300px;
+    margin: 100px auto;
+    background-color: white;
+    padding: 40px;
+}
+
+/* Register form */
+.form-register {
+    max-width: 500px;
+    margin: auto;
+    width: 100%;
+}
+
+.form-signin {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: auto;
+    width: 100%;
+}
+
+.text-center {
+    text-align: center;
 }

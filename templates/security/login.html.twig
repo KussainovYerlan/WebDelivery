@@ -4,63 +4,36 @@
 
 {% block body %}
     {{ include('partials/flashes.html.twig') }}
-    <div class="login-container">
-        <div class="login-container-left">
-            <form method="post">
-                <div class="form">
-                    {% if error|default(null) %}
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                    {% endif %}
+    <div class="container text-center">
+        <form method="post" class="form-signin">
+            {% if error|default(null) %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
 
-                    <div class="login-top-grid">
-                        <h4 class="h4 mb-3 font-weight-normal">Registered customers</h4>
-                        <div class="register__item register__item-label">
-                            <p>If you have an account with us, please log in.</p>
-                        </div>
-                        <div class="register__item" style="margin-top: 10px">
-                            <div class="register__item-label">
-                                <label for="inputEmail" class="sr-only">Email / Login</label>
-                            </div>
-                            <div class="register__item-widget">
-                                <input value="{{ last_username }}" name="email" id="inputEmail"  placeholder="Email / Login" required autofocus>
-                            </div>
-                        </div>
-                        <div class="register__item">
-                            <div class="register__item-label">
-                                <label for="inputPassword" class="sr-only">Password</label>
-                            </div>
-                            <div class="register__item-widget">
-                                <input type="password" name="password" id="inputPassword" placeholder="Password" required>
-                            </div>
-                        </div>
-                        <div class="forgot-password-clean mt-1">
-                            <a href="#" data-toggle="modal" data-target="#forgot">Забыли пароль?</a>
-                        </div>
-
-                        <input type="hidden" name="_csrf_token"
-                               value="{{ csrf_token('authenticate') }}"
-                        >
-                    </div>
-                    <div class="checkbox mb-3" id="remember-me">
-                        <label>
-                            <input type="checkbox" name="_remember_me"> Remember me
-                        </label>
-                    </div>
-                    <div class="form-but" style="margin-top: 2px">
-                        <button class="btn" >Sign in</button>
-                    </div>
+            <img class="mb-2 align-self-center" width="80px" height="80px" src="{{ asset('img/' ~ 'logo.png') }}">
+            
+            <h1 class="h3 mb-3 font-weight-normal">Авторизация</h1>
+            
+            <label for="inputEmail" class="sr-only">Email / Логин</label>
+            <input value="{{ last_username }}" class="form-control" name="email" id="inputEmail"  placeholder="Email / Login" required autofocus>
+            
+            <label for="inputPassword" class="sr-only">Пароль</label>
+            <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password" required>
+            
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            
+            <div class="d-flex justify-content-between mb-3 mt-3">
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" class="form-check-input" name="_remember_me" id="rememberCheck">
+                    <label class="form-check-label" for="rememberCheck">
+                        Запомнить меня
+                    </label>
                 </div>
-            </form>
-        </div>
-        <div class="login-container-right">
-            <h4 class="h4 mb-3 font-weight-normal">New customers</h4>
-            <p>By creating an account with our store, you will be able to move through the checkout process faster, view your orders in your account and more.</p>
-            <div class="form-but" style="margin-top: 2px; margin-left: 0px">
-                <a href="{{ path('app_register') }}">
-                    <button class="btn" >Register</button>
-                </a>
+                <a href="#" data-toggle="modal" data-target="#forgot">Забыли пароль?</a>
             </div>
-        </div>
+            <button class="btn btn-primary btn-block" >Войти</button>
+            <a class="align-self-start mt-3" href="{{ path('app_register') }}">Еще не зарегестрированы?</a>
+        </form>
     </div>
     <div class="modal fade forgot-password" id="forgot" tabindex="-1" role="dialog" aria-labelledby="forgotArea" aria-hidden="true">
         <div class="modal-dialog" role="document">
