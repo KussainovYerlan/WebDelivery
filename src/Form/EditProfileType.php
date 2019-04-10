@@ -13,12 +13,12 @@ class EditProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('name')
+            ->add('surname')
             ->add('email')
-            ->add('login',
-                TextType::class, [
-                    'help' => 'Your login should be at least 6 characters'
-                ]
-            )
+            ->add('login', TextType::class, [
+                'help' => 'Ваш логин должен быть длиннее 6 символов'
+            ])
         ;
     }
 
@@ -26,6 +26,7 @@ class EditProfileType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'required' => false,
         ]);
     }
 }

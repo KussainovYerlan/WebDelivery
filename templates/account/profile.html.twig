@@ -14,10 +14,14 @@
                     </div>
                     <div class="profile-wrapper-content">
                         <div class="profile-wrapper-content-labels">
+                            <p>Имя:</p>
+                            <p>Фамилия:</p>
                             <p>Ваш логин:</p>
                             <p>Email:</p>
                         </div>
                         <div class="profile-wrapper-content-data">
+                            <p>{{ user.getName() }}</p>
+                            <p>{{ user.getSurname }}</p>
                             <p>{{ user.getLogin() }}</p>
                             <p>{{ user.getEmail }}</p>
                         </div>
