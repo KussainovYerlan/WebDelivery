@@ -19,38 +19,37 @@ class AppFixtures extends Fixture
         $category = new Category();
         $category->setName('Фрукты и овощи');
         $manager->persist($category);
+        $category = new Category();
         $category->setName('Напитки');
         $manager->persist($category);
+        $category = new Category();
         $category->setName('Молочные продукты');
         $manager->persist($category);
-
-        $manager->flush();
 
         //add Saller
         $saller = new Seller();
         $saller->setName('Мясной магазин');
         $saller->setDescription('Всегда только свежее мясо.');
-        $saller->setAddress('Новосибирск, Красный проспект 1'   );
+        $saller->setAddress('Россия, Новосибирск, Вокзальная магистраль, 16 '   );
         $manager->persist($saller);
 
         $saller = new Seller();
         $saller->setName('Молочный магазин');
         $saller->setDescription('Фермерское молоко в Новосибирске.');
-        $saller->setAddress('Новосибирск, Красный проспект 2');
+        $saller->setAddress('Россия, Новосибирск, Красный проспект, 17');
         $manager->persist($saller);
 
         $saller = new Seller();
         $saller->setName('Магазин напитков');
         $saller->setDescription('Лучший лимонад на свете.');
-        $saller->setAddress('Новосибирск, Красный проспект 3');
+        $saller->setAddress('Россия, Новосибирск, Гурьевская улица, 51');
         $manager->persist($saller);
 
         $saller = new Seller();
         $saller->setName('Фрукты и овощи');
         $saller->setDescription('Свежий фрукт.');
-        $saller->setAddress('Новосибирск, Красный проспект 4');
+        $saller->setAddress('Россия, Новосибирск, улица Блюхера, 32 ');
         $manager->persist($saller);
-
         $manager->flush();
 
 
