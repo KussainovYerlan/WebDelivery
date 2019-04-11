@@ -491,15 +491,6 @@ body {
     text-decoration: none;
 }
 
-.text-logo {
-    color: #303030;
-    text-decoration: none;
-}
-
-.text-logo:hover {
-    text-decoration: none;
-}
-
 .logo-nav {
     position: absolute;
     left: 80px;
@@ -508,4 +499,16 @@ body {
 .dropdown-nav {
     position: absolute;
     right: 80px;
+}
+
+.btn-del {
+    min-width: 100px;
+}
+
+.list-group-selected {
+    border-left: 5px solid blue;
+}
+
+.list-group-not-selected:hover {
+    border-left: 5px solid #9f9f9f;
 }

@@ -42,9 +42,9 @@
 <div class="row">
     <div class="col-lg-3">
         <div class="list-group">
-            <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: null, id: app.request.get('id')}) }}" class="list-group-item">Все продукты</a>
+            <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: null, id: app.request.get('id')}) }}" class="list-group-item {{ app.request.get('category') == '' ? 'list-group-selected' : 'list-group-not-selected'}}">Все продукты</a>
             {% for category in categories %}
-                <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: category.getId(), id: app.request.get('id')}) }}" class="list-group-item {% if app.request.get('category') == category.getId() %} active{% endif %}">{{ category.getName() }}</a>
+                <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: category.getId(), id: app.request.get('id')}) }}" class="list-group-item {{ app.request.get('category') == category.id ? 'list-group-selected' : 'list-group-not-selected' }}">{{ category.getName() }}</a>
             {% endfor %}
         </div>
     </div>
