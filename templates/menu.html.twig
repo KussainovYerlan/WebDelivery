@@ -6,34 +6,52 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link but-orange" href="{{ path('index') }}">Главная</a>
+                <a class="nav-link but-orange" href="{{ path("index") }}" class="row">
+                    <h3 class="text-logo">Web Delivery</h3>
+                </a>
             </li>
         </ul>
         <ul class="nav justify-content-end">
-            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') != true %}
-                <li class="nav-item">
-                    <a class="nav-link but-green" href="{{ path('seller_requests_new')}}">Стать продавцом</a>
-                </li>
-            {% endif %}
-            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and (is_granted('ROLE_ADMIN') != true) %}
-                <li class="nav-item">
-                    <a class="nav-link but-green" href="{{ path('profile') }}">Аккаунт</a>
-                </li>
-            {% endif %}
-            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') != true %}
-                <li class="nav-item">
-                    <a class="nav-link but-green" href="{{ path('app_register') }}">Регистрация</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link but-green" href="{{ path('app_login') }}">Войти</a>
-                </li>
-            {% endif %}
-            {% if is_granted('ROLE_ADMIN') %}
-                <li class="nav-item">
-                    <a class="nav-link but-green" href="{{ path('admin_dashboard') }}">Панель администратора</a>
-                </li>
-            {% endif %}
+            {# Account dropdown #}
+            <li class="nav-item dropdown">
+                <button class="btn nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Aккаунт
+                </button>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') != true %}
+                    <a class="dropdown-item" href="{{ path('app_login') }}">
+                        <i class="icon ion-md-log-in"></i> Вход
+                    </a>
+                    <a class="dropdown-item" href="{{ path('app_register') }}">
+                        <i class="icon ion-md-person-add"></i> Регистрация
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ path('seller_requests_new')}}">
+                        <i class="icon ion-md-briefcase"></i> Стать продавцом</a>
+                {% endif %}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and (is_granted('ROLE_ADMIN') != true) %}
+                    <a class="dropdown-item" href="{{ path('profile') }}">
+                        <i class="icon ion-md-desktop"></i> Личный кабинет
+                    </a>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="dropdown-item" href="{{ path('admin_dashboard') }}">
+                        <i class="icon ion-md-build"></i> Панель администратора
+                    </a>
+                {% endif %}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ path('logout') }}">
+                        <i class="icon ion-md-log-out"></i> Выход
+                    </a>
+                {% endif %}
+                </div>
+            </div>
         </ul>
-
     </div>
 </nav>
+
+<div class="logo-nav">
+
+</div>
+

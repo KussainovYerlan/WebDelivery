@@ -506,3 +506,13 @@ body {
 .text-logo:hover {
     text-decoration: none;
 }
+
+.logo-nav {
+    position: absolute;
+    left: 80px;
+}
+
+.dropdown-nav {
+    position: absolute;
+    right: 80px;
+}
