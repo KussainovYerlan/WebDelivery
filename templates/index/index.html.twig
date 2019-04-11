@@ -14,7 +14,9 @@
             </div>
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <i class="input-group-text icon ion-md-navigate"></i>
+                    <button class="btn btn-primary" id="get_location_address">
+                        <i class="icon ion-md-navigate"></i>
+                    </button>
                 </div>
                 <input class="form-control" id="geocomplete" type="text" placeholder="Введите ваш адрес" value="{{ userAddress }}">
                 <div class="input-group-append">
@@ -137,6 +139,16 @@
                 localStorage.clear();
             });
         }
+
+        $('#get_location_address').click(() => {
+            let geolocation = ymaps.geolocation
+            geolocation.get({
+                provider: 'browser',
+                mapStateAutoApply: true
+            }).then(function (result) {
+                $('#geocomplete').val(result.geoObjects.get(0).getAddressLine())
+            })
+        })
     </script>
 {% endblock %}
 
