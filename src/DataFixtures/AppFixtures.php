@@ -5,17 +5,38 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Seller;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
     private $encoder;
 
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
 
     public function load(ObjectManager $manager)
     {
+        $user = new User();
+        $user->setName('admin');
+        $user->setSurname('ADMIN');
+        $user->setPassword($this->encoder->encodePassword(
+            $user,
+            '12345678'
+        ));
+        $user->setEmail('ema@ema.ru');
+        $user->setLogin('sup_admin');
+        $user->setRoles(User::ROLE_ADMIN);
+        $manager->persist($user);
+        $manager->flush();
+        $user = $manager->getRepository(User::class)->find(1);
+
         //add Category
         $category = new Category();
         $category->setName('Мясо');
