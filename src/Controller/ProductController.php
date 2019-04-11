@@ -38,7 +38,8 @@ class ProductController extends AbstractController
                 'maxPages' => $maxPages,
                 'seller' => $seller,
                 'products' => $products,
-                'categories' => $categories
+                'categories' => $categories,
+                'userAddress' => $request->getSession()->get('userAddress')
             ]);
         }
 
