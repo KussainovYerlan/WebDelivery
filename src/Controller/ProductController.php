@@ -20,6 +20,7 @@ class ProductController extends AbstractController
      */
     public function index(int $id, Request $request): Response
     {
+
         $seller = $this->getDoctrine()->getRepository(Seller::class)->find($id);
         $request->getSession()->set('sellerId', $id);
 
@@ -27,7 +28,7 @@ class ProductController extends AbstractController
         {
             $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
             $products = $this->getDoctrine()->getRepository(Product::class)
-                ->searchProducts($request->get('query'), $request->get('category'), $seller->getId(), $request->get('page'));
+                ->searchProducts($request->get('query'), $seller->getId(), $request->get('page'), $request->get('category'));
 
             $thisPage = $request->get('page') ?: 1;
 

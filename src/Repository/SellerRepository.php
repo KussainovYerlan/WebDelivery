@@ -23,7 +23,7 @@ class SellerRepository extends ServiceEntityRepository
     public function getAddresses()
     {
         return $this->createQueryBuilder('s')
-            ->select('s.address, s.id')
+            ->select('s.address, s.id, s.name')
             ->getQuery()
             ->getResult()
             ;

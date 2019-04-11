@@ -8,7 +8,7 @@
             <h4 class="d-flex justify-content-between align-item-center mb-3">
                 {% set totalSum = 0 %}
                 {% set totalCount = 0 %}
-                {% for item in checkout.checkoutproducts %}
+                {% for item in checkout.checkoutProducts() %}
                     {% set totalCount = item.count + totalCount ?? 0 %}
                     {% set totalSum = item.product.price*item.count + totalSum ?? 0 %}
                 {% endfor %}
@@ -21,10 +21,10 @@
                     <div>
                         <h6 class="my-0">{{ item.product.name }}</h6>
                         <small class="text-muted">
-                        {% if product.description|length > 40 %}
-                            {{ product.description[:40] }}...
+                        {% if item.product.description|length > 40 %}
+                            {{ item.product.description[:40] }}...
                         {% else %}
-                            {{ product.description }}
+                            {{ item.product.description }}
                         {% endif %}
                         </small>
                     </div>
@@ -42,11 +42,11 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                 <label for="firstName">Имя</label>
-                <input type="text" class="form-control" id="firstName" placeholder="" value="{{ checkout.user.name }}" readonly>
+                <input type="text" class="form-control" id="firstName" placeholder="" value="{{ checkout.getUser().getName() }}" readonly>
             </div>
             <div class="col-md-6 mb-3">
                 <label for="lastName">Фамилия</label>
-                <input type="text" class="form-control" id="lastName" placeholder="" value="{{ checkout.user.surname }}" readonly>
+                <input type="text" class="form-control" id="lastName" placeholder="" value="{{ checkout.getUser().getSurname() }}" readonly>
             </div>
             </div>
             {{ form_start(form) }}
