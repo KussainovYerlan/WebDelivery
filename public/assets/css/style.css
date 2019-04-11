@@ -453,17 +453,6 @@ body {
     line-height: 25px;
 }
 
-/* Form input address */
-.form-input-address {
-    display: flex;
-    flex-direction: column;
-    width: 900px;
-    height: 300px;
-    margin: 100px auto;
-    background-color: white;
-    padding: 80px;
-}
-
 /* Register form */
 .form-register {
     display: flex;
@@ -481,6 +470,10 @@ body {
 
 .text-center {
     text-align: center;
+}
+
+.white-box {
+    background-color: white;
 }
 
 .modal-width-forgot {

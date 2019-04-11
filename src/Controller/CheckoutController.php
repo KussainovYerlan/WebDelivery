@@ -36,6 +36,10 @@ class CheckoutController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        
         $checkout = new Checkout();
 
         $session = $request->getSession();
