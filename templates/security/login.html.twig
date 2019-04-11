@@ -4,7 +4,7 @@
 
 {% block body %}
     {{ include('partials/flashes.html.twig') }}
-        <form method="post" class="form-register">
+        <form method="post" class="form-register shadow-sm">
             {% if error|default(null) %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}

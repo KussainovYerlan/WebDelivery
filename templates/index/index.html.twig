@@ -3,26 +3,28 @@
 {% block title %}Доставка еды{% endblock %}
 
 {% block body %}
-    <div class="form-input-address">
-        <div class="row">
-            <img class="mb-2 align-self-center" width="100px" height="100px" src="{{ asset('img/' ~ 'logo.svg') }}">
-            <div class="col">
-                <h1 class="text-logo">Web Delivery</h1>
-                <p class="text-muted">Faster than can you say blueberry pie</p>
+    <div class="row justify-content-center">
+        <div class="col-8 white-box shadow-sm p-5 mt-5">
+            <div class="row">
+                <img class="mb-2 align-self-center" width="100px" height="100px" src="{{ asset('img/' ~ 'logo.svg') }}">
+                <div class="col">
+                    <h1 class="text-logo">Web Delivery</h1>
+                    <p class="text-muted">Faster than can you say blueberry pie</p>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <i class="input-group-text icon ion-md-navigate"></i>
+                </div>
+                <input class="form-control" id="geocomplete" type="text" placeholder="Введите ваш адрес" value="{{ userAddress }}">
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-primary ajax-select">Выбрать</button>
+                </div>
             </div>
         </div>
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <i class="input-group-text icon ion-md-navigate"></i>
-            </div>
-            <input class="form-control" id="geocomplete" type="text" placeholder="Введите ваш адрес" value="{{ userAddress }}">
-            <div class="input-group-append">
-                <button type="button" class="btn btn-primary ajax-select">Выбрать</button>
-            </div>
+        <div class="col-8 white-box shadow-sm p-5 mt-5 mb-5">
+            <div id="map" style="width: 100%; height: 500px"></div>
         </div>
-    </div>
-    <div class="row">
-        <div id="map" style="width: 500px; height: 500px"></div>
     </div>
 
     {% include('includes/modal_seller.html.twig') %}
