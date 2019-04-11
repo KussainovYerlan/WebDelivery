@@ -7,9 +7,13 @@ use App\Entity\Product;
 use App\Entity\Seller;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 
 class AppFixtures extends Fixture
 {
+    private $encoder;
+
+
     public function load(ObjectManager $manager)
     {
         //add Category
@@ -30,7 +34,7 @@ class AppFixtures extends Fixture
         $saller = new Seller();
         $saller->setName('Мясной магазин');
         $saller->setDescription('Всегда только свежее мясо.');
-        $saller->setAddress('Россия, Новосибирск, Вокзальная магистраль, 16 '   );
+        $saller->setAddress('Россия, Новосибирск, Вокзальная магистраль, 16 ');
         $manager->persist($saller);
 
         $saller = new Seller();
@@ -84,7 +88,7 @@ class AppFixtures extends Fixture
         $product->setName('Сливки');
         $product->setCategory($category);
         $product->setCount(20);
-        $product->setDescription('Сливки это продукт, созданный из 100% натурального коровьего молока.');
+        $product->setDescription('Сливки - это продукт, созданный из 100% натурального коровьего молока.');
         $product->setPrice(80);
         $product->setExternalId(3);
         $product->setSeller($seller);
