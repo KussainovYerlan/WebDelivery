@@ -91,6 +91,8 @@ class AdminService
 
         $user->setEmail($adminRequest->getEmail());
         $user->setRoles(User::ROLE_SELLER_MAIN);
+        $user->setName($adminRequest->getName());
+        $user->setSurname($adminRequest->getSurname());
         $user->setLogin($login);
         $user->setSeller($seller);
 
