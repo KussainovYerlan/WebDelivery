@@ -99,10 +99,11 @@ class User implements UserInterface
     private $CreatedAt;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank(
      *     message="Пожалуйста, введите email."
      * )
+     *
      * @Assert\Length(
      *     max = 180,
      *     maxMessage = "Ваше имя должно быть короче {{ limit }} символов."
@@ -111,7 +112,7 @@ class User implements UserInterface
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank(
      *     message="Пожалуйста, введите email."
      * )

@@ -304,12 +304,14 @@ class AccountController extends AbstractController
      */
     public function sellerProductList(Request $request): Response
     {
-        $seller = $this->getUser()->getSeller();
+        $saller = $this->getUser()->getSeller()->getId();
+        $seller = $this->getDoctrine()->getRepository(Seller::class)->find($saller);
 
         if ($seller)
         {
             $products = $this->getDoctrine()->getRepository(Product::class)
                 ->searchProducts($request->get('query'), $seller->getId(), $request->get('page'));
+            dump($products);
 
             $thisPage = $request->get('page') ?: 1;
 

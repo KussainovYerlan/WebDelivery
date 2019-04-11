@@ -11,6 +11,18 @@
         </div>
         <div class="form-row col col-md-12">
             <div class="form-error">
+                {{ form_errors(form.name) }}
+            </div>
+            {{ form_widget(form.name, {'attr': {'class': 'form-control rounded-0 mb-4', 'placeholder': 'Имя'}}) }}
+        </div>
+        <div class="form-row col col-md-12">
+            <div class="form-error">
+                {{ form_errors(form.surname) }}
+            </div>
+            {{ form_widget(form.surname, {'attr': {'class': 'form-control rounded-0 mb-4', 'placeholder': 'Фамилия'}}) }}
+        </div>
+        <div class="form-row col col-md-12">
+            <div class="form-error">
                 {{ form_errors(form.company_name) }}
             </div>
             {{ form_widget(form.company_name, {'attr': {'class': 'form-control mb-4', 'placeholder': 'Название компании'}}) }}

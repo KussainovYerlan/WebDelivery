@@ -32,6 +32,9 @@ class AdminRequests
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank(
+     *     message="Пожалуйста, опишите вашу компанию."
+     * )
      */
     private $company_description;
 
@@ -67,6 +70,22 @@ class AdminRequests
      * )
      */
     private $company_address;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     *     message="Пожалуйста, введите ваше имя."
+     * )
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     *     message="Пожалуйста, введите вашу фамилию."
+     * )
+     */
+    private $surname;
 
     public function getId(): ?int
     {
@@ -129,6 +148,30 @@ class AdminRequests
     public function setCompanyAddress(string $company_address): self
     {
         $this->company_address = $company_address;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSurname(): ?string
+    {
+        return $this->surname;
+    }
+
+    public function setSurname(string $surname): self
+    {
+        $this->surname = $surname;
 
         return $this;
     }
