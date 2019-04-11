@@ -15,12 +15,6 @@
                 <h2 class="text-logo">Web Delivery</h2>
             </div>
         </a>
-        <div class="list-group">
-            <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: null, id: app.request.get('id')}) }}" class="list-group-item">Все продукты</a>
-            {% for category in categories %}
-                <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: category.getId(), id: app.request.get('id')}) }}" class="list-group-item">{{ category.getName() }}</a>
-            {% endfor %}
-        </div>
     </div>
 
     <div class="col-lg-9">
@@ -83,8 +77,21 @@
                 </a>
             </div>
         </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3">
+        <div class="list-group">
+            <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: null, id: app.request.get('id')}) }}" class="list-group-item">Все продукты</a>
+            {% for category in categories %}
+                <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: category.getId(), id: app.request.get('id')}) }}" class="list-group-item">{{ category.getName() }}</a>
+            {% endfor %}
+        </div>
+    </div>
 
-        {# Products cards #}
+    {# Products cards #}
+    <div class="col-lg-9">
+
         <div class="row">
         {% for product in products %}
             <div class="col-lg-4 col-md-6 mb-4">
