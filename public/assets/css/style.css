@@ -36,12 +36,6 @@ body {
     padding-left:10px
 }
 
-
-.register__item {
-    margin-top: 10px;
-    margin-left: 10px;
-}
-
 .form-but{
     margin-top:1em;
     margin-left: 10px;
@@ -440,7 +434,7 @@ body {
 
 #shopping-cart_total {
     background-color: green;
-    border-radius: 15%;
+    border-radius: 10%;
     padding: 5px 10px;
 }
 
@@ -472,18 +466,17 @@ body {
 
 /* Register form */
 .form-register {
-    max-width: 500px;
-    margin: auto;
-    width: 100%;
-}
-
-/* Signin form */
-.form-signin {
     display: flex;
     flex-direction: column;
-    max-width: 400px;
-    margin: auto;
+    max-width: 450px;
+    margin: 50px auto;
     width: 100%;
+    padding: 40px;
+    background-color: #FFFFFF;
+}
+
+.register__item {
+    margin-top: 10px;
 }
 
 .text-center {
