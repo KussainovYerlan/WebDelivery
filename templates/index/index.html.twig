@@ -15,12 +15,14 @@
             <div class="input-group-prepend">
                 <i class="input-group-text icon ion-md-navigate"></i>
             </div>
-            <input class="form-control" id="geocomplete" type="text" placeholder="Введите ваш адрес">
+            <input class="form-control" id="geocomplete" type="text" placeholder="Введите ваш адрес" value="{{ userAddress }}">
             <div class="input-group-append">
                 <button type="button" class="btn btn-primary ajax-select">Выбрать</button>
             </div>
         </div>
-        <div id="map" style="display: none"></div>
+    </div>
+    <div class="row">
+        <div id="map" style="width: 500px; height: 500px"></div>
     </div>
 
     {% include('includes/modal_seller.html.twig') %}
@@ -47,6 +49,7 @@
                     geoObjectOpenBalloonOnClick: false
                 });
             let suggestView = new ymaps.SuggestView('geocomplete');
+            let idsArray
 
             $.ajax({
                 url:'{{ (path('index_points')) }}',
@@ -67,7 +70,8 @@
                             placemark = new ymaps.Placemark(coordsSingle);
                             myMap.geoObjects
                                 .add(new ymaps.Placemark(coordsSingle, {
-                                    balloonContent: response.addresses[key]['id']
+                                    balloonContent: response.addresses[key]['name'],
+                                    addressId: response.addresses[key]['id']
                                 }));
                         }, function (err) {
                             // Обработка ошибки.
@@ -93,7 +97,7 @@
                     let objectsInsideCircle = ymaps.geoQuery(myMap.geoObjects).searchInside(circle);
                     for (i = 0; i < objectsInsideCircle.getLength(); i++)
                     {
-                        ids[i] = objectsInsideCircle.get(i).properties.get('balloonContent');
+                        ids[i] = objectsInsideCircle.get(i).properties.get('addressId');
                     }
                     console.log(ids);
                     $.ajax({

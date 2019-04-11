@@ -58,6 +58,7 @@ class IndexController extends AbstractController
 
         return $this->render('index/index.html.twig', [
             'form' => $form->createView(),
+            'userAddress' => $request->getSession()->get('userAddress')
         ]);
     }
 
@@ -66,6 +67,7 @@ class IndexController extends AbstractController
      */
     public function getAddresses(Request $request){
         $addresses = $this->getDoctrine()->getRepository(Seller::class)->getAddresses();
+
 
         return new JsonResponse(['addresses' => $addresses], 200);
     }

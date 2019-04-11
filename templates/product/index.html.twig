@@ -18,7 +18,7 @@
         <div class="list-group">
             <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: null, id: app.request.get('id')}) }}" class="list-group-item">Все продукты</a>
             {% for category in categories %}
-                <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: category.getId(), id: app.request.get('id')}) }}" class="list-group-item">{{ category.getName() }}</a>
+                <a href="{{ path('product_index', { page: thisPage, query: app.request.get('query'), category: category.getId(), id: app.request.get('id')}) }}" class="list-group-item {% if app.request.get('category') == category.getId() %} active{% endif %}">{{ category.getName() }}</a>
             {% endfor %}
         </div>
     </div>
@@ -32,6 +32,7 @@
                         <div class="input-group-prepend">
                             <button class="btn btn-primary" onclick="$('#modalSeller').modal('show');"><b>{{ seller.name }}</b></button>
                         </div>
+                        <input type="hidden" value="{{ app.request.get('category') }}" name="category">
                         <input type="text" class="form-control" value="{{app.request.get('query')}}" name="query" placeholder="Поиск в магазине {{ seller.name }}">
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-outline-secondary">
