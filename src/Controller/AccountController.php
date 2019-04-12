@@ -280,6 +280,7 @@ class AccountController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->getData()['importFile'];
             $this->productImportService->importCsv($file, $user);
+            return $this->redirectToRoute('seller_product_list');
         }
 
         return $this->render('index/importcsv.html.twig', [
@@ -347,12 +348,14 @@ class AccountController extends AbstractController
 
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($product);
             if ($checkouts = $this->service->checkProduct($product))
             {
                 foreach ($checkouts as $item)
                 {
                     $entityManager->remove($item);
                 }
+
                 $entityManager->remove($product);
                 $entityManager->flush();
                 return $this->redirectToRoute('seller_product_list');
