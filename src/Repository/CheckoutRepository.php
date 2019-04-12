@@ -37,6 +37,23 @@ class CheckoutRepository extends ServiceEntityRepository
         return $ql->getQuery()->getSingleScalarResult();
     }
 
+    public function countCancelOrders(\DateTime $date)
+    {
+
+        $ql = $this->createQueryBuilder('d')
+            ->select('COUNT(d.id)')
+            ->where('YEAR(d.createdAt) = :year')
+            ->andWhere('MONTH(d.createdAt) = :month')
+            ->andWhere('DAY(d.createdAt) = :day')
+            ->andWhere('DAY(d.status) = :status')
+            ->setParameter('year', $date->format('Y'))
+            ->setParameter('month', $date->format('m'))
+            ->setParameter('day', $date->format('d'))
+            ->setParameter('status', Checkout::STATUS_CANCEL);
+        ;
+        return $ql->getQuery()->getSingleScalarResult();
+    }
+
     public function findBySeller(int $id , $page = 1)
     {
         $query = $this->createQueryBuilder('d'          )

@@ -37,9 +37,11 @@ class AdminController extends AbstractController
     {
         $newUsers = $this->service->newUserRegistry();
         $doneOrdersToday = $this->service->getDoneOrdersToday();
+        $cancelOrderToday = $this->service->getCancelOrdersToday();
         return $this->render('admin/dashboard.html.twig', [
             'newUser' => $newUsers,
-            'doneOrdersToday' => $doneOrdersToday
+            'doneOrdersToday' => $doneOrdersToday,
+            'cancelOrdersToday' => $cancelOrderToday
         ]);
     }
 

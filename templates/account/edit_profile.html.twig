@@ -21,20 +21,6 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    {{ form_label(form.email, 'Email' ) }}
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">
-                            <i class="icon ion-ios-mail"></i>
-                        </span>
-                        </div>
-                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
-                    </div>
-                    <div class="mt-1 form-error">
-                        {{ form_errors(form.email, {'attr': {'class': 'invalid-feedback'}} ) }}
-                    </div>
-                </div>
-                <div class="mb-3">
                     {{ form_label(form.login, 'Логин' ) }}
                     <div class="input-group">
                         <div class="input-group-prepend">
