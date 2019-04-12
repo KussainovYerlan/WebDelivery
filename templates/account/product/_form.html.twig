@@ -30,6 +30,9 @@
         <div class="form-group col-md-6">
             {{ form_label(form.image, 'Изображение продукта' ) }}
             {{ form_widget(form.image, {'attr': {'class': 'form-control-file'}}) }}
+            <div class="form-error pt-2">
+                {{  form_errors(form.image,{ 'attr': {'class': 'form-error'}}) }}
+            </div>
         </div>
     </div>
     <button class="btn btn-primary">{{ button_label|default('Создать продукт') }}</button>

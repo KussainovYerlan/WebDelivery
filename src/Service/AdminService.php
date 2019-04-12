@@ -78,6 +78,11 @@ class AdminService
         return $this->manager->getRepository(Checkout::class)->countDoneOrders(new \DateTime());
     }
 
+    public function getCancelOrdersToday()
+    {
+        return $this->manager->getRepository(Checkout::class)->countCancelOrders(new \DateTime());
+    }
+
     public function requestSubmit(AdminRequests $adminRequest, $domen)
     {
         $user = new User();
