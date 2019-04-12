@@ -55,7 +55,6 @@ class AccountController extends AbstractController
     public function profileEditAction(Request $request)
     {
         $user = $this->getUser();
-        dump($user->getPassword());
         $form = $this->createForm(EditProfileType::class, $user);
         $form->handleRequest($request);
 
