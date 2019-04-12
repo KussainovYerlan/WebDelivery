@@ -36,7 +36,7 @@ class AppFixtures extends Fixture
         $user->setRoles(User::ROLE_ADMIN);
         $manager->persist($user);
         $manager->flush();
-        $user = $manager->getRepository(User::class)->find(1);
+       // $user = $manager->getRepository(User::class)->find(1);
 
 
 
@@ -78,7 +78,6 @@ class AppFixtures extends Fixture
         $manager->persist($user);
         $user->setRoles(User::ROLE_SELLER_MAIN);
         $manager->flush();
-        $user = $manager->getRepository(User::class)->find(1);
 
         $manager->persist($saller);
 
@@ -88,10 +87,43 @@ class AppFixtures extends Fixture
         $saller->setAddress('Россия, Новосибирск, Красный проспект, 17');
         $manager->persist($saller);
 
+        $user = new User();
+        $user->setName('Василий');
+        $user->setSurname('Абрамов');
+        $user->setPassword($this->encoder->encodePassword(
+            $user,
+            'dev12345'
+        ));
+        $user->setEmail('dhh@rgsgr.ru');
+        $user->setLogin('saller1');
+        $user->setSeller($saller);
+        $manager->persist($user);
+        $user->setRoles(User::ROLE_SELLER_MAIN);
+        $manager->flush();
+        $user = $manager->getRepository(User::class)->find(1);
+
+        $manager->persist($saller);
+
         $saller = new Seller();
         $saller->setName('Магазин напитков');
         $saller->setDescription('Лучший лимонад на свете.');
         $saller->setAddress('Россия, Новосибирск, Гурьевская улица, 51');
+        $manager->persist($saller);
+
+        $user = new User();
+        $user->setName('Александ');
+        $user->setSurname('Веселов');
+        $user->setPassword($this->encoder->encodePassword(
+            $user,
+            'dev12345'
+        ));
+        $user->setEmail('ndhthnd@gsrehdth.ru');
+        $user->setLogin('saller2');
+        $user->setSeller($saller);
+        $manager->persist($user);
+        $user->setRoles(User::ROLE_SELLER_MAIN);
+        $manager->flush();
+
         $manager->persist($saller);
 
         $saller = new Seller();
@@ -101,6 +133,22 @@ class AppFixtures extends Fixture
         $manager->persist($saller);
         $manager->flush();
 
+        $user = new User();
+        $user->setName('Анна');
+        $user->setSurname('Иванова');
+        $user->setPassword($this->encoder->encodePassword(
+            $user,
+            'dev12345'
+        ));
+        $user->setEmail('ftjtyj@htddrth.ru');
+        $user->setLogin('saller3');
+        $user->setSeller($saller);
+        $manager->persist($user);
+        $user->setRoles(User::ROLE_SELLER_MAIN);
+        $manager->flush();
+
+
+        $manager->persist($saller);
 
         //add Products
 
