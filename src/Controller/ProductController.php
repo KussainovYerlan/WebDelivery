@@ -32,7 +32,7 @@ class ProductController extends AbstractController
 
             $thisPage = $request->get('page') ?: 1;
 
-            $maxPages = ceil($products->count() / 4);
+            $maxPages = ceil($products->count() / 9);
             return $this->render('product/index.html.twig', [
                 'thisPage' => $thisPage,
                 'maxPages' => $maxPages,

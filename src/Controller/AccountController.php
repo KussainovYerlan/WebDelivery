@@ -115,17 +115,6 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @Route("/account/mydiscounts", name="mydiscounts")
-     */
-    public function myDiscountsAction()
-    {
-        $user = $this->getUser();
-        return $this->render('account/profile.html.twig', [
-            'user' => $user,
-        ]);
-    }
-
-    /**
      * @Route("/account/seller/orders", name="seller_orders")
      */
     public function sellerOrdersListAction(Request $request)
@@ -312,7 +301,6 @@ class AccountController extends AbstractController
         {
             $products = $this->getDoctrine()->getRepository(Product::class)
                 ->searchProducts($request->get('query'), $seller->getId(), $request->get('page'));
-            dump($products);
 
             $thisPage = $request->get('page') ?: 1;
 
@@ -368,8 +356,12 @@ class AccountController extends AbstractController
                 {
                     $entityManager->remove($item);
                 }
+
+                $entityManager->remove($product);
+                $entityManager->flush();
                 return $this->redirectToRoute('seller_product_list');
             }
+            $entityManager->remove($product);
             $entityManager->flush();
         }
 
@@ -386,12 +378,14 @@ class AccountController extends AbstractController
                 new File($this->getParameter('product_images_directory').'/'.$product->getImage())
             );
         }
-
         $form = $this->createForm(ProductType::class, $product);
+        $file = $product->getImage();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
+            if ($product->getImage() == null){
+                $product->setImage($file);
+            }
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('seller_product_list', [
