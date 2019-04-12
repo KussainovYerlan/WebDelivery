@@ -9,7 +9,7 @@
                 <img class="mb-2 align-self-center" width="100px" height="100px" src="{{ asset('img/' ~ 'logo.svg') }}">
                 <div class="col">
                     <h1 class="text-logo">Web Delivery</h1>
-                    <p class="text-muted">Faster than can you say blueberry pie</p>
+                    <p class="text-muted">Быстрее, чем вы скажете "вишневый пирог"</p>
                 </div>
             </div>
             <div class="input-group">
@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-8 white-box shadow-sm p-5 mt-5 mb-5">
+        <div class="col-8 white-box shadow-sm p-5 mt-4 mb-5">
             <div id="map" style="width: 100%; height: 500px"></div>
         </div>
     </div>
@@ -143,7 +143,7 @@
         $('#get_location_address').click(() => {
             let geolocation = ymaps.geolocation
             geolocation.get({
-                provider: 'browser',
+                provider: 'yandex',
                 mapStateAutoApply: true
             }).then(function (result) {
                 $('#geocomplete').val(result.geoObjects.get(0).getAddressLine())
