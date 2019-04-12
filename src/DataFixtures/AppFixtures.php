@@ -23,6 +23,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+        //add Admin
         $user = new User();
         $user->setName('admin');
         $user->setSurname('ADMIN');
@@ -36,6 +37,11 @@ class AppFixtures extends Fixture
         $manager->persist($user);
         $manager->flush();
         $user = $manager->getRepository(User::class)->find(1);
+
+
+
+
+
 
         //add Category
         $category = new Category();
@@ -56,6 +62,24 @@ class AppFixtures extends Fixture
         $saller->setName('Мясной магазин');
         $saller->setDescription('Всегда только свежее мясо.');
         $saller->setAddress('Россия, Новосибирск, Вокзальная магистраль, 16 ');
+        $manager->persist($saller);
+
+
+        $user = new User();
+        $user->setName('Иван');
+        $user->setSurname('Петров');
+        $user->setPassword($this->encoder->encodePassword(
+            $user,
+            'dev12345'
+        ));
+        $user->setEmail('dgs@dfger.ru');
+        $user->setLogin('saller');
+        $user->setSeller($saller);
+        $manager->persist($user);
+        $user->setRoles(User::ROLE_SELLER_MAIN);
+        $manager->flush();
+        $user = $manager->getRepository(User::class)->find(1);
+
         $manager->persist($saller);
 
         $saller = new Seller();
