@@ -39,7 +39,7 @@ make test
 
 Run bash
 ```
-make bash - Running bash
+make bash
 ```
 
 
