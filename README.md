@@ -21,15 +21,24 @@ Docker
 make install
 ```
 
+Run application
+```
+make up
+```
+
+Stop application
+```
+make down
+```
+
 ## Running the tests
 
 ```
 make test
 ```
 
+Run bash
 ```
-make up - Running containers
-make down - Stopping containers
 make bash - Running bash
 ```
 
