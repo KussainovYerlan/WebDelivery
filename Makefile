@@ -14,6 +14,7 @@ bash:
 
 install:
 	docker-compose build \
-	docker-compose up -d \
-	docker-compose exec php-fpm bash composer install \
-	docker-compose exec php-fpm bash bin/console doctrine:migrations:migrate \
+	&& docker-compose up -d \
+	&& docker-compose exec php-fpm composer install \
+	&& docker-compose exec php-fpm bin/console doctrine:migrations:migrate \
+	&& docker-compose down

@@ -4,6 +4,7 @@ public/uploads/
 storage/
 ###> symfony/framework-bundle ###
 .env.local
+docker/mysql_data
 /.env.local.php
 /.env.*.local
 /public/bundles/
