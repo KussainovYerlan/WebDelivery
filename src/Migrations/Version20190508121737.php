@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190508082441 extends AbstractMigration
+final class Version20190508121737 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -29,6 +29,7 @@ final class Version20190508082441 extends AbstractMigration
         $this->addSql('CREATE TABLE seller_requests (id INT AUTO_INCREMENT NOT NULL, seller_id INT NOT NULL, user_id INT NOT NULL, first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, resume LONGTEXT DEFAULT NULL, file VARCHAR(255) DEFAULT NULL, INDEX IDX_11EEF81A8DE820D9 (seller_id), INDEX IDX_11EEF81AA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE seller (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, address LONGTEXT NOT NULL, description LONGTEXT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE checkout (id INT AUTO_INCREMENT NOT NULL, seller_id INT NOT NULL, user_id INT NOT NULL, address VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, cost INT NOT NULL, phone VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, INDEX IDX_AF382D4E8DE820D9 (seller_id), INDEX IDX_AF382D4EA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE category (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE checkout_product ADD CONSTRAINT FK_2F21E0D4146D8724 FOREIGN KEY (checkout_id) REFERENCES checkout (id)');
         $this->addSql('ALTER TABLE checkout_product ADD CONSTRAINT FK_2F21E0D44584665A FOREIGN KEY (product_id) REFERENCES product (id)');
         $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D6498DE820D9 FOREIGN KEY (seller_id) REFERENCES seller (id)');
@@ -53,6 +54,7 @@ final class Version20190508082441 extends AbstractMigration
         $this->addSql('ALTER TABLE seller_requests DROP FOREIGN KEY FK_11EEF81A8DE820D9');
         $this->addSql('ALTER TABLE checkout DROP FOREIGN KEY FK_AF382D4E8DE820D9');
         $this->addSql('ALTER TABLE checkout_product DROP FOREIGN KEY FK_2F21E0D4146D8724');
+        $this->addSql('ALTER TABLE product DROP FOREIGN KEY FK_D34A04AD12469DE2');
         $this->addSql('DROP TABLE checkout_product');
         $this->addSql('DROP TABLE user');
         $this->addSql('DROP TABLE product');
@@ -60,5 +62,6 @@ final class Version20190508082441 extends AbstractMigration
         $this->addSql('DROP TABLE seller_requests');
         $this->addSql('DROP TABLE seller');
         $this->addSql('DROP TABLE checkout');
+        $this->addSql('DROP TABLE category');
     }
 }

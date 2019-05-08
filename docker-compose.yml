@@ -3,11 +3,11 @@ services:
   php:
     build: docker/webserver
     container_name: docker-symfony4-php
+    working_dir: /application
     volumes:
       - .:/application
       - ./docker/webserver/apache/apache.conf:/etc/apache2/sites-enabled/000-default.conf
       - ./docker/webserver/php/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
-    working_dir: /application
     ports:
       - "8000:80"
 
@@ -15,10 +15,10 @@ services:
     image: mysql:5.5
     mem_limit: 128M
     container_name: docker-symfony4-mysql
+    working_dir: /application
     volumes:
       - .:/application
       - ./docker/mysql/storage:/var/lib/mysql
-    working_dir: /application
     environment:
       - MYSQL_ROOT_PASSWORD=dbrootpw
       - MYSQL_DATABASE=docker_symfony4

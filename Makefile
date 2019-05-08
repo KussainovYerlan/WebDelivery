@@ -10,7 +10,7 @@ build:
 	docker-compose build
 
 bash:
-	docker-compose exec php-fpm bash
+	docker-compose exec php bash
 
 install:
 	docker-compose build \
