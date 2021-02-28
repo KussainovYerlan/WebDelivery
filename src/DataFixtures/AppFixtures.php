@@ -8,7 +8,6 @@ use App\Entity\Seller;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
@@ -19,7 +18,6 @@ class AppFixtures extends Fixture
     {
         $this->encoder = $encoder;
     }
-
 
     public function load(ObjectManager $manager)
     {
@@ -36,12 +34,7 @@ class AppFixtures extends Fixture
         $user->setRoles(User::ROLE_ADMIN);
         $manager->persist($user);
         $manager->flush();
-       // $user = $manager->getRepository(User::class)->find(1);
-
-
-
-
-
+        // $user = $manager->getRepository(User::class)->find(1);
 
         //add Category
         $category = new Category();
@@ -63,7 +56,6 @@ class AppFixtures extends Fixture
         $saller->setDescription('Всегда только свежее мясо.');
         $saller->setAddress('Россия, Новосибирск, Вокзальная магистраль, 16 ');
         $manager->persist($saller);
-
 
         $user = new User();
         $user->setName('Иван');
@@ -146,7 +138,6 @@ class AppFixtures extends Fixture
         $manager->persist($user);
         $user->setRoles(User::ROLE_SELLER_MAIN);
         $manager->flush();
-
 
         $manager->persist($saller);
 
@@ -276,10 +267,6 @@ class AppFixtures extends Fixture
         $product->setSeller($seller);
         $manager->persist($product);
 
-
-
         $manager->flush();
-
-
     }
 }

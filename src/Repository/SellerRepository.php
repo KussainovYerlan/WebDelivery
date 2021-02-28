@@ -38,13 +38,13 @@ class SellerRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    
+
     public function findByNamePaginate($page = 1, string $search = null)
     {
         $query = $this->createQueryBuilder('s')
             ->where('s.name LIKE :search')
             ->setParameters([
-                'search' => '%' . $search . '%',
+                'search' => '%'.$search.'%',
             ])
         ;
 
@@ -57,6 +57,7 @@ class SellerRepository extends ServiceEntityRepository
         $paginator->getQuery()
             ->setFirstResult($limit * ($page - 1))
             ->setMaxResults($limit);
+
         return $paginator;
     }
 

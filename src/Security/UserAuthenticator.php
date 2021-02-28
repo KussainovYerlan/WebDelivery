@@ -4,14 +4,13 @@ namespace App\Security;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use MongoDB\Driver\Exception\AuthenticationException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -71,7 +70,6 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator
             $user = $this->entityManager->getRepository(User::class)->findOneBy(['login' => $credentials['email']]);
         }
 
-
         if (!$user) {
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Email/логин не найден.');
@@ -82,13 +80,11 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        if (!empty($user->getToken()))
-        {
+        if (!empty($user->getToken())) {
             throw new \Symfony\Component\Security\Core\Exception\AuthenticationException('Пожалуйста, подтвердите свой email.');
         }
 
-        if (!($this->passwordEncoder->isPasswordValid($user, $credentials['password'])))
-        {
+        if (!($this->passwordEncoder->isPasswordValid($user, $credentials['password']))) {
             throw new \Symfony\Component\Security\Core\Exception\AuthenticationException('Неверный пароль.');
         }
 
@@ -108,6 +104,7 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator
     {
         $session = new Session();
         $session->getFlashBag()->add('warning', $exception->getMessage());
+
         return new RedirectResponse($this->getLoginUrl());
     }
 

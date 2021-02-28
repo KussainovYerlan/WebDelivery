@@ -34,6 +34,7 @@ class AdminRequestsRepository extends ServiceEntityRepository
         $paginator->getQuery()
             ->setFirstResult($limit * ($page - 1))
             ->setMaxResults($limit);
+
         return $paginator;
     }
 

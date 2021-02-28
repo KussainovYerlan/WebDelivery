@@ -22,8 +22,8 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
-      * @return Product[] Returns an array of Product objects
-      */
+     * @return Product[] Returns an array of Product objects
+     */
     public function findBySellerId($sellerId)
     {
         return $this->createQueryBuilder('p')
@@ -35,20 +35,18 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
-      * @return Product[] Returns an array of Product objects
-      */
-
+     * @return Product[] Returns an array of Product objects
+     */
     public function searchProducts(?string $search, $sellerId, $page = 1, $category = null)
     {
         $query = $this->createQueryBuilder('p')
             ->Where('p.name LIKE :search')
             ->andWhere('p.seller = :seller')
-            ->setParameter('search', '%' . $search . '%')
+            ->setParameter('search', '%'.$search.'%')
             ->setParameter('seller', $sellerId)
         ;
 
-        if (!empty($category))
-        {
+        if (!empty($category)) {
             $query->andWhere('p.category = :category')
                 ->setParameter('category', $category)
             ;
@@ -63,9 +61,9 @@ class ProductRepository extends ServiceEntityRepository
             ->andWhere('p.seller = :seller')
             ->andWhere('p.name LIKE :search')
             ->setParameter('seller', $seller->getId())
-            ->setParameter('search', '%' . $search . '%')
+            ->setParameter('search', '%'.$search.'%')
         ;
-        
+
         return $this->paginate($query->getQuery(), $page ?: 1);
     }
 
@@ -75,6 +73,7 @@ class ProductRepository extends ServiceEntityRepository
         $paginator->getQuery()
             ->setFirstResult($limit * ($page - 1))
             ->setMaxResults($limit);
+
         return $paginator;
     }
 

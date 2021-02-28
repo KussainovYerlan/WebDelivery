@@ -16,7 +16,7 @@ class EditProfileType extends AbstractType
             ->add('name')
             ->add('surname')
             ->add('login', TextType::class, [
-                'help' => 'Ваш логин должен быть длиннее 6 символов'
+                'help' => 'Ваш логин должен быть длиннее 6 символов',
             ])
         ;
     }

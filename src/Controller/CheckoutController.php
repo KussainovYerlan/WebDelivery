@@ -2,18 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Checkout;
+use App\Entity\CheckoutProduct;
 use App\Entity\Product;
 use App\Entity\Seller;
-use App\Repository\ProductRepository;
-use App\Entity\CheckoutProduct;
-use App\Entity\Checkout;
 use App\Form\CheckoutType;
-use App\Repository\CheckoutRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @Route("/checkout")
@@ -28,6 +25,7 @@ class CheckoutController extends AbstractController
         $session = $request->getSession();
         $shoppingCart = json_decode($request->request->get('products'), true);
         $session->set('shoppingCart', $shoppingCart);
+
         return new Response();
     }
 
@@ -39,7 +37,7 @@ class CheckoutController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        
+
         $checkout = new Checkout();
 
         $session = $request->getSession();
@@ -50,8 +48,7 @@ class CheckoutController extends AbstractController
             ->findOneById($sellerId)
         ;
 
-        if ($session->get('userAddress'))
-        {
+        if ($session->get('userAddress')) {
             $checkout->setAddress($session->get('userAddress'));
         }
 
@@ -60,7 +57,7 @@ class CheckoutController extends AbstractController
 
         $shoppingCart = $session->get('shoppingCart');
         $entityManager = $this->getDoctrine()->getManager();
-        foreach($shoppingCart as $id => $count) {
+        foreach ($shoppingCart as $id => $count) {
             $product = $this->getDoctrine()
                 ->getRepository(Product::class)
                 ->findOneById($id)

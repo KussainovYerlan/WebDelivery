@@ -13,20 +13,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  * @UniqueEntity(fields={"login"}, message="There is already an account with this login")
- * @ORM\HasLifecycleCallbacks()
- *
+ * @ORM\HasLifecycleCallbacks
  */
 class User implements UserInterface
 {
-
     const ROLE_USER = 'ROLE_USER';
     const ROLE_SELLER_MAIN = 'ROLE_SELLER_MAIN';
     const ROLE_SELLER_MANAGER = 'ROLE_SELLER_MANAGER';
     const ROLE_ADMIN = 'ROLE_ADMIN';
 
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -48,7 +46,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string")
-     *
      */
     private $role;
 
@@ -57,7 +54,6 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
-
 
     /**
      * @ORM\Column(type="string", length=120, unique=true)
@@ -123,7 +119,6 @@ class User implements UserInterface
      */
     private $surname;
 
-
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -166,7 +161,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getRoles() : array
+    public function getRoles(): array
     {
         return [$this->role];
     }
@@ -247,7 +242,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Checkout[]
+     * @return Checkout[]|Collection
      */
     public function getCheckouts(): Collection
     {
@@ -339,5 +334,4 @@ class User implements UserInterface
 
         return $this;
     }
-
 }

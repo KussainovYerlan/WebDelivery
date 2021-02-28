@@ -24,7 +24,7 @@ class CategoryRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('c')
             ->andWhere('c.name LIKE :search')
-            ->setParameter('search', '%' . $search . '%')
+            ->setParameter('search', '%'.$search.'%')
         ;
 
         return $this->paginate($query->getQuery(), $page ?: 1);
@@ -36,6 +36,7 @@ class CategoryRepository extends ServiceEntityRepository
         $paginator->getQuery()
             ->setFirstResult($limit * ($page - 1))
             ->setMaxResults($limit);
+
         return $paginator;
     }
 

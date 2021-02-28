@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CheckoutRepository")
- * @ORM\HasLifecycleCallbacks()
+ * @ORM\HasLifecycleCallbacks
  */
 class Checkout
 {
@@ -18,8 +18,8 @@ class Checkout
     const STATUS_DONE = 'done';
 
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -28,7 +28,6 @@ class Checkout
      * @ORM\Column(type="string", length=255)
      */
     private $address;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Seller", inversedBy="checkouts")
@@ -88,7 +87,6 @@ class Checkout
 
         return $this;
     }
-
 
     public function getSeller(): ?Seller
     {
@@ -154,8 +152,7 @@ class Checkout
         $checkoutProducts = $this->getCheckoutProducts();
         $cost = 0;
 
-        foreach ($checkoutProducts as $item)
-        {
+        foreach ($checkoutProducts as $item) {
             $cost += $item->getCount() * $item->getProduct()->getPrice();
         }
 
@@ -195,7 +192,7 @@ class Checkout
     }
 
     /**
-     * @return Collection|CheckoutProduct[]
+     * @return CheckoutProduct[]|Collection
      */
     public function getCheckoutProducts(): Collection
     {
@@ -224,5 +221,4 @@ class Checkout
 
         return $this;
     }
-
 }

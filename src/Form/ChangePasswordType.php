@@ -15,7 +15,7 @@ class ChangePasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('old_pass', PasswordType::class,[
+            ->add('old_pass', PasswordType::class, [
                     'constraints' => [
                         new NotBlank([
                             'message' => 'Пожалуйста, введите старый пароль.',
@@ -33,7 +33,7 @@ class ChangePasswordType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => 'Пароли должны совпадать',
                 'required' => true,
-                'first_options'  => ['label' => 'Новый пароль'],
+                'first_options' => ['label' => 'Новый пароль'],
                 'second_options' => ['label' => 'Повторите пароль'],
                 'constraints' => [
                     new NotBlank([
@@ -47,7 +47,6 @@ class ChangePasswordType extends AbstractType
                     ]),
                 ],
             ]);
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

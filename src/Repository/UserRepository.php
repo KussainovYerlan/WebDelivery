@@ -30,7 +30,6 @@ class UserRepository extends ServiceEntityRepository
             ;
     }
 
-
     public function findByEmail($email)
     {
         return $this->createQueryBuilder('p')
@@ -63,13 +62,13 @@ class UserRepository extends ServiceEntityRepository
             ->setParameter('month', $month)
             ->setParameter('day', $day)
             ->setParameter('token', '');
-            ;
+
         return $ql->getQuery()->getSingleScalarResult();
     }
 
-    public function findBySeller(int $id , $page = 1)
+    public function findBySeller(int $id, $page = 1)
     {
-        $query = $this->createQueryBuilder('u'          )
+        $query = $this->createQueryBuilder('u')
             ->andWhere('u.seller = :id')
             ->setParameter('id', $id)
         ;
@@ -79,19 +78,19 @@ class UserRepository extends ServiceEntityRepository
 
     public function findByLoginAndRole($page = 1, string $search = null, $role = null)
     {
-        if ($role == "Любая")
-        {
+        if ('Любая' == $role) {
             $role = null;
         }
         $query = $this->createQueryBuilder('u')
             ->where('u.login LIKE :search')
             ->andWhere('u.role LIKE :role')
             ->setParameters([
-                'search' => '%' . $search . '%',
-                'role' => '%' .$role .'%'
+                'search' => '%'.$search.'%',
+                'role' => '%'.$role.'%',
             ])
         ;
         $paginator = $this->paginate($query->getQuery(), $page ?: 1, 4);
+
         return $paginator;
     }
 
@@ -101,6 +100,7 @@ class UserRepository extends ServiceEntityRepository
         $paginator->getQuery()
             ->setFirstResult($limit * ($page - 1))
             ->setMaxResults($limit);
+
         return $paginator;
     }
 

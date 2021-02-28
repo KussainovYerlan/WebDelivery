@@ -38,10 +38,11 @@ class AdminController extends AbstractController
         $newUsers = $this->service->newUserRegistry();
         $doneOrdersToday = $this->service->getDoneOrdersToday();
         $cancelOrderToday = $this->service->getCancelOrdersToday();
+
         return $this->render('admin/dashboard.html.twig', [
             'newUser' => $newUsers,
             'doneOrdersToday' => $doneOrdersToday,
-            'cancelOrdersToday' => $cancelOrderToday
+            'cancelOrdersToday' => $cancelOrderToday,
         ]);
     }
 
@@ -59,7 +60,7 @@ class AdminController extends AbstractController
         return $this->render('admin/users.html.twig', [
             'thisPage' => $thisPage,
             'maxPages' => $maxPages,
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
@@ -74,9 +75,9 @@ class AdminController extends AbstractController
                 $this->service->removeFromTable($user);
 
                 return new JsonResponse(['message' => 'Done'], 200);
-
             }
         }
+
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
 
@@ -88,6 +89,7 @@ class AdminController extends AbstractController
         if ($request->isXMLHttpRequest()) {
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $userRegistryCount = $this->service->chartUserRegistry(self::COUNT_USER);
+
             return new JsonResponse($userRegistryCount, 200);
         }
 
@@ -109,7 +111,7 @@ class AdminController extends AbstractController
             'thisPage' => $thisPage,
             'maxPages' => $maxPages,
             'requests' => $adminRequests,
-            'directory' => $this->getParameter('request_doc_directory')
+            'directory' => $this->getParameter('request_doc_directory'),
         ]);
     }
 
@@ -120,13 +122,13 @@ class AdminController extends AbstractController
     {
         if ($request->isXMLHttpRequest()) {
             if (($id = $request->request->get('id')) == true) {
-
                 $adminRequest = $this->getDoctrine()->getRepository(AdminRequests::class)->find($id);
                 $this->service->requestSubmit($adminRequest, $request->getSchemeAndHttpHost());
-                return new JsonResponse(['message' => 'Done'], 200);
 
+                return new JsonResponse(['message' => 'Done'], 200);
             }
         }
+
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
 
@@ -137,12 +139,13 @@ class AdminController extends AbstractController
     {
         if ($request->isXMLHttpRequest()) {
             if (($id = $request->request->get('id')) == true) {
-
                 $adminRequest = $this->getDoctrine()->getRepository(AdminRequests::class)->find($id);
                 $this->service->requestCancel($adminRequest);
+
                 return new JsonResponse(['message' => 'Done'], 200);
             }
         }
+
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
 
@@ -161,7 +164,7 @@ class AdminController extends AbstractController
         return $this->render('admin/sellers.html.twig', [
             'thisPage' => $thisPage,
             'maxPages' => $maxPages,
-            'sellers' => $sellers
+            'sellers' => $sellers,
         ]);
     }
 
@@ -174,9 +177,11 @@ class AdminController extends AbstractController
             if (($id = $request->request->get('id')) == true) {
                 $seller = $this->getDoctrine()->getRepository(Seller::class)->find($id);
                 $this->service->removeFromTable($seller);
+
                 return new JsonResponse(['message' => 'Done'], 200);
             }
         }
+
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
 
@@ -231,6 +236,7 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->service->persistToTable($category);
+
             return $this->redirectToRoute('admin_categories');
         }
 
@@ -238,7 +244,7 @@ class AdminController extends AbstractController
             'category' => $category,
             'form' => $form->createView(),
             'title' => 'Создание категории',
-            'btn' => 'Создать'
+            'btn' => 'Создать',
         ]);
     }
 
@@ -253,6 +259,7 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->service->persistToTable($category);
+
             return $this->redirectToRoute('admin_categories');
         }
 
@@ -260,7 +267,7 @@ class AdminController extends AbstractController
             'category' => $category,
             'form' => $form->createView(),
             'title' => 'Редактирование категории',
-            'btn' => 'Изменить'
+            'btn' => 'Изменить',
         ]);
     }
 
@@ -273,9 +280,11 @@ class AdminController extends AbstractController
             if (($id = $request->request->get('id')) == true) {
                 $seller = $this->getDoctrine()->getRepository(Category::class)->find($id);
                 $this->service->removeFromTable($seller);
+
                 return new JsonResponse(['message' => 'Done'], 200);
             }
         }
+
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
 
@@ -294,7 +303,7 @@ class AdminController extends AbstractController
         return $this->render('admin/orders.html.twig', [
             'thisPage' => $thisPage,
             'maxPages' => $maxPages,
-            'orders' => $orders
+            'orders' => $orders,
         ]);
     }
 
@@ -305,15 +314,14 @@ class AdminController extends AbstractController
     {
         if ($request->isXMLHttpRequest()) {
             if (($id = $request->request->get('id')) == true) {
-
                 $order = $this->getDoctrine()->getRepository(Checkout::class)->find($id);
                 $order->setStatus(Checkout::STATUS_DONE);
                 $this->service->persistToTable($order);
 
                 return new JsonResponse(['message' => 'Done'], 200);
-
             }
         }
+
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
 
@@ -324,15 +332,14 @@ class AdminController extends AbstractController
     {
         if ($request->isXMLHttpRequest()) {
             if (($id = $request->request->get('id')) == true) {
-
                 $order = $this->getDoctrine()->getRepository(Checkout::class)->find($id);
                 $order->setStatus(Checkout::STATUS_CANCEL);
                 $this->service->persistToTable($order);
 
                 return new JsonResponse(['message' => 'Done'], 200);
-
             }
         }
+
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
 }

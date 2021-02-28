@@ -22,7 +22,6 @@ class CheckoutRepository extends ServiceEntityRepository
 
     public function countDoneOrders(\DateTime $date)
     {
-
         $ql = $this->createQueryBuilder('d')
             ->select('COUNT(d.id)')
             ->where('YEAR(d.createdAt) = :year')
@@ -33,13 +32,12 @@ class CheckoutRepository extends ServiceEntityRepository
             ->setParameter('month', $date->format('m'))
             ->setParameter('day', $date->format('d'))
             ->setParameter('status', Checkout::STATUS_DONE);
-        ;
+
         return $ql->getQuery()->getSingleScalarResult();
     }
 
     public function countCancelOrders(\DateTime $date)
     {
-
         $ql = $this->createQueryBuilder('d')
             ->select('COUNT(d.id)')
             ->where('YEAR(d.createdAt) = :year')
@@ -50,13 +48,13 @@ class CheckoutRepository extends ServiceEntityRepository
             ->setParameter('month', $date->format('m'))
             ->setParameter('day', $date->format('d'))
             ->setParameter('status', Checkout::STATUS_CANCEL);
-        ;
+
         return $ql->getQuery()->getSingleScalarResult();
     }
 
-    public function findBySeller(int $id , $page = 1)
+    public function findBySeller(int $id, $page = 1)
     {
-        $query = $this->createQueryBuilder('d'          )
+        $query = $this->createQueryBuilder('d')
             ->andWhere('d.seller = :id')
             ->setParameter('id', $id)
         ;
@@ -72,9 +70,9 @@ class CheckoutRepository extends ServiceEntityRepository
         return $this->paginate($query->getQuery(), $page ?: 1);
     }
 
-    public function findByUser(int $id , $page = 1)
+    public function findByUser(int $id, $page = 1)
     {
-        $query = $this->createQueryBuilder('d'          )
+        $query = $this->createQueryBuilder('d')
             ->andWhere('d.user = :id')
             ->setParameter('id', $id)
         ;
@@ -88,6 +86,7 @@ class CheckoutRepository extends ServiceEntityRepository
         $paginator->getQuery()
             ->setFirstResult($limit * ($page - 1))
             ->setMaxResults($limit);
+
         return $paginator;
     }
 

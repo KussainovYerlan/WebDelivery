@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
-
 class RegistrationController extends AbstractController
 {
     private $service;
@@ -30,7 +29,6 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, UserAuthenticator $authenticator): Response
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-
             /* Redirect the user to the homepage */
             return $this->redirectToRoute('index');
         }
@@ -39,13 +37,12 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setRoles(User::ROLE_USER);
             $this->service->register($user, $request->getSchemeAndHttpHost(), $form->get('plainPassword')->getData(), 'email/registration.html.twig', 'Регистрация');
 
-
             $this->addFlash('notice', 'Вы успешно зарегистрировались, проверьте ваш email! ');
+
             return $this->redirectToRoute('app_login');
             //disable auto-login
             /*return $guardHandler->authenticateUserAndHandleSuccess(
@@ -70,13 +67,14 @@ class RegistrationController extends AbstractController
             if (($emailForgot = $request->request->get('email')) == true) {
                 $user = $this->getDoctrine()->getRepository(User::class)
                     ->findByEmail($emailForgot);
-                if ($user)
-                {
+                if ($user) {
                     $this->service->forgotPasswordService($user);
+
                     return new JsonResponse(['message' => 'Done'], 200);
                 }
             }
         }
+
         return new JsonResponse(['message' => 'error'], 404);
     }
 }

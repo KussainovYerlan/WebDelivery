@@ -1,12 +1,9 @@
 <?php
 
-
 namespace App\Service;
-
 
 use App\Entity\AdminRequests;
 use App\Entity\Checkout;
-use App\Entity\DeliveryOrder;
 use App\Entity\Seller;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -45,8 +42,7 @@ class AdminService
         $counts = [];
         $date = new \DateTime();
         $date->modify('+1 day');
-        for ($i = 0; $i < $count; $i++)
-        {
+        for ($i = 0; $i < $count; ++$i) {
             $date->modify('-1 day');
             $counts['data'][] = $repository->getCountByDay(
                 $date->format('Y'),
@@ -55,10 +51,10 @@ class AdminService
             );
             $counts['labels'][] = $date->format('d M');
             $counts['max'] = max($counts['data']);
-
         }
         $counts['labels'] = array_reverse($counts['labels']);
         $counts['data'] = array_reverse($counts['data']);
+
         return $counts;
     }
 
@@ -66,6 +62,7 @@ class AdminService
     {
         $repository = $this->manager->getRepository(User::class);
         $date = new \DateTime();
+
         return $repository->getCountByDay(
             $date->format('Y'),
             $date->format('m'),

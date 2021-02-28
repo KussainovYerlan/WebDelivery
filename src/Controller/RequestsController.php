@@ -37,10 +37,10 @@ class RequestsController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getDoctrine()->getRepository(User::class)
-                ->findBy(['email' => $file = $form->get('email')->getData() ]);
-            if ($user)
-            {
+                ->findBy(['email' => $file = $form->get('email')->getData()]);
+            if ($user) {
                 $this->addFlash('warning', 'Пользователь с таким email уже зарегистрирован.');
+
                 return $this->render('admin_requests/new.html.twig', [
                     'admin_request' => $adminRequest,
                     'form' => $form->createView(),
@@ -48,6 +48,7 @@ class RequestsController extends AbstractController
             }
             $this->service->addNewSeller($form, $adminRequest);
             $this->addFlash('notice', 'Ваша заявка отправлена на рассмотрение');
+
             return $this->redirectToRoute('index');
         }
 
@@ -63,10 +64,10 @@ class RequestsController extends AbstractController
     public function newManagerRequest(Request $request): Response
     {
         $sellerRequest = new SellerRequests();
-        $seller = $this->getDoctrine()->getRepository(Seller::class)->find($request->get("id"));
-        if (!$this->service->checkManager($seller, $this->getUser()))
-        {
+        $seller = $this->getDoctrine()->getRepository(Seller::class)->find($request->get('id'));
+        if (!$this->service->checkManager($seller, $this->getUser())) {
             $this->addFlash('warning', 'Вы уже отправили заявку этому продавцу');
+
             return $this->redirectToRoute('sellers_choice');
         }
         $sellerRequest->setSeller($seller);
@@ -78,14 +79,14 @@ class RequestsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid() && ($form->get('file')->getData() || $form->get('resume')->getData())) {
             $this->service->addNewManager($form, $sellerRequest, $this->getUser());
             $this->addFlash('notice', 'Ваша заявка отправлена на рассмотрение');
+
             return $this->redirectToRoute('profile');
         }
 
         return $this->render('seller_requests/new.html.twig', [
             'seller_request' => $sellerRequest,
             'form' => $form->createView(),
-            'name' => $seller
+            'name' => $seller,
         ]);
     }
-
 }

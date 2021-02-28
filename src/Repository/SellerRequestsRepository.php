@@ -20,7 +20,7 @@ class SellerRequestsRepository extends ServiceEntityRepository
         parent::__construct($registry, SellerRequests::class);
     }
 
-    public function findBySeller(int $id , $page = 1)
+    public function findBySeller(int $id, $page = 1)
     {
         $query = $this->createQueryBuilder('s')
             ->andWhere('s.seller = :id')
@@ -36,10 +36,11 @@ class SellerRequestsRepository extends ServiceEntityRepository
         $paginator->getQuery()
             ->setFirstResult($limit * ($page - 1))
             ->setMaxResults($limit);
+
         return $paginator;
     }
 
-    public function findBySellerAndUser($sellerId , $userId)
+    public function findBySellerAndUser($sellerId, $userId)
     {
         return $this->createQueryBuilder('s')
             ->andWhere('s.seller = :sellerId')

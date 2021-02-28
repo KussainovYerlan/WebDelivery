@@ -3,25 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\Checkout;
+use App\Entity\Product;
 use App\Entity\Seller;
 use App\Entity\SellerRequests;
-use App\Entity\User;
-use App\Entity\Product;
 use App\Form\ChangePasswordType;
-use App\Form\ProductType;
 use App\Form\EditProfileType;
 use App\Form\ImportTableType;
-use App\Form\RegistrationFormType;
+use App\Form\ProductType;
 use App\Service\AccountService;
 use App\Service\ProductImportService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
 
 class AccountController extends AbstractController
 {
@@ -61,16 +58,15 @@ class AccountController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->service->persistToTable($user);
             $this->addFlash('notice', 'Вы успешно отредактивовали профиль');
+
             return $this->redirectToRoute('profile');
         }
 
         return $this->render('account/edit_profile.html.twig', [
             'form' => $form->createView(),
-            'error' => null
+            'error' => null,
         ]);
-
     }
-
 
     /**
      * @Route("/account/edit/password", name="password_edit")
@@ -82,15 +78,15 @@ class AccountController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->service->changePassword($form, $user);
             $this->addFlash('notice', 'Вы успешно изменили пароль');
+
             return $this->redirectToRoute('profile');
         }
 
         return $this->render('account/edit_password.html.twig', [
             'form' => $form->createView(),
-            'error' => null
+            'error' => null,
         ]);
     }
 
@@ -109,7 +105,7 @@ class AccountController extends AbstractController
         return $this->render('account/history.html.twig', [
             'thisPage' => $thisPage,
             'maxPages' => $maxPages,
-            'orders' => $orders
+            'orders' => $orders,
         ]);
     }
 
@@ -118,7 +114,6 @@ class AccountController extends AbstractController
      */
     public function sellerOrdersListAction(Request $request)
     {
-
         $user = $this->getUser();
         $sellerId = $user->getSeller()->getId();
         $orders = $this->getDoctrine()->getRepository(Checkout::class)
@@ -131,7 +126,7 @@ class AccountController extends AbstractController
         return $this->render('account/seller_orders.html.twig', [
             'thisPage' => $thisPage,
             'maxPages' => $maxPages,
-            'orders' => $orders
+            'orders' => $orders,
         ]);
     }
 
@@ -142,15 +137,14 @@ class AccountController extends AbstractController
     {
         if ($request->isXMLHttpRequest()) {
             if (($id = $request->request->get('id')) == true) {
-
                 $order = $this->getDoctrine()->getRepository(Checkout::class)->find($id);
                 $order->setStatus(Checkout::STATUS_ACCEPT);
                 $this->service->persistToTable($order);
 
                 return new JsonResponse(['message' => 'Done'], 200);
-
             }
         }
+
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
 
@@ -161,15 +155,14 @@ class AccountController extends AbstractController
     {
         if ($request->isXMLHttpRequest()) {
             if (($id = $request->request->get('id')) == true) {
-
                 $order = $this->getDoctrine()->getRepository(Checkout::class)->find($id);
                 $order->setStatus(Checkout::STATUS_CANCEL);
                 $this->service->persistToTable($order);
 
                 return new JsonResponse(['message' => 'Done'], 200);
-
             }
         }
+
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
 
@@ -178,7 +171,6 @@ class AccountController extends AbstractController
      */
     public function sellerRequestsListAction(Request $request)
     {
-
         $sellerId = $this->getUser()->getSeller()->getId();
         $requests = $this->getDoctrine()->getRepository(SellerRequests::class)
             ->findBySeller($sellerId, $request->get('page'));
@@ -190,7 +182,7 @@ class AccountController extends AbstractController
         return $this->render('account/requests.html.twig', [
             'thisPage' => $thisPage,
             'maxPages' => $maxPages,
-            'requests' => $requests
+            'requests' => $requests,
         ]);
     }
 
@@ -199,7 +191,6 @@ class AccountController extends AbstractController
      */
     public function sellerManagersListAction(Request $request)
     {
-
         $managersClear = $this->service->getManagers($this->getUser(), $request);
 
         $thisPage = $request->get('page') ?: 1;
@@ -210,7 +201,7 @@ class AccountController extends AbstractController
             'thisPage' => $thisPage,
             'maxPages' => $maxPages,
             'managers' => $managersClear,
-            'directory' => $this->getParameter('request_doc_directory')
+            'directory' => $this->getParameter('request_doc_directory'),
         ]);
     }
 
@@ -221,13 +212,12 @@ class AccountController extends AbstractController
     {
         if ($request->isXMLHttpRequest()) {
             if (($id = $request->request->get('id')) == true) {
-
                 $this->service->submit($id);
 
                 return new JsonResponse(['message' => 'Done'], 200);
-
             }
         }
+
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
 
@@ -238,13 +228,12 @@ class AccountController extends AbstractController
     {
         if ($request->isXMLHttpRequest()) {
             if (($id = $request->request->get('id')) == true) {
-
                 $this->service->cancel($id);
 
                 return new JsonResponse(['message' => 'Done'], 200);
-
             }
         }
+
         return new JsonResponse(['message' => 'Update failure'], 404);
     }
 
@@ -263,7 +252,7 @@ class AccountController extends AbstractController
         return $this->render('account/sellers.html.twig', [
             'thisPage' => $thisPage,
             'maxPages' => $maxPages,
-            'sellers' => $sellers
+            'sellers' => $sellers,
         ]);
     }
 
@@ -280,6 +269,7 @@ class AccountController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->getData()['importFile'];
             $this->productImportService->importCsv($file, $user);
+
             return $this->redirectToRoute('seller_product_list');
         }
 
@@ -296,14 +286,14 @@ class AccountController extends AbstractController
         $saller = $this->getUser()->getSeller()->getId();
         $seller = $this->getDoctrine()->getRepository(Seller::class)->find($saller);
 
-        if ($seller)
-        {
+        if ($seller) {
             $products = $this->getDoctrine()->getRepository(Product::class)
                 ->searchProducts($request->get('query'), $seller->getId(), $request->get('page'));
 
             $thisPage = $request->get('page') ?: 1;
 
             $maxPages = ceil($products->count() / 4);
+
             return $this->render('account/product/list.html.twig', [
                 'thisPage' => $thisPage,
                 'maxPages' => $maxPages,
@@ -326,7 +316,7 @@ class AccountController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $product->setSeller($this->getUser()->getSeller());
-            
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
@@ -345,19 +335,17 @@ class AccountController extends AbstractController
      */
     public function sellerDeleteProduct(Request $request, Product $product): Response
     {
-
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($product);
-            if ($checkouts = $this->service->checkProduct($product))
-            {
-                foreach ($checkouts as $item)
-                {
+            if ($checkouts = $this->service->checkProduct($product)) {
+                foreach ($checkouts as $item) {
                     $entityManager->remove($item);
                 }
 
                 $entityManager->remove($product);
                 $entityManager->flush();
+
                 return $this->redirectToRoute('seller_product_list');
             }
             $entityManager->remove($product);
@@ -372,7 +360,7 @@ class AccountController extends AbstractController
      */
     public function sellerEditProduct(Request $request, Product $product): Response
     {
-        if ($product->getImage() !== null) {
+        if (null !== $product->getImage()) {
             $product->setImage(
                 new File($this->getParameter('product_images_directory').'/'.$product->getImage())
             );
@@ -382,7 +370,7 @@ class AccountController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($product->getImage() == null){
+            if (null == $product->getImage()) {
                 $product->setImage($file);
             }
             $this->getDoctrine()->getManager()->flush();

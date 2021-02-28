@@ -44,13 +44,12 @@ class CategoryVoter extends Voter
 
     protected function canEditDeleteAdd(User $user)
     {
-        foreach($user->getRoles() as $item)
-        {
-            if ($item == "ROLE_ADMIN")
-            {
+        foreach ($user->getRoles() as $item) {
+            if ('ROLE_ADMIN' == $item) {
                 return true;
             }
         }
+
         return false;
     }
 }

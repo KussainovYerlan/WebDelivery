@@ -12,8 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Seller
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -52,8 +52,6 @@ class Seller
      * @ORM\OneToMany(targetEntity="App\Entity\SellerRequests", mappedBy="seller", orphanRemoval=true)
      */
     private $requests;
-
-
 
     public function __construct()
     {
@@ -173,7 +171,7 @@ class Seller
     }
 
     /**
-     * @return Collection|Checkout[]
+     * @return Checkout[]|Collection
      */
     public function getCheckouts(): Collection
     {
@@ -233,5 +231,4 @@ class Seller
 
         return $this;
     }
-
 }

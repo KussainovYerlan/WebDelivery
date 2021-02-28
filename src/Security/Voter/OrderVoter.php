@@ -3,7 +3,6 @@
 namespace App\Security\Voter;
 
 use App\Entity\Checkout;
-use App\Entity\DeliveryOrder;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -45,42 +44,43 @@ class OrderVoter extends Voter
     protected function canAdd(User $user, Checkout $order)
     {
         foreach ($user->getRoles() as $item) {
-            if ($item == "ROLE_USER") {
+            if ('ROLE_USER' == $item) {
                 $products = $order->getCheckoutProducts();
                 $seller = $order->getSeller();
-                foreach ($products as $product)
-                {
-                    if ($product->getProduct()->getSeller() !== $seller)
-                    {
+                foreach ($products as $product) {
+                    if ($product->getProduct()->getSeller() !== $seller) {
                         return false;
                     }
                 }
+
                 return true;
             }
         }
+
         return false;
     }
 
     protected function canView(User $user)
     {
         foreach ($user->getRoles() as $item) {
-
-            if (($item == "ROLE_SELLER_MAIN") || ($item === "ROLE_SELLER_MANAGER")) {
-                    return true;
+            if (('ROLE_SELLER_MAIN' == $item) || ('ROLE_SELLER_MANAGER' === $item)) {
+                return true;
             }
         }
+
         return false;
     }
 
     protected function canSubmit(User $user, Checkout $order)
     {
-        if (($user->getRoles() == "ROLE_SELLER_MAIN") || ($user->getRoles() == "ROLE_SELLER_MANAGER")) {
-            foreach ($order->getCheckoutProducts() as $item)
-                if ($item->getProduct()->getSeller() !== $user->getSeller())
-                {
+        if (('ROLE_SELLER_MAIN' == $user->getRoles()) || ('ROLE_SELLER_MANAGER' == $user->getRoles())) {
+            foreach ($order->getCheckoutProducts() as $item) {
+                if ($item->getProduct()->getSeller() !== $user->getSeller()) {
                     return true;
                 }
+            }
         }
+
         return false;
     }
 }

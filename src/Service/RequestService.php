@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Service;
-
 
 use App\Entity\AdminRequests;
 use App\Entity\Seller;
@@ -24,10 +22,9 @@ class RequestService
 
     public function addNewSeller(FormInterface $form, AdminRequests $adminRequest)
     {
-        if ($file = $form->get('company_file')->getData())
-        {
+        if ($file = $form->get('company_file')->getData()) {
             $file = $form->get('company_file')->getData();
-            $fileName = time() . uniqid() . '.' . $file->guessExtension();
+            $fileName = time().uniqid().'.'.$file->guessExtension();
             $file->move(
                 $this->directory,
                 $fileName
@@ -40,10 +37,9 @@ class RequestService
 
     public function addNewManager(FormInterface $form, SellerRequests $sellerRequest, User $thisUser)
     {
-        if ($file = $form->get('file')->getData())
-        {
+        if ($file = $form->get('file')->getData()) {
             $file = $form->get('file')->getData();
-            $fileName = time() . uniqid() . '.' . $file->guessExtension();
+            $fileName = time().uniqid().'.'.$file->guessExtension();
             $file->move(
                 $this->directory,
                 $fileName
@@ -60,8 +56,7 @@ class RequestService
         $checkManager = $this->manager->getRepository(SellerRequests::class)
             ->findBySellerAndUser($seller->getId(), $user->getId());
 
-        if ($checkManager)
-        {
+        if ($checkManager) {
             return false;
         }
 

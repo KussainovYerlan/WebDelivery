@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Service;
-
 
 use App\Entity\CheckoutProduct;
 use App\Entity\Product;
@@ -17,7 +15,6 @@ use Twig\Environment;
 
 class AccountService
 {
-
     private $manager;
     private $mailer;
     private $encoder;
@@ -56,7 +53,7 @@ class AccountService
         } else {
             return $this->templating->render('account/edit_password.html.twig', [
                 'form' => $form->createView(),
-                'error' => 'Неправильный пароль.'
+                'error' => 'Неправильный пароль.',
             ]);
         }
     }
@@ -64,10 +61,9 @@ class AccountService
     public function submit(int $id)
     {
         $sellerRequest = $this->manager->getRepository(SellerRequests::class)->find($id);
-        if ($sellerRequest->getFile())
-        {
+        if ($sellerRequest->getFile()) {
             $filesystem = new Filesystem();
-            $filesystem->remove(str_replace('/src/Service', '', __DIR__ . '/public/assets/request_doc/' . $sellerRequest->getFile()));
+            $filesystem->remove(str_replace('/src/Service', '', __DIR__.'/public/assets/request_doc/'.$sellerRequest->getFile()));
         }
 
         $user = $sellerRequest->getUser();
@@ -96,10 +92,9 @@ class AccountService
     public function cancel(int $id)
     {
         $sellerRequest = $this->manager->getRepository(SellerRequests::class)->find($id);
-        if ($sellerRequest->getFile())
-        {
+        if ($sellerRequest->getFile()) {
             $filesystem = new Filesystem();
-            $filesystem->remove(str_replace('/src/Service', '', __DIR__ . '/public/assets/request_doc/' . $sellerRequest->getFile()));
+            $filesystem->remove(str_replace('/src/Service', '', __DIR__.'/public/assets/request_doc/'.$sellerRequest->getFile()));
         }
 
         $user = $sellerRequest->getUser();
@@ -138,6 +133,7 @@ class AccountService
     public function checkProduct(Product $product)
     {
         $checkouts = $this->manager->getRepository(CheckoutProduct::class)->findBy(['product' => $product]);
+
         return $checkouts;
     }
 }

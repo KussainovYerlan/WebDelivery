@@ -47,31 +47,27 @@ class ProductVoter extends Voter
 
     protected function canEditDeleteView(User $user, Product $product)
     {
-        foreach($user->getRoles() as $item)
-        {
-            if ($item == "ROLE_SELLER_MAIN")
-            {
-                foreach ($product->getSeller()->getUsers() as $user_single)
-                {
-                    if ($user_single == $user)
-                    {
+        foreach ($user->getRoles() as $item) {
+            if ('ROLE_SELLER_MAIN' == $item) {
+                foreach ($product->getSeller()->getUsers() as $user_single) {
+                    if ($user_single == $user) {
                         return true;
                     }
                 }
             }
         }
+
         return false;
     }
 
     protected function canAdd(User $user)
     {
-        foreach($user->getRoles() as $item)
-        {
-            if ($item == "ROLE_SELLER_MAIN")
-            {
+        foreach ($user->getRoles() as $item) {
+            if ('ROLE_SELLER_MAIN' == $item) {
                 return true;
             }
         }
+
         return false;
     }
 }

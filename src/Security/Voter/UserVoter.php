@@ -27,10 +27,11 @@ class UserVoter extends Voter
         switch ($attribute) {
             case 'viewAccount':
                 foreach ($user->getRoles() as $item) {
-                    if (($item == "ROLE_ADMIN") || ($item == "ROLE_SELLER_MAIN") || ($item == "ROLE_SELLER_MANAGER")) {
+                    if (('ROLE_ADMIN' == $item) || ('ROLE_SELLER_MAIN' == $item) || ('ROLE_SELLER_MANAGER' == $item)) {
                         return false;
                     }
                 }
+
                 return true;
                 break;
         }

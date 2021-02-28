@@ -2,8 +2,6 @@
 
 namespace App\Service;
 
-
-use App\Entity\Seller;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\RouterInterface;
@@ -30,7 +28,7 @@ class AuthService
 
     public function generate()
     {
-        $token = time() . '_' . uniqid("", TRUE);
+        $token = time().'_'.uniqid('', true);
 
         return $token;
     }
@@ -57,13 +55,12 @@ class AuthService
         $this->manager->persist($user);
         $this->manager->flush();
 
-
         $this->sendEmail($domen, $user, $template, $plainPassword, $title);
     }
 
     public function sendEmail(string $domen, User $user, $template, $plainPassword, $title)
     {
-        $url = $domen . $this->generator->generate('activation', ['token' => $user->getToken()]);
+        $url = $domen.$this->generator->generate('activation', ['token' => $user->getToken()]);
 
         $message = (new \Swift_Message($title))
             ->setFrom('delivery.dev@gmail.com')
@@ -74,7 +71,7 @@ class AuthService
                     [
                         'name' => $user->getLogin(),
                         'token' => $url,
-                        'password' => $plainPassword
+                        'password' => $plainPassword,
                     ]
                 ),
                 'text/html'
@@ -84,12 +81,13 @@ class AuthService
 
     public function generateStr()
     {
-        $chars = "qazxswedcvfrtgbnhyujmkiolp1234567890QAZXSWEDCVFRTGBNHYUJMKIOLP";
+        $chars = 'qazxswedcvfrtgbnhyujmkiolp1234567890QAZXSWEDCVFRTGBNHYUJMKIOLP';
         $max = 10;
         $size = strlen($chars) - 1;
-        $str= null;
-        while ($max--)
+        $str = null;
+        while ($max--) {
             $str .= $chars[rand(0, $size)];
+        }
 
         return $str;
     }
@@ -121,7 +119,5 @@ class AuthService
                 'text/html'
             );
         $this->mailer->send($message);
-
     }
-
 }

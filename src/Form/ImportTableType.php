@@ -6,8 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ImportTableType extends AbstractType
 {
@@ -15,7 +15,7 @@ class ImportTableType extends AbstractType
     {
         $builder
             ->setMethod('POST')
-            ->add('importFile',FileType::class, [
+            ->add('importFile', FileType::class, [
                 'label' => 'Импорт продуктов',
                 'constraints' => [
                     new NotBlank(),
@@ -25,8 +25,8 @@ class ImportTableType extends AbstractType
                         'maxSize' => '10M',
                         'maxSizeMessage' => 'Размер файла должен быть меньше {{ limit }} {{ suffix }}.',
                         'notFoundMessage' => 'Файл не найден',
-                        ])
-                ]
+                        ]),
+                ],
             ])
         ;
     }
