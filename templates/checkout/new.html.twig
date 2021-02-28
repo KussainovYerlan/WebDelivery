@@ -28,28 +28,30 @@
                         {% endif %}
                         </small>
                     </div>
-                    <span class="text-muted">{{ item.count }}&nbsp;x&nbsp;{{ item.product.price }}&nbsp;₽</span>
+                    <span class="text-muted">{{ item.count }}&nbsp;x&nbsp;{{ item.product.price }}&nbsp;KZT</span>
                 </li>
             {% endfor %}
                 <li class="list-group-item d-flex justify-content-between">
                     <span>Сумма</span>
-                    <strong>{{ totalSum }}&nbsp;₽</strong>
+                    <strong>{{ totalSum }}&nbsp;KZT</strong>
                 </li>
             </ul>
         </div>
         <div class="col-md-8 order-md-1">
             <h4 class="mb-3">Информация о заказе</h4>
+            {{ form_start(form) }}
             <div class="row">
                 <div class="col-md-6 mb-3">
-                <label for="firstName">Имя</label>
-                <input type="text" class="form-control" id="firstName" placeholder="" value="{{ checkout.getUser().getName() }}" readonly>
+                    {{ form_label(form.name, 'Имя' ) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'value': checkout.getUser() ? checkout.getUser().getName() : '' }}) }}
+                    {{ form_errors(form.name, {'attr': {'class': 'invalid-feedback'}}) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.surname, 'Фамилия' ) }}
+                    {{ form_widget(form.surname, {'attr': {'class': 'form-control', 'value': checkout.getUser() ? checkout.getUser().getSurname() : '' }}) }}
+                    {{ form_errors(form.surname, {'attr': {'class': 'invalid-feedback'}}) }}
+                </div>
             </div>
-            <div class="col-md-6 mb-3">
-                <label for="lastName">Фамилия</label>
-                <input type="text" class="form-control" id="lastName" placeholder="" value="{{ checkout.getUser().getSurname() }}" readonly>
-            </div>
-            </div>
-            {{ form_start(form) }}
             <div class="mb-3">
                 {{ form_label(form.address, 'Адрес доставки' ) }}
                 <div class="input-group">
@@ -70,7 +72,7 @@
                             <i class="icon ion-md-call"></i>
                         </span>
                     </div>
-                {{ form_widget(form.phone, {'attr': {'class': 'form-control', 'placeholder': '+7 (999) 888-77-66'}}) }}
+                {{ form_widget(form.phone, {'attr': {'class': 'form-control', 'placeholder': '+7 777 777 77 77'}}) }}
                 {{ form_errors(form.phone, {'attr': {'class': 'invalid-feedback'}}) }}
                 </div>
             </div>

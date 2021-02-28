@@ -84,7 +84,6 @@ class AdminService
     {
         $user = new User();
         $seller = new Seller();
-        $login = $this->authService->generateStr();
 
         $seller->setName($adminRequest->getCompanyName());
         $seller->setAddress($adminRequest->getCompanyAddress());
@@ -95,7 +94,6 @@ class AdminService
         $user->setRoles(User::ROLE_SELLER_MAIN);
         $user->setName($adminRequest->getName());
         $user->setSurname($adminRequest->getSurname());
-        $user->setLogin($login);
         $user->setSeller($seller);
 
         $this->authService->register($user, $domen, $this->authService->generateStr(), 'email/admin_request_submit.html.twig', 'Заявка одобрена');

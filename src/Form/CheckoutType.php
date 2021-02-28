@@ -15,6 +15,8 @@ class CheckoutType extends AbstractType
         $builder
             ->add('address')
             ->add('phone', TelType::class)
+            ->add('name')
+            ->add('surname')
         ;
     }
 

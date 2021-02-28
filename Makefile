@@ -22,7 +22,7 @@ migrate:
 	${DCEXEC_PHP} bin/console d:m:m
 
 fixtures:
-	${DCEXEC_PHP} bin/console doctrine:fixtures:load
+	${DCEXEC_PHP} bin/console d:f:l
 
 cs-fix:
 	${DCEXEC_PHP} vendor/bin/php-cs-fixer fix

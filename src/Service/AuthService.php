@@ -69,7 +69,7 @@ class AuthService
                 $this->templating->render(
                     $template,
                     [
-                        'name' => $user->getLogin(),
+                        'name' => $user->getName(),
                         'token' => $url,
                         'password' => $plainPassword,
                     ]
@@ -112,7 +112,7 @@ class AuthService
                 $this->templating->render(
                     'email/reset_password.html.twig',
                     [
-                        'name' => $user->getLogin(),
+                        'name' => $user->getName(),
                         'password' => $plainPassword,
                     ]
                 ),

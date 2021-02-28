@@ -19,9 +19,6 @@ class RegistrationFormType extends AbstractType
             ->add('name')
             ->add('surname')
             ->add('email')
-            ->add('login', TextType::class, [
-                'help' => 'Ваш логин должен быть длиннее 6 символов',
-            ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller

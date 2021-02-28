@@ -34,10 +34,6 @@ class CheckoutController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-
         $checkout = new Checkout();
 
         $session = $request->getSession();
@@ -77,7 +73,7 @@ class CheckoutController extends AbstractController
             $entityManager->persist($checkout);
             $entityManager->flush();
 
-            return $this->redirectToRoute('myhistory');
+            return $this->redirectToRoute('index');
         }
 
         return $this->render('checkout/new.html.twig', [

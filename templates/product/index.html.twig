@@ -70,7 +70,7 @@
                         </p>
                     </div>
                     <div class="card-footer d-flex justify-content-between align-items-center">
-                        <span class="text-muted product-price">{{ product.price }} Р</span>
+                        <span class="text-muted product-price">{{ product.price }} KZT</span>
                         <button class="btn btn-add btn-sm btn-outline-secondary" id="{{ product.id }}">В корзину</button>
                     </div>
                 </div>
@@ -182,7 +182,7 @@
                 cartCont.innerHTML = 'Корзина пуста'
             }
 
-            d.getElementById('shopping-cart_total').innerHTML = totalSum + ' P'
+            d.getElementById('shopping-cart_total').innerHTML = totalSum + ' KZT'
 
             let delButtons = d.querySelectorAll('.btn-del')
             for(var i = 0; i < delButtons.length; i++){

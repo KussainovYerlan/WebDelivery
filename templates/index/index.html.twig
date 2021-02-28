@@ -9,7 +9,7 @@
                 <img class="mb-2 align-self-center" width="100px" height="100px" src="{{ asset('img/' ~ 'logo.svg') }}">
                 <div class="col">
                     <h1 class="text-logo">Web Delivery</h1>
-                    <p class="text-muted">Быстрее, чем вы скажете "вишневый пирог"</p>
+                    <p class="text-muted">Вам больше не нужно в идти в магазин. <br>Мы доставим продукты до вашей двери всего за 15 минут с собственных складов, без посредников и переплат.</p>
                 </div>
             </div>
             <div class="input-group">
@@ -42,14 +42,12 @@
         function init() {
             let circle;
             var myMap = new ymaps.Map("map", {
-                center: [55.030199, 82.920430],
+                center: [51.1449621, 71.4359559],
                 zoom: 12
             }, {
                 searchControlProvider: 'yandex#search'
             }),
                 objectManager = new ymaps.ObjectManager({
-                    // Мы хотим загружать данные для балуна перед открытием, поэтому
-                    // запретим автоматически открывать балун по клику.
                     geoObjectOpenBalloonOnClick: false
                 });
             let suggestView = new ymaps.SuggestView('geocomplete');
@@ -96,7 +94,7 @@
                     let secondGeoObject = res.geoObjects.get(0);
                     let coordsOne = secondGeoObject.geometry.getCoordinates();
                     let ids = [];
-                    circle = new ymaps.Circle([coordsOne, 2500], null);
+                    circle = new ymaps.Circle([coordsOne, 10000], null);
                     myMap.geoObjects.add(circle);
                     let objectsInsideCircle = ymaps.geoQuery(myMap.geoObjects).searchInside(circle);
                     for (i = 0; i < objectsInsideCircle.getLength(); i++)
@@ -118,6 +116,8 @@
                             $('#modal-body-cards').html('');
                             for (key in response.sellers)
                             {
+                                window.location.href = response.sellers[key]['path']
+
                                 $('#modal-body-cards').append('<div class="d-flex justify-content-center ml-2 mr-2 mb-2 mt-2" id="modal-body-cards">\n' +
                                     '        <div class="card card-href" style="width: 10rem; height: auto">\n' +
                                     '            <a href="' + response.sellers[key]['path'] + '" class="card-href">' +

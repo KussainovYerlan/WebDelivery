@@ -12,7 +12,7 @@
                 <div class="row search-form">
                     <div class="col-md-8">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="search-login" value="{{ app.request.get('search') }}" placeholder="Введите логин пользователя">
+                            <input type="text" class="form-control" name="search-email" value="{{ app.request.get('search') }}" placeholder="Введите email пользователя">
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -49,7 +49,6 @@
                     <thead>
                     <tr>
                         <th scope="col">id</th>
-                        <th scope="col">Логин</th>
                         <th scope="col">Email</th>
                         <th scope="col">Кол-во заказов</th>
                         <th scope="col">Роли</th>
@@ -61,7 +60,6 @@
                     {% for user in users %}
                     <tr id="user-{{ user.getId() }}">
                         <th scope="col">{{ user.getId() }}</th>
-                        <th scope="col">{{ user.getLogin() }}</th>
                         <th scope="col">{{ user.getEmail() }}</th>
                         <th scope="col">{{ user.getCheckouts().count }}</th>
                         <th scope="col">{{ user.getRoles()|join(', ') }}</th>

@@ -81,7 +81,7 @@ class AccountService
                     'email/request_submit.html.twig',
                     [
                         'seller' => $user->getSeller(),
-                        'name' => $user->getLogin(),
+                        'name' => $user->getName(),
                     ]
                 ),
                 'text/html'
@@ -108,7 +108,7 @@ class AccountService
                     'email/request_cancel.html.twig',
                     [
                         'seller' => $user->getSeller(),
-                        'name' => $user->getLogin(),
+                        'name' => $user->getName(),
                     ]
                 ),
                 'text/html'

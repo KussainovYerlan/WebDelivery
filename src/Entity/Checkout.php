@@ -37,7 +37,7 @@ class Checkout
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="checkouts")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $user;
 
@@ -65,6 +65,16 @@ class Checkout
      * @ORM\OneToMany(targetEntity="App\Entity\CheckoutProduct", mappedBy="checkout", orphanRemoval=true)
      */
     private $checkoutProducts;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $surname;
 
     public function __construct()
     {
@@ -218,6 +228,30 @@ class Checkout
                 $checkoutProduct->setCheckout(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSurname(): ?string
+    {
+        return $this->surname;
+    }
+
+    public function setSurname(?string $surname): self
+    {
+        $this->surname = $surname;
 
         return $this;
     }

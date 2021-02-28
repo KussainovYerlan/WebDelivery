@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
- * @UniqueEntity(fields={"login"}, message="There is already an account with this login")
  * @ORM\HasLifecycleCallbacks
  */
 class User implements UserInterface
@@ -54,20 +53,6 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
-
-    /**
-     * @ORM\Column(type="string", length=120, unique=true)
-     * @Assert\NotBlank(
-     *     message="Пожалуйства, введите свой логин."
-     * )
-     * @Assert\Length(
-     *      min = 6,
-     *      max = 120,
-     *      minMessage = "Ваш логин должен быть длиннее {{ limit }} символов.",
-     *      maxMessage = "Ваш логин должен быть короче {{ limit }} символов."
-     * )
-     */
-    private $login;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
@@ -128,7 +113,7 @@ class User implements UserInterface
 
     public function __toString()
     {
-        return $this->login;
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -203,18 +188,6 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function getLogin(): ?string
-    {
-        return $this->login;
-    }
-
-    public function setLogin(string $login): self
-    {
-        $this->login = $login;
-
-        return $this;
     }
 
     public function getToken(): ?string

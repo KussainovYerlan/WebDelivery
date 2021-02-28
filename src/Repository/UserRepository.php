@@ -76,13 +76,13 @@ class UserRepository extends ServiceEntityRepository
         return $this->paginate($query->getQuery(), $page ?: 1);
     }
 
-    public function findByLoginAndRole($page = 1, string $search = null, $role = null)
+    public function findByEmailAndRole($page = 1, string $search = null, $role = null)
     {
         if ('Любая' == $role) {
             $role = null;
         }
         $query = $this->createQueryBuilder('u')
-            ->where('u.login LIKE :search')
+            ->where('u.email LIKE :search')
             ->andWhere('u.role LIKE :role')
             ->setParameters([
                 'search' => '%'.$search.'%',

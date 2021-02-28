@@ -6,7 +6,7 @@
 <div class="row" id="row-body">
     {{ include('account/account_menu.html.twig') }}
     <div class="col-lg-9">
-        {%  form_theme form 'bootstrap_4_layout.html.twig' %}
+        {% form_theme form 'bootstrap_4_layout.html.twig' %}
         {{ form_start(form) }}
         {{ form_widget(form) }}
         <button class="btn btn-outline-secondary">{{ button_label|default('Send') }}</button>

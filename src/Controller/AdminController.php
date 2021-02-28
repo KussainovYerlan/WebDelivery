@@ -51,8 +51,10 @@ class AdminController extends AbstractController
      */
     public function usersListAction(Request $request)
     {
-        $users = $this->getDoctrine()->getRepository(User::class)
-            ->findByLoginAndRole($request->get('page'), $request->get('search'), $request->get('role'));
+        $users = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->findByEmailAndRole($request->get('page'), $request->get('search'), $request->get('role'));
+
         $thisPage = $request->get('page') ?: 1;
 
         $maxPages = ceil($users->count() / 4);
