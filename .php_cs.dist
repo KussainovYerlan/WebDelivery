@@ -1,0 +1,17 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__.'/src')
+;
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'ordered_imports' => true,
+        'protected_to_private' => false,
+        'phpdoc_types_order' => ['null_adjustment' => 'always_last'],
+        'doctrine_annotation_braces' => ['syntax' => 'without_braces'],
+    ])
+    ->setFinder($finder)
+;

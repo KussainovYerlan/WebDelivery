@@ -10,3 +10,9 @@ docker-compose.yml
 .git/
 .gitignore
 *.md
+
+.phpunit
+/phpunit.xml
+
+/.php_cs
+/.php_cs.cache

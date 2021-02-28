@@ -24,4 +24,7 @@ migrate:
 fixtures:
 	${DCEXEC_PHP} bin/console doctrine:fixtures:load
 
+cs-fix:
+	${DCEXEC_PHP} vendor/bin/php-cs-fixer fix
+
 install: up composer-install migrate
