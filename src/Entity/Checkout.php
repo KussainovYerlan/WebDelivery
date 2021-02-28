@@ -117,9 +117,9 @@ class Checkout
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $CreatedAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
-        $this->createdAt = $CreatedAt;
+        $this->createdAt = $createdAt;
 
         return $this;
     }

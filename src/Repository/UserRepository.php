@@ -54,9 +54,9 @@ class UserRepository extends ServiceEntityRepository
     {
         $ql = $this->createQueryBuilder('u')
             ->select('COUNT(u.id)')
-            ->where('YEAR(u.CreatedAt) = :year')
-            ->andWhere('MONTH(u.CreatedAt) = :month')
-            ->andWhere('DAY(u.CreatedAt) = :day')
+            ->where('YEAR(u.createdAt) = :year')
+            ->andWhere('MONTH(u.createdAt) = :month')
+            ->andWhere('DAY(u.createdAt) = :day')
             ->andWhere('u.token = :token')
             ->setParameter('year', $year)
             ->setParameter('month', $month)

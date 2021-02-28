@@ -92,7 +92,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime")
      */
-    private $CreatedAt;
+    private $createdAt;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -308,7 +308,7 @@ class User implements UserInterface
      */
     public function setCreatedAt()
     {
-        $this->CreatedAt = new \DateTime();
+        $this->createdAt = new \DateTime();
     }
 
     public function getName(): ?string
