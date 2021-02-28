@@ -4,8 +4,7 @@ public/uploads/
 storage/
 ###> symfony/framework-bundle ###
 .env.local
-docker/mysql/storage
-docker_dev/mysql/storage
+docker/db/data
 /.env.local.php
 /.env.*.local
 /public/bundles/
@@ -17,8 +16,3 @@ docker_dev/mysql/storage
 .phpunit
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
-
-###> symfony/web-server-bundle ###
-/.web-server-pid
-###< symfony/web-server-bundle ###
-/public/assets/uploads

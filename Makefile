@@ -1,23 +1,27 @@
-.PHONY: up down build bash install fixtures
+DC=docker-compose
+DCEXEC=${DC} exec -u 1000
+DCEXEC_PHP=${DCEXEC} php
+DCRUN = ${DC} run --rm -u 1000
 
 up:
-	docker-compose up -d
+	${DC} up -d --build
 
 down:
-	docker-compose down
-
-build:
-	docker-compose build
+	${DC} down
 
 bash:
-	docker-compose exec php bash
+	${DCEXEC_PHP} bash
 
-install:
-	docker-compose build \
-	&& docker-compose up -d \
-	&& docker-compose exec php composer install \
-	&& docker-compose exec php bin/console doctrine:migrations:migrate \
-	&& docker-compose down
+composer-install:
+	${DCRUN} composer composer install --ignore-platform-reqs --no-scripts
+
+composer-bash:
+	${DCRUN} composer bash
+
+migrate:
+	${DCEXEC_PHP} bin/console d:m:m
 
 fixtures:
-	docker-compose exec php bin/console doctrine:fixtures:load
+	${DCEXEC_PHP} bin/console doctrine:fixtures:load
+
+install: up composer-install migrate

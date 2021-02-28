@@ -1,0 +1,12 @@
+public/bundles
+var
+vendor/
+node_modules/
+
+docker/db/data
+.dockerignore
+docker-compose.yml
+
+.git/
+.gitignore
+*.md
